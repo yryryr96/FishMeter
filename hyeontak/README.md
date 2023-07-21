@@ -18,5 +18,6 @@
 
 # 7/20
 
-react-camera-pro 조사
+react-camera-pro 조사 및 구현
 
+https://www.npmjs.com/package/react-camera-pro
