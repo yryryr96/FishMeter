@@ -22,6 +22,12 @@ export default function Home({navigation}) {
             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("Calendars")}>
                 <Text style={styles.text}>달력</Text>
             </TouchableOpacity>
+            
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate("ModalTest")}>
+                <Text style={styles.text}>모달</Text>
+            </TouchableOpacity>
+           
+            
         </View>
     )
 }
