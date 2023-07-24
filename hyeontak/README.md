@@ -21,3 +21,17 @@
 react-camera-pro 조사 및 구현
 
 https://www.npmjs.com/package/react-camera-pro
+
+# 7/24
+
+로그인 페이지
+
+메인 페이지 날씨구현
+
+
+
+![캡처](C:\Users\SSAFY\Downloads\캡처.PNG)
+
+![캡처1](C:\Users\SSAFY\Downloads\캡처1.PNG)
+
+![캡처3](C:\Users\SSAFY\Downloads\캡처3.PNG)
