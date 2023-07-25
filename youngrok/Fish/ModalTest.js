@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {Alert, Modal, StyleSheet, Text, Pressable, View, TouchableOpacity} from 'react-native';
 import CalendarPicker from "react-native-calendar-picker";
+import { AntDesign } from '@expo/vector-icons';
 
 export default function ModalTest() {
 
@@ -10,8 +11,10 @@ export default function ModalTest() {
 
   const clickOk = () => {
     setModalVisible(!modalVisible)
-    console.log(selectedStartDate.toISOString().substring(0, 10))
-    console.log(selectedEndDate.toISOString().substring(0, 10))
+    if (selectedStartDate && selectedStartDate) {
+      console.log(selectedStartDate.toISOString().substring(0, 10))
+      console.log(selectedEndDate.toISOString().substring(0, 10))
+    }
   }
 
   const onDateChange = (date, type) => {
@@ -27,7 +30,6 @@ export default function ModalTest() {
     <View style={styles.centeredView}>
         <Text style={{backgroundColor:'black'}}>MODDDDDDDDDDDDDDDDD</Text>
         <Modal
-        style={{backgroundColor : 'yellow'}}
         animationType="slide"
         transparent={true}
         visible={modalVisible}
@@ -35,9 +37,8 @@ export default function ModalTest() {
             setModalVisible(!modalVisible);
         }}>
           <View style={styles.calendarContainer}>
-            <View style={{backgroundColor : 'white', alignItems : 'center', width : "80%", borderRadius : 30}}>
+            <View style={{backgroundColor : 'white', width : "90%", paddingTop:20, borderRadius : 30}}>
               <CalendarPicker
-                
                 startFromMonday={false}
                 dayLabelsWrapper={{
                   style: { width: "50%", height: 30, alignItems: 'center' } // 버튼을 감싸는 View 컴포넌트의 스타일 조정
@@ -60,17 +61,23 @@ export default function ModalTest() {
                   "11월",
                   "12월"
                 ]}
-                previousTitle="이전"
-                nextTitle="다음"
-                
+                previousTitle={<AntDesign name="left" size={24} color="black" />}
+                nextTitle={<AntDesign name="right" size={24} color="black" />}
+                monthYearHeaderWrapperStyle={{flexDirection: 'row-reverse'}}
+                monthTitleStyle={{fontSize: 24, fontWeight: "400"}}
+                yearTitleStyle={{fontSize: 24, fontWeight: "400"}}
+                headingLevel={2}
+                allowBackwardRangeSelect
                 todayBackgroundColor="pink"
                 selectedDayColor="pink"
                 selectedDayTextColor="#000000"
-                scaleFactor={450}
+                headerWrapperStyle = {{width:"80%", justifyContent : 'space-between'}}
+                scaleFactor={400}
                 textStyle={{
                   color: "#000000"
                 }}
                 onDateChange={onDateChange}
+                
               />
               
               <View style={styles.modalButtonContainer}>
@@ -125,7 +132,8 @@ const styles = StyleSheet.create({
     borderRadius : 30,
   },
   calendarContainer : {
-    backgroundColor : 'yellow',
+    
+    backgroundColor : 'green',
     alignItems : 'center',
     justifyContent : 'center',
     flex : 1,

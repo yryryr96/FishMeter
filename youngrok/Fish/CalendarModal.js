@@ -1,117 +1,150 @@
 import React, { useState } from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Calendar } from 'react-native-calendars';
+import CalendarPicker from "react-native-calendar-picker";
+import { AntDesign } from '@expo/vector-icons';
 
-export default function CalendarModal({ modalVisible, closeCalendarModal }) {
-  const [selectedStartDate, setSelectedStartDate] = useState('');
-  const [selectedEndDate, setSelectedEndDate] = useState('');
+export default function CalendarModal({calendarModalVisible,setCalendarModalVisible}) {
+  // const [modalVisible, setModalVisible] = useState(false);
+  const [selectedStartDate, setSelectedStartDate] = useState(null);
+  const [selectedEndDate, setSelectedEndDate] = useState(null);
 
-  // Helper function to get all dates between the start and end dates
-  const getRangeDates = (start, end) => {
-    const dates = {};
-    const currentDate = new Date(start);
-    while (currentDate <= new Date(end)) {
-      const dateString = currentDate.toISOString().split('T')[0];
-      dates[dateString] = { selected: true, disableTouchEvent: true, selectedDotColor: 'orange' };
-      currentDate.setDate(currentDate.getDate() + 1);
+  const closeCalendarModal = () => {
+    setCalendarModalVisible(!calendarModalVisible)
+    if (selectedStartDate && selectedStartDate) {
+      console.log(selectedStartDate.toISOString().substring(0, 10))
+      console.log(selectedEndDate.toISOString().substring(0, 10))
     }
-    return dates;
+  }
+
+  const onDateChange = (date, type) => {
+    //function to handle the date changer
+    if (type === "END_DATE") {
+      setSelectedEndDate(date);
+    } else {
+      setSelectedEndDate(null);
+      setSelectedStartDate(date);
+    }
   };
 
   return (
     <Modal
-      animationType="slide"
-      transparent={true}
-      visible={modalVisible}
-      onRequestClose={() => {
-        closeCalendarModal();
-      }}
-    >
-      <View style={styles.calendarContainer}>
-        <View style={{ backgroundColor: 'white', alignItems: 'center', width: '80%', borderRadius: 30 }}>
-          <Calendar
-            horizontal={true}
-            style={styles.calendar}
-            theme={{
-              calendarBackground: 'transparent',
-              textSectionTitleColor: 'black',
-              selectedDayBackgroundColor: 'orange',
-              selectedDayTextColor: 'white',
-              todayTextColor: 'skyblue',
-              dayTextColor: 'black',
-              textDisabledColor: 'grey',
-              dotColor: 'orange',
-              selectedDotColor: 'white',
-              arrowColor: 'black',
-              monthTextColor: 'black',
-              indicatorColor: 'black',
-              dotStyle: 'sqaure'
-            }}
-            onDayPress={(day) => {
-              if (selectedStartDate && !selectedEndDate) {
-                if (new Date(day.dateString) < new Date(selectedStartDate)) {
-                  // Swap the dates if the end date is earlier than the start date
-                  setSelectedEndDate(selectedStartDate);
-                  setSelectedStartDate(day.dateString);
-                } else {
-                  setSelectedEndDate(day.dateString);
-                }
-              } else {
-                setSelectedStartDate(day.dateString);
-                setSelectedEndDate('');
-              }
-            }}
-            markedDates={
-              selectedStartDate && selectedEndDate
-                ? getRangeDates(selectedStartDate, selectedEndDate)
-                : {
-                    [selectedStartDate]: {
-                      selected: true,
-                      disableTouchEvent: true,
-                      selectedDotColor: 'orange',
-                    },
-                  }
-            }
-          />
-
-          <View style={styles.modalButtonContainer}>
-            <TouchableOpacity style={styles.modalButton} onPress={closeCalendarModal}>
-              <Text style={{ fontSize: 18 }}>설정</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={styles.modalButton} onPress={closeCalendarModal}>
-              <Text style={{ fontSize: 18 }}>취소</Text>
-            </TouchableOpacity>
+        animationType="fade"
+        transparent={true}
+        visible={calendarModalVisible}
+        onRequestClose={() => {
+          setCalendarModalVisible(!calendarModalVisible);
+        }}>
+        <View style={styles.calendarContainer}>
+          <View style={{backgroundColor : 'white', width : "90%", paddingTop:20, borderRadius : 30, borderWidth:3}}>
+            <CalendarPicker
+              startFromMonday={false}
+              dayLabelsWrapper={{
+                style: { width: "50%", height: 30, alignItems: 'center' } // 버튼을 감싸는 View 컴포넌트의 스타일 조정
+              }}
+              allowRangeSelection={true}
+              minDate={new Date(2019, 1, 1)}
+              maxDate={new Date(2024, 6, 3)}
+              weekdays={["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"]}
+              months={[
+                "1월",
+                "2월",
+                "3월",
+                "4월",
+                "5월",
+                "6월",
+                "7월",
+                "8월",
+                "9월",
+                "10월",
+                "11월",
+                "12월"
+              ]}
+              previousTitle={<AntDesign name="left" size={24} color="black" />}
+              nextTitle={<AntDesign name="right" size={24} color="black" />}
+              selectYearTitle='연도를 선택해주세요'
+              selectMonthTitle=''
+              monthYearHeaderWrapperStyle={{flexDirection: 'row-reverse'}}
+              monthTitleStyle={{fontSize: 24, fontWeight: "400"}}
+              yearTitleStyle={{fontSize: 24, fontWeight: "400"}}
+              allowBackwardRangeSelect
+              todayBackgroundColor="pink"
+              selectedDayColor="pink"
+              selectedDayTextColor="#000000"
+              headerWrapperStyle = {{width:"80%", justifyContent : 'space-between'}}
+              scaleFactor={400}
+              textStyle={{
+                color: "#000000"
+              }}
+              onDateChange={onDateChange}
+              
+            />
+            
+            <View style={styles.modalButtonContainer}>
+              <TouchableOpacity style={styles.modalButton} onPress={closeCalendarModal}>
+                <Text style={{fontSize:18}}>설정</Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity style={styles.modalButton} onPress={()=>setCalendarModalVisible(!calendarModalVisible)}>
+                <Text style={{fontSize:18}}>취소</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
-      </View>
-    </Modal>
+      </Modal>
   );
 }
 
 const styles = StyleSheet.create({
-  calendarContainer: {
-    backgroundColor: 'transparent',
-    alignItems: 'center',
-    justifyContent: 'center',
+  centeredView: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+    backgroundColor : 'red'
+  },
+  
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: 'center',
+  },
+  modal : {
+    backgroundColor : 'black',
+    
+  },
+  calendar : {
+    borderRadius : 30,
+  },
+  calendarContainer : {
+    backgroundColor : 'transparent',
+    alignItems : 'center',
+    justifyContent : 'center',
+    flex : 1,
     width: '100%',
   },
-  calendar: {
-    borderRadius: 30,
+  modalButton : {
+    backgroundColor : 'pink',
+    borderRadius : 10,
+    padding : 5,
+    paddingHorizontal:10,
+    borderWidth : 1
+
   },
-  modalButton: {
-    backgroundColor: 'pink',
-    borderRadius: 10,
-    padding: 5,
-    borderColor: 'black',
-    borderWidth: 1,
-  },
-  modalButtonContainer: {
-    paddingVertical: '5%',
-    paddingHorizontal: '30%',
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
+  modalButtonContainer : {
+    paddingVertical:"5%",
+    paddingHorizontal:'30%', 
+    width:"100%",
+    flexDirection:'row', 
+    justifyContent:'space-between'
+  }
 });
+

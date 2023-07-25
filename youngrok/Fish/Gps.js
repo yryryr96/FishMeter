@@ -5,6 +5,7 @@ import MapView from "react-native-map-clustering";
 
 import * as Location from 'expo-location';
 import CalendarModal from './CalendarModal';
+import ModalFishCategory from './ModalFishCategory';
 
 export default function Gps({navigation}) {
 
@@ -13,18 +14,15 @@ export default function Gps({navigation}) {
   const [lon, setLon] = useState(126);
   const mapRef = useRef(null);
 
-  const [modalVisible, setModalVisible] = useState(false);
+  const [calendarModalVisible, setCalendarModalVisible] = useState(false);
+  const [CategoryModalVisible, setCategoryModalVisible] = useState(false);
 
   const openCalendarModal = () => {
-    setModalVisible(true)
+    setCalendarModalVisible(true)
   }
 
-  const closeCalendarModal = () => {
-    setModalVisible(false)
-  }
-
-  const toDictionary = () => {
-    navigation.navigate("Dictionary")
+  const openCategoryModal = () => {
+    setCategoryModalVisible(true)
   }
 
   const [InitialRegion, setInitialRegion] = useState(
@@ -110,16 +108,16 @@ export default function Gps({navigation}) {
             >
             <Text style={{fontSize:18, fontWeight:"600", color:"black"}}>날짜</Text>
           </TouchableOpacity>
-          <CalendarModal modalVisible={modalVisible} closeCalendarModal={closeCalendarModal}></CalendarModal>
+          <CalendarModal calendarModalVisible={calendarModalVisible} setCalendarModalVisible={setCalendarModalVisible}></CalendarModal>
 
 
           <TouchableOpacity 
             style={styles.button}
-            onPress={toDictionary}
+            onPress={openCategoryModal}
           >
             <Text style={{fontSize:18, fontWeight:"600", color:"black"}}>어종</Text>
+            <ModalFishCategory CategoryModalVisible={CategoryModalVisible} setCategoryModalVisible={setCategoryModalVisible}></ModalFishCategory>
           </TouchableOpacity>
-
         </View>
         
       </View>
