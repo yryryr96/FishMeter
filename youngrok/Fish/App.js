@@ -9,9 +9,6 @@ import Home from './Home';
 import Dictionary from './Dictionary';
 import Feed from './Feed';
 import Camera from './Camera';
-import Calendars from './Calendars';
-import ModalH from './modal/ModalH';
-import Modal from './modal/modal';
 import ModalTest from './ModalTest';
 
 
@@ -27,9 +24,7 @@ export default function App() {
         <Stack.Screen name="Feed" component={Feed} />
         <Stack.Screen name="Dictionary" component={Dictionary} />
         <Stack.Screen name="Camera" component={Camera} />
-        <Stack.Screen name="Calendars" component={Calendars} />
         <Stack.Screen name="ModalTest" component={ModalTest} />
-
       </Stack.Navigator>
     </NavigationContainer>
   );

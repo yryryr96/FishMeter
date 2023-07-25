@@ -1,9 +1,10 @@
 import React, { useState,useEffect, useRef } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Modal } from 'react-native';
 import { Marker } from "react-native-maps";
 import MapView from "react-native-map-clustering";
 
 import * as Location from 'expo-location';
+import CalendarModal from './CalendarModal';
 
 export default function Gps({navigation}) {
 
@@ -12,8 +13,14 @@ export default function Gps({navigation}) {
   const [lon, setLon] = useState(126);
   const mapRef = useRef(null);
 
-  const toCalendar = () => {
-    navigation.navigate("Calendars")
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const openCalendarModal = () => {
+    setModalVisible(true)
+  }
+
+  const closeCalendarModal = () => {
+    setModalVisible(false)
   }
 
   const toDictionary = () => {
@@ -76,11 +83,8 @@ export default function Gps({navigation}) {
 
   return (
     <View style={styles.container}>
-      {/* <Text>hi</Text>
-      <TouchableOpacity style={styles.button}>
-        <Text>Press Here</Text>
-      </TouchableOpacity> */}
       
+      {/* 지도 구현   */}
       <View>
         <MapView 
           ref={mapRef} 
@@ -98,18 +102,21 @@ export default function Gps({navigation}) {
             )}
         </MapView>
         
+        {/* 버튼  */}
         <View style={styles.ButtonContainer}>
           <TouchableOpacity 
             style={styles.button}
-            onPress={toCalendar}
+            onPress={openCalendarModal}
             >
             <Text style={{fontSize:18, fontWeight:"600", color:"black"}}>날짜</Text>
           </TouchableOpacity>
+          <CalendarModal modalVisible={modalVisible} closeCalendarModal={closeCalendarModal}></CalendarModal>
+
 
           <TouchableOpacity 
             style={styles.button}
             onPress={toDictionary}
-            >
+          >
             <Text style={{fontSize:18, fontWeight:"600", color:"black"}}>어종</Text>
           </TouchableOpacity>
 
