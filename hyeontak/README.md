@@ -28,10 +28,10 @@ https://www.npmjs.com/package/react-camera-pro
 
 메인 페이지 날씨구현
 
+# 7/25
 
+프로필 페이지수정
 
-![캡처](C:\Users\SSAFY\Downloads\캡처.PNG)
-
-![캡처1](C:\Users\SSAFY\Downloads\캡처1.PNG)
-
-![캡처3](C:\Users\SSAFY\Downloads\캡처3.PNG)
+- 프로필이미지첨부
+- 비밀번호 표시기능
+- 기타 css수정
