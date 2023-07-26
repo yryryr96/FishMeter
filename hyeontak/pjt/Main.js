@@ -136,8 +136,8 @@ const styles = StyleSheet.create({
     color: "gray",
   },
   weatherS: {
-    marginTop: 35,
-    height: 100,
+    marginTop: 15,
+    height: "90%",
     borderWidth: 1,
     borderRadius: 20,
     borderColor: "white",
@@ -149,24 +149,27 @@ const styles = StyleSheet.create({
   },
   weatherContainer: {
     marginTop: 10,
-    height: 120, // 일정한 크기 설정
-  },
-  image: {
-    top: 25,
-    right: 10,
-    width: 30,
-    height: 30,
-  },
-  city: {
-    top: 25,
-    left: 10,
-    width: 100,
-    height: 30,
+    flex: 0.21,
   },
   head: {
-    flexDirection: "row", // 이미지들을 세로 방향으로 나란히 배치
-    alignItems: "center", // 이미지들을 가운데로 정렬
+    marginTop: 15,
+    flexDirection: "row",
+    alignItems: "center",
     justifyContent: "space-between",
+    paddingHorizontal: 10,
+  },
+
+  image: {
+    flex: 1, // 이미지가 가로 방향으로 컨테이너의 30%의 공간을 차지하도록 설정
+    aspectRatio: 1, // 이미지의 가로:세로 비율을 1:1로 유지
+    resizeMode: "contain",
+  },
+
+  city: {
+    flex: 0.3, // 도시 이름이 가로 방향으로 컨테이너의 20%의 공간을 차지하도록 설정
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
   },
 });
 

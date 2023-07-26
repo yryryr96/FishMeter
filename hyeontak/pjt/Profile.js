@@ -200,11 +200,10 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 15,
     padding: 8,
-    paddingLeft: 15,
     marginBottom: 16,
     backgroundColor: "white",
     elevation: 4,
-    height: 40, // 입력창 높이 조정
+    width: "100%",
   },
   button: {
     backgroundColor: "white",
@@ -212,12 +211,14 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
     justifyContent: "center",
-    width: 100, // 버튼 크기 조정
-    height: 40, // 버튼 높이 조정
+    width: "30%", // 버튼 크기 조정
+    height: undefined, // height를 undefined로 설정하여 가로세로 비율을 유지하도록 함
+    aspectRatio: 2, // 가로:세로 비율을 2:1로 설정 (width:height = 2:1)
+    resizeMode: "contain",
   },
   buttonText: {
     color: "black",
-    fontSize: 13,
+    fontSize: 18,
     fontWeight: "bold",
   },
   headbutton: {
@@ -237,8 +238,10 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   profileImage: {
-    width: 140,
-    height: 140,
+    width: "40%",
+    height: undefined, // height를 undefined로 설정하여 가로세로 비율을 유지하도록 함
+    aspectRatio: 1,
+    resizeMode: "contain",
     backgroundColor: "#B6CEE2",
     borderRadius: 30,
     marginVertical: 10,
