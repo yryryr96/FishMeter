@@ -1,5 +1,5 @@
 import React, { useState,useEffect, useRef } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Modal } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Modal, Alert } from 'react-native';
 import { Marker } from "react-native-maps";
 import MapView from "react-native-map-clustering";
 
@@ -19,10 +19,12 @@ export default function Gps({navigation}) {
 
   const openCalendarModal = () => {
     setCalendarModalVisible(true)
+    setCategoryModalVisible(false)
   }
 
   const openCategoryModal = () => {
     setCategoryModalVisible(true)
+    setCalendarModalVisible(false)
   }
 
   const [InitialRegion, setInitialRegion] = useState(
@@ -40,7 +42,7 @@ export default function Gps({navigation}) {
       
     }
 
-    const {coords:{latitude,longitude}} = await Location.getCurrentPositionAsync();
+    const {coords:{latitude,longitude}} = await Location.getCurrentPositionAsync().then( console.log("Hi"));
     
     setLon(longitude)
     setLat(latitude)
@@ -48,10 +50,12 @@ export default function Gps({navigation}) {
     // console.log()
     // console.log(locate)
     console.log(longitude,latitude)
-    setInitialRegion((prev) => {
-      prev[latitude] = latitude,
-      prev[longitude] = longitude
-    })
+    setInitialRegion((prev) => ({
+      ...prev,
+      latitude : latitude,
+      longitude, longitude
+
+    }))
     // console.log(mapRef.current)
 
     if (mapRef.current) {
@@ -89,13 +93,14 @@ export default function Gps({navigation}) {
           initialRegion={InitialRegion} 
           style={styles.map}
           rotateEnabled={false}
-          icon={require("./assets/fish.png")}
+          // icon={require("./assets/fish.png")}
           >
             {markerCoordinates.map((coordinate, index) => (
               <Marker
                 key={index}
                 coordinate={coordinate}
                 icon={require("./assets/fish.png")}
+                onPress={() => Alert.alert("Click")}
               />)
             )}
         </MapView>
@@ -103,21 +108,21 @@ export default function Gps({navigation}) {
         {/* 버튼  */}
         <View style={styles.ButtonContainer}>
           <TouchableOpacity 
-            style={styles.button}
+            style={styles.categoryButton}
             onPress={openCalendarModal}
             >
-            <Text style={{fontSize:18, fontWeight:"600", color:"black"}}>날짜</Text>
+            <Text style={styles.categoryButtonText}>달력</Text>
           </TouchableOpacity>
           <CalendarModal calendarModalVisible={calendarModalVisible} setCalendarModalVisible={setCalendarModalVisible}></CalendarModal>
 
 
           <TouchableOpacity 
-            style={styles.button}
+            style={styles.categoryButton}
             onPress={openCategoryModal}
           >
-            <Text style={{fontSize:18, fontWeight:"600", color:"black"}}>어종</Text>
-            <ModalFishCategory CategoryModalVisible={CategoryModalVisible} setCategoryModalVisible={setCategoryModalVisible}></ModalFishCategory>
+            <Text style={styles.categoryButtonText}>어종</Text>
           </TouchableOpacity>
+          <ModalFishCategory CategoryModalVisible={CategoryModalVisible} setCategoryModalVisible={setCategoryModalVisible}></ModalFishCategory>
         </View>
         
       </View>
@@ -134,17 +139,27 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
   },
-  button : {
-    marginTop:40,
-    marginLeft: 5,
-    backgroundColor:"white",
-    borderRadius : 15,
-    padding : 10,
-    opacity : 0.7
-  },
   ButtonContainer : {
     position : 'absolute',
     flexDirection : "row",
     paddingLeft : 20,
-  }
+  },
+  categoryButton : {
+    marginTop:70,
+    marginLeft: 10,
+    backgroundColor:"#5c7db4",
+    borderRadius : 20,
+    // borderWidth : 1,
+    padding : 10,
+    paddingHorizontal:10,
+    alignItems : 'center',
+    justifyContent : 'center',
+    width : "33%",
+  },
+  categoryButtonText : {
+    fontSize:18,
+    fontWeight:"600", 
+    color:"white"
+  },
+
 });
