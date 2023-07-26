@@ -165,7 +165,7 @@ const DogamScreen = ({ navigation }) => {
       style={styles.dogamList}
       onPress={() => {
         const itemId = item.id;
-        navigation.navigate(DogamGallery, { itemId: 86 });
+        navigation.navigate("DogamGallery", { itemId: 86 });
         console.log(item.id);
       }}
     >

@@ -70,9 +70,8 @@ export default function Gps({navigation}) {
 
   useEffect(()=>{
     getLocation()
-    
     // console.log(INITIAL_REGION)
-  },[])
+  },[lat,lon])
 
   const markerCoordinates = [
     { latitude: lat, longitude: lon },

@@ -6,6 +6,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import Gps from "../spot/Gps";
 import Profile from "../screens/Profile";
+import WebViewTest from "../WebViewTest";
 
 const Tab = createBottomTabNavigator();
 
@@ -65,7 +66,7 @@ const Tabs = () => {
     >
       <Tab.Screen
         name="Home"
-        component={Gps}
+        component={WebViewTest}
         options={{
           tabBarIcon: (props) =>
             IonIcon({
@@ -93,8 +94,8 @@ const Tabs = () => {
         }}
       />
       {/* <Tab.Screen
-        name="Camera"
-        component={Camera}
+        name="WebViewTest"
+        component={WebViewTest}
         options={{
           tabBarButton: (props) => <CustomTabBarButton {...props} />,
         }}
