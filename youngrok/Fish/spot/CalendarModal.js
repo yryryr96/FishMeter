@@ -10,7 +10,7 @@ export default function CalendarModal({calendarModalVisible,setCalendarModalVisi
   const [selectedEndDate, setSelectedEndDate] = useState(null);
 
   const closeCalendarModal = () => {
-    setCalendarModalVisible(!calendarModalVisible)
+    setCalendarModalVisible(false)
     if (selectedStartDate && selectedStartDate) {
       console.log(selectedStartDate.toISOString().substring(0, 10))
       console.log(selectedEndDate.toISOString().substring(0, 10))
@@ -33,7 +33,7 @@ export default function CalendarModal({calendarModalVisible,setCalendarModalVisi
         transparent={true}
         visible={calendarModalVisible}
         onRequestClose={() => {
-          setCalendarModalVisible(!calendarModalVisible);
+          setCalendarModalVisible(false);
         }}>
         
         <TouchableWithoutFeedback onPress={closeCalendarModal}>
@@ -62,10 +62,9 @@ export default function CalendarModal({calendarModalVisible,setCalendarModalVisi
                   "11월",
                   "12월"
                 ]}
-                previousTitle={<AntDesign name="left" size={24} color="black" />}
-                nextTitle={<AntDesign name="right" size={24} color="black" />}
+                previousTitle="이전"
+                nextTitle="다음"
                 selectYearTitle='연도를 선택해주세요'
-                selectMonthTitle=''
                 monthYearHeaderWrapperStyle={{flexDirection: 'row-reverse'}}
                 monthTitleStyle={{fontSize: 24, fontWeight: "400"}}
                 yearTitleStyle={{fontSize: 24, fontWeight: "400"}}
