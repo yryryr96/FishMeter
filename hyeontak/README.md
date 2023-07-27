@@ -35,3 +35,8 @@ https://www.npmjs.com/package/react-camera-pro
 - 프로필이미지첨부
 - 비밀번호 표시기능
 - 기타 css수정
+# 7/26
+카메라기능조사1
+
+# 7/27
+카메라 화면만 구현
