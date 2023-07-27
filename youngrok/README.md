@@ -46,3 +46,11 @@
 
 - react-native-calendar-picker 을 사용해 달력 구현
 - 스팟 조회에서 어종 카테고리 모달 구현
+
+## 7.26(수)
+- oauth 2.0 기반 카카오 로그인 구현
+- 스팟 조회 화면 수정
+
+## 7.27(목)
+- 직접 react-native-maps-clustering 라이브러리의 소스코드를 뜯어보며 prop을 이해하고 사용
+- cluster 마커 클릭시 해당 cluster가 포함하고 있는 마커들의 위도, 경도 정보 추출
