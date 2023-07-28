@@ -69,27 +69,29 @@ const Profile = () => {
             ) : (
               // image 값이 null인 경우 디폴트 이미지 표시
               <Image
-                source={require("../assets/Group.png")}
+                source={require("../assets/DefaultProfile.png")}
                 style={styles.profileImage}
                 resizeMode="contain"
               />
             )}
           </TouchableOpacity>
-          <Text
-            style={{
-              color: "#89C4F6",
-              fontWeight: "bold",
-            }}
-          >
-            사진 변경
-          </Text>
+          <TouchableOpacity onPress={pickImage}>
+            <Text
+              style={{
+                color: "grey",
+                fontWeight: "bold",
+              }}
+            >
+              사진 변경
+            </Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.Hcontainer}>
           <TouchableOpacity style={styles.headbutton} onPress={info}>
             <Text
               style={{
                 ...styles.headbuttonText,
-                color: myinfo ? "black" : "white",
+                color: myinfo ? "white" : "black",
               }}
             >
               회원정보
@@ -99,7 +101,7 @@ const Profile = () => {
             <Text
               style={{
                 ...styles.headbuttonText,
-                color: !myinfo ? "black" : "white",
+                color: !myinfo ? "white" : "black",
               }}
             >
               비밀번호 변경
@@ -242,10 +244,9 @@ const styles = StyleSheet.create({
     height: undefined, // height를 undefined로 설정하여 가로세로 비율을 유지하도록 함
     aspectRatio: 1,
     resizeMode: "contain",
-    backgroundColor: "#B6CEE2",
-    borderRadius: 30,
+    backgroundColor: "white",
+    borderRadius: 100,
     marginVertical: 10,
-    borderWidth: 0.5,
     borderColor: "black",
   },
   imageContainer: {

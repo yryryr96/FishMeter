@@ -8,6 +8,9 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import Tabs from './navigation/tabs';
 import DogamGallery from './screens/dogam/DogamGallery';
+import KaKaoLogin from './KaKaoLogin';
+import KaKaoLogOut from './KaKaoLogOut';
+import { RecoilRoot } from 'recoil';
 
 
 const Stack = createNativeStackNavigator();
@@ -16,11 +19,15 @@ const Stack = createNativeStackNavigator();
 export default function App() {
 
   return(
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Root" component={Tabs} />
-        <Stack.Screen name="DogamGallery" component={DogamGallery} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <RecoilRoot>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Root" component={Tabs} />
+          <Stack.Screen name="DogamGallery" component={DogamGallery} />
+          <Stack.Screen name="KaKaoLogin" component={KaKaoLogin} />
+          <Stack.Screen name="KaKaoLogOut" component={KaKaoLogOut} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </RecoilRoot>
   );
 }

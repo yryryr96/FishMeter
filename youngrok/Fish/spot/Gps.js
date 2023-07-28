@@ -6,24 +6,39 @@ import MapView from "react-native-map-clustering";
 import * as Location from 'expo-location';
 import CalendarModal from './CalendarModal';
 import ModalFishCategory from './ModalFishCategory';
+import { useRecoilState, useResetRecoilState } from 'recoil';
+import { testGpsList } from '../component/recoil/atoms/test';
+import ModalArticle from './ModalArticle';
 
 export default function Gps({navigation}) {
 
   const [ok, setOk] = useState(true);
   const [lat,setLat] = useState(37);
   const [lon, setLon] = useState(126);
+
+  const [gpsList,setGpsList] = useRecoilState(testGpsList);
+
   const mapRef = useRef(null);
 
   const [calendarModalVisible, setCalendarModalVisible] = useState(false);
   const [CategoryModalVisible, setCategoryModalVisible] = useState(false);
+  const [ArticleModalVisible, setArticleModalVisible] = useState(false);
 
   const openCalendarModal = () => {
     setCalendarModalVisible(true)
     setCategoryModalVisible(false)
+    setArticleModalVisible(false)
   }
 
   const openCategoryModal = () => {
     setCategoryModalVisible(true)
+    setCalendarModalVisible(false)
+    setArticleModalVisible(false)
+  }
+
+  const openArticleModal = () => {
+    setArticleModalVisible(true)
+    setCategoryModalVisible(false)
     setCalendarModalVisible(false)
   }
 
@@ -37,16 +52,15 @@ export default function Gps({navigation}) {
 
   const getLocation = async() => {
     const {granted} = await Location.requestForegroundPermissionsAsync();
-    if (!granted) {
-      setOk(false);
-      
-    }
+    console.log(granted)
 
-    const {coords:{latitude,longitude}} = await Location.getCurrentPositionAsync().then( console.log("Hi"));
-    
-    setLon(longitude)
-    setLat(latitude)
+    const {coords:{latitude,longitude}} = await Location.getCurrentPositionAsync();
+    console.log("umm")
+    // setLon(longitude)
+    // setLat(latitude)
+    console.log('#',longitude,latitude)
     const locate = await Location.reverseGeocodeAsync({latitude, longitude}, {useGoogleMaps:false});
+    console.log(locate)
     // console.log()
     // console.log(locate)
     console.log(longitude,latitude)
@@ -71,8 +85,9 @@ export default function Gps({navigation}) {
   useEffect(()=>{
     getLocation()
     // console.log(INITIAL_REGION)
-  },[lat,lon])
+  },[])
 
+  // 마커 표시된 집합
   const markerCoordinates = [
     { latitude: lat, longitude: lon },
     { latitude: lat + 0.001, longitude: lon },
@@ -92,6 +107,12 @@ export default function Gps({navigation}) {
           initialRegion={InitialRegion} 
           style={styles.map}
           rotateEnabled={false}
+          onClusterPress={(cluster,children) => {
+            temp = []
+            children.map((item) => temp.push(item.geometry.coordinates))
+            setGpsList(temp)
+            console.log(gpsList)
+          }}
           // icon={require("./assets/fish.png")}
           >
             {markerCoordinates.map((coordinate, index) => (
@@ -99,7 +120,7 @@ export default function Gps({navigation}) {
                 key={index}
                 coordinate={coordinate}
                 icon={require("../assets/fish.png")}
-                onPress={() => Alert.alert("Click")}
+                onPress={() => {console.log(coordinate.latitude)}}
               />)
             )}
         </MapView>
@@ -122,6 +143,15 @@ export default function Gps({navigation}) {
             <Text style={styles.categoryButtonText}>어종</Text>
           </TouchableOpacity>
           <ModalFishCategory CategoryModalVisible={CategoryModalVisible} setCategoryModalVisible={setCategoryModalVisible}></ModalFishCategory>
+
+          <TouchableOpacity 
+            style={styles.categoryButton}
+            onPress={openArticleModal}
+            >
+            <Text style={styles.categoryButtonText}>게시글</Text>
+          </TouchableOpacity>
+          <ModalArticle ArticleModalVisible={ArticleModalVisible} setArticleModalVisible={setArticleModalVisible}/>
+
         </View>
         
       </View>
@@ -153,7 +183,7 @@ const styles = StyleSheet.create({
     paddingHorizontal:10,
     alignItems : 'center',
     justifyContent : 'center',
-    width : "33%",
+    width : "30%",
   },
   categoryButtonText : {
     fontSize:18,
