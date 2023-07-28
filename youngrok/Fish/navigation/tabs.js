@@ -7,6 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 import Gps from "../spot/Gps";
 import Profile from "../screens/Profile";
 import WebViewTest from "../WebViewTest";
+import WebView from "react-native-webview";
 
 const Tab = createBottomTabNavigator();
 
@@ -115,7 +116,7 @@ const Tabs = () => {
         }}
       />
       <Tab.Screen
-        name="myProfile"
+        name="Profile"
         component={Profile}
         options={{
           tabBarLabel: "",
