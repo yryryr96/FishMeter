@@ -40,3 +40,6 @@ https://www.npmjs.com/package/react-camera-pro
 
 # 7/27
 카메라 화면만 구현
+
+# 7/28
+카메라 최적화
