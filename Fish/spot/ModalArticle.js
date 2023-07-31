@@ -7,21 +7,8 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { filteredArticle, testDefaultGps } from '../component/recoil/selectors/testSelector';
 
 
-export default function ModalArticle({ArticleModalVisible,setArticleModalVisible,gpsInfo}) {
-    const [FilteredList,setFilteredList] = useState([])
-    const globalList = useRecoilValue(testDefaultGps)
-    const getFiltered = () => {
-        gpsInfo.map((item,index) => {
-            globalList.filter((gps,idx) => gps.latitude===item.latitude && gps.longitude===item.longitude)
-        })
-        return globalList
-    }
-
-    useEffect(()=>{
-        setFilteredList(getFiltered());
-        console.log(FilteredList)
-    },[])
-      
+export default function ModalArticle({ArticleModalVisible,setArticleModalVisible,filterList}) {
+    console.log(filterList)
     const closeArticleModal = () => {
         setArticleModalVisible(false)
     }
@@ -44,11 +31,11 @@ export default function ModalArticle({ArticleModalVisible,setArticleModalVisible
                 </View>
 
                 <View>
-                    <Text style={styles.articleCountText}>{FilteredList.length}개의 게시글</Text>
+                    <Text style={styles.articleCountText}>{filterList.length}개의 게시글</Text>
                 </View>
                 
                 
-                    {FilteredList.map((item,index) => (
+                    {filterList.map((item,index) => (
                         <SpotArticle key={index} item={item}/>
                     ))}
             </View>

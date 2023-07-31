@@ -1,4 +1,5 @@
-import { atom } from "recoil"
+import { atom, selector } from 'recoil';
+import * as Location from 'expo-location';
 
 export const testNumber = atom({
     key : 'test',
@@ -9,3 +10,4 @@ export const testGpsList = atom({
     key : 'testGpsList',
     default : []
 })
+

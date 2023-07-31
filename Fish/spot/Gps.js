@@ -6,10 +6,11 @@ import MapView from "react-native-map-clustering";
 import * as Location from 'expo-location';
 import CalendarModal from './CalendarModal';
 import ModalFishCategory from './ModalFishCategory';
-import { useRecoilState, useResetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { testGpsList } from '../component/recoil/atoms/test';
 import ModalArticle from './ModalArticle';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { testDefaultGps } from '../component/recoil/selectors/testSelector';
 
 export default function Gps({navigation}) {
 
@@ -42,32 +43,20 @@ export default function Gps({navigation}) {
     setCalendarModalVisible(false)
   }
 
-  const [InitialRegion, setInitialRegion] = useState(
-    {
-      latitude: 37,
-      longitude: 128,
-      latitudeDelta: 1,
-      longitudeDelta: 1,
-    })
-
   const getLocation = async() => {
     const {granted} = await Location.requestForegroundPermissionsAsync();
     console.log(granted)
 
     const {coords:{latitude,longitude}} = await Location.getCurrentPositionAsync();
-    setLon(longitude)
-    setLat(latitude)
+    
+    if (lon !== longitude && lat !== latitude) {
+      setLon(longitude)
+      setLat(latitude)
+    }
     
     // const locate = await Location.reverseGeocodeAsync({latitude, longitude}, {useGoogleMaps:false});
 
-    setInitialRegion((prev) => ({
-      ...prev,
-      latitude : latitude,
-      longitude, longitude
-
-    }))
-    console.log(latitude,longitude)
-    console.log(InitialRegion)
+    console.log("llllllllloaaaaaaaarrr",latitude,longitude)
 
     if (mapRef.current) {
       mapRef.current.animateToRegion({
@@ -82,7 +71,7 @@ export default function Gps({navigation}) {
   useEffect(()=>{
     getLocation()
     // console.log(INITIAL_REGION)
-  },[])
+  },[lat,lon])
 
   // 마커 표시된 집합
   const markerCoordinates = [
@@ -95,6 +84,27 @@ export default function Gps({navigation}) {
     { latitude: lat + 0.005, longitude: lon },
   ];
 
+  testCoordinates = [
+     [128.9104394,35.0925174 ],
+     [128.9104394, 35.0925174  + 0.001],
+     [128.9104394, 35.0925174  + 0.002],
+     [128.9104394, 35.0925174  + 0.003],
+     [128.9104394, 35.0925174  + 0.004],
+     [128.9104394, 35.0925174  + 0.005],
+     [128.9104394, 35.0925174  + 0.005],
+  ]
+
+
+  const getFiltered = (gpsInformation) => {
+    const temp = []
+    const [globalList,setGlobalList] = useRecoilState(testDefaultGps)
+    const filtered = gpsInformation.forEach((item) => {
+        temp.push(globalList.filter((gps,idx) => gps.latitude===item[1] && gps.longitude===item[0]))
+    })
+    console.log("temp=",temp)
+    return temp
+}
+
   return (
     <SafeAreaProvider style={styles.container}>
       
@@ -102,13 +112,19 @@ export default function Gps({navigation}) {
       <View>
         <MapView 
           ref={mapRef}
-          initialRegion={InitialRegion} 
+          initialRegion={{
+            latitude: lat,
+            longitude: lon,
+            latitudeDelta: 0.07,
+            longitudeDelta: 0.07,
+          }} 
           style={styles.map}
           rotateEnabled={false}
           onClusterPress={(cluster,children) => {
             temp = []
             children.map((item) => temp.push(item.geometry.coordinates))
             setGpsList(temp)
+            console.log("gpsList",gpsList)
           }}
           // icon={require("./assets/fish.png")}
           >
@@ -147,7 +163,7 @@ export default function Gps({navigation}) {
             >
             <Text style={styles.categoryButtonText}>게시글</Text>
           </TouchableOpacity>
-          <ModalArticle ArticleModalVisible={ArticleModalVisible} setArticleModalVisible={setArticleModalVisible} gpsInfo={gpsList} />
+          <ModalArticle ArticleModalVisible={ArticleModalVisible} setArticleModalVisible={setArticleModalVisible} filterList={getFiltered(gpsList)} />
 
         </View>
         
