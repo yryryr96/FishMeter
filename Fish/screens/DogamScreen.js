@@ -13,6 +13,7 @@ import {
 } from "react-native";
 
 import DogamGallery from "./dogam/DogamGallery";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const DATA = [
   {
@@ -158,7 +159,7 @@ const DATA = [
 ];
 
 const Stack = createStackNavigator();
-
+  
 const DogamScreen = ({ navigation }) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity
@@ -178,7 +179,7 @@ const DogamScreen = ({ navigation }) => {
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaProvider style={styles.container}>
       {/* <View>
         <View style={{ padding: 5 }}>
           <Image
@@ -205,7 +206,7 @@ const DogamScreen = ({ navigation }) => {
         title="click here"
         onPress={() => alert("button clicked!")}
       ></Button>
-    </View>
+    </SafeAreaProvider>
   );
 };
 

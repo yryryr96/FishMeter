@@ -5,6 +5,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
 import { TouchableOpacity } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function KaKaoLogOut() {
     const navigation = useNavigation();
@@ -28,11 +29,11 @@ export default function KaKaoLogOut() {
     }
 
     return (
-        <View style={styles.container}>
+        <SafeAreaProvider style={styles.container}>
             <TouchableOpacity onPress={requestLogout}>
                 <Text style={{fontSize:30}}>카카오 로그아웃</Text>
             </TouchableOpacity>
-        </View>
+        </SafeAreaProvider>
     )
 }
 

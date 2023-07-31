@@ -8,6 +8,7 @@ import Gps from "../spot/Gps";
 import Profile from "../screens/Profile";
 import WebViewTest from "../WebViewTest";
 import WebView from "react-native-webview";
+import DogamGallery from "../screens/dogam/DogamGallery";
 
 const Tab = createBottomTabNavigator();
 

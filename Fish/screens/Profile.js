@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import { TextInput } from "react-native-paper";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 // import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Profile = () => {
@@ -60,7 +61,7 @@ const Profile = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaProvider style={styles.container}>
       <ScrollView>
         <View style={styles.imageContainer}>
           <TouchableOpacity onPress={pickImage}>
@@ -181,7 +182,7 @@ const Profile = () => {
           </TouchableOpacity>
         </View>
       </ScrollView>
-    </View>
+    </SafeAreaProvider>
   );
 };
 

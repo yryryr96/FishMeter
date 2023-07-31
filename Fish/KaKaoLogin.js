@@ -4,6 +4,7 @@ import { WebView } from 'react-native-webview';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 const REST_API_KEY = 'f55712663179d181a09716e3fbe37ac0'
 const REDIRECT_URI = 'http://192.168.166.11:19006/kakao'
@@ -70,7 +71,7 @@ export default function KaKaoLogin() {
     }
     
     return (
-      <View style={styles.container}>      
+      <SafeAreaProvider style={styles.container}>      
         <WebView
           style={{ flex: 1 }}
           originWhitelist={['*']}
@@ -82,7 +83,7 @@ export default function KaKaoLogin() {
           javaScriptEnabled
           onMessage={event => { KakaoLoginWebView(event.nativeEvent["url"])}}
         />
-      </View>
+      </SafeAreaProvider>
     )
 }
     

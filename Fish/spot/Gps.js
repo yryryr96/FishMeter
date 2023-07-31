@@ -9,10 +9,10 @@ import ModalFishCategory from './ModalFishCategory';
 import { useRecoilState, useResetRecoilState } from 'recoil';
 import { testGpsList } from '../component/recoil/atoms/test';
 import ModalArticle from './ModalArticle';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export default function Gps({navigation}) {
 
-  const [ok, setOk] = useState(true);
   const [lat,setLat] = useState(37);
   const [lon, setLon] = useState(126);
 
@@ -55,22 +55,19 @@ export default function Gps({navigation}) {
     console.log(granted)
 
     const {coords:{latitude,longitude}} = await Location.getCurrentPositionAsync();
-    console.log("umm")
-    // setLon(longitude)
-    // setLat(latitude)
-    console.log('#',longitude,latitude)
-    const locate = await Location.reverseGeocodeAsync({latitude, longitude}, {useGoogleMaps:false});
-    console.log(locate)
-    // console.log()
-    // console.log(locate)
-    console.log(longitude,latitude)
+    setLon(longitude)
+    setLat(latitude)
+    
+    // const locate = await Location.reverseGeocodeAsync({latitude, longitude}, {useGoogleMaps:false});
+
     setInitialRegion((prev) => ({
       ...prev,
       latitude : latitude,
       longitude, longitude
 
     }))
-    // console.log(mapRef.current)
+    console.log(latitude,longitude)
+    console.log(InitialRegion)
 
     if (mapRef.current) {
       mapRef.current.animateToRegion({
@@ -95,15 +92,16 @@ export default function Gps({navigation}) {
     { latitude: lat + 0.003, longitude: lon },
     { latitude: lat + 0.004, longitude: lon },
     { latitude: lat + 0.005, longitude: lon },
+    { latitude: lat + 0.005, longitude: lon },
   ];
 
   return (
-    <View style={styles.container}>
+    <SafeAreaProvider style={styles.container}>
       
       {/* 지도 구현   */}
       <View>
         <MapView 
-          ref={mapRef} 
+          ref={mapRef}
           initialRegion={InitialRegion} 
           style={styles.map}
           rotateEnabled={false}
@@ -111,7 +109,6 @@ export default function Gps({navigation}) {
             temp = []
             children.map((item) => temp.push(item.geometry.coordinates))
             setGpsList(temp)
-            console.log(gpsList)
           }}
           // icon={require("./assets/fish.png")}
           >
@@ -150,12 +147,12 @@ export default function Gps({navigation}) {
             >
             <Text style={styles.categoryButtonText}>게시글</Text>
           </TouchableOpacity>
-          <ModalArticle ArticleModalVisible={ArticleModalVisible} setArticleModalVisible={setArticleModalVisible}/>
+          <ModalArticle ArticleModalVisible={ArticleModalVisible} setArticleModalVisible={setArticleModalVisible} gpsInfo={gpsList} />
 
         </View>
         
       </View>
-    </View>
+    </SafeAreaProvider>
   );
 }
 
