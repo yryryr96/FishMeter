@@ -1,5 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import { SafeAreaView } from "react-native-safe-area-context";
 import React, { useState } from "react";
 import {
   View,
@@ -9,7 +10,6 @@ import {
   Image,
   FlatList,
   TouchableOpacity,
-  SafeAreaView,
 } from "react-native";
 
 import DogamGallery from "./dogam/DogamGallery";
@@ -24,7 +24,7 @@ const DATA = [
   },
   {
     id: "2",
-    title: "Item2",
+    title: "감성돔",
     state: true,
     src1: require("../assets/dogam_number/1.png"),
     src2: require("../assets/dogam_number/Gamsoung.png"),
@@ -164,9 +164,10 @@ const DogamScreen = ({ navigation }) => {
     <TouchableOpacity
       style={styles.dogamList}
       onPress={() => {
-        const itemId = item.id;
-        navigation.navigate("DogamGallery", { itemId: 86 });
-        console.log(item.id);
+        navigation.navigate("DogamGallery", {
+          itemId: item.id,
+          itemName: item.title,
+        });
       }}
     >
       <Image
@@ -176,9 +177,11 @@ const DogamScreen = ({ navigation }) => {
       />
     </TouchableOpacity>
   );
-
+  const handleGoBack = () => {
+    navigation.goBack();
+  };
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {/* <View>
         <View style={{ padding: 5 }}>
           <Image
@@ -205,7 +208,7 @@ const DogamScreen = ({ navigation }) => {
         title="click here"
         onPress={() => alert("button clicked!")}
       ></Button>
-    </View>
+    </SafeAreaView>
   );
 };
 
