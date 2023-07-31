@@ -29,3 +29,6 @@
 ## 7.25(금)
 - 깃랩 mattermost 알림 설정
 ---
+## 7.31(월)
+- mattermost 젠킨스 알림 설정, mariadb로 변경
+---
