@@ -23,6 +23,7 @@ import KaKaoLogOut from "./KaKaoLogOut";
 import DogamDetail from "./screens/dogam/DogamDetail";
 import { RecoilRoot } from "recoil";
 import TestImage from "./TestImage";
+import Home from "./Home";
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +38,7 @@ export default function App() {
           <Stack.Screen name="KaKaoLogin" component={KaKaoLogin} />
           <Stack.Screen name="KaKaoLogOut" component={KaKaoLogOut} />
           <Stack.Screen name="TestImage" component={TestImage} />
+          <Stack.Screen name="HomeTest" component={Home} />
         </Stack.Navigator>
       </RecoilRoot>
     </NavigationContainer>
