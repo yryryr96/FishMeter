@@ -6,57 +6,57 @@ import MapView from "react-native-map-clustering";
 import * as Location from 'expo-location';
 import CalendarModal from './CalendarModal';
 import ModalFishCategory from './ModalFishCategory';
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
+import { testGpsList } from '../component/recoil/atoms/test';
+import ModalArticle from './ModalArticle';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { testDefaultGps } from '../component/recoil/selectors/testSelector';
+
+import { MaterialIcons } from '@expo/vector-icons';
 
 export default function Gps({navigation}) {
 
-  const [ok, setOk] = useState(true);
   const [lat,setLat] = useState(37);
   const [lon, setLon] = useState(126);
+  const [city, setCity] = useState(null);
+
+  const [gpsList,setGpsList] = useRecoilState(testGpsList);
   const mapRef = useRef(null);
 
   const [calendarModalVisible, setCalendarModalVisible] = useState(false);
   const [CategoryModalVisible, setCategoryModalVisible] = useState(false);
+  const [ArticleModalVisible, setArticleModalVisible] = useState(false);
 
   const openCalendarModal = () => {
     setCalendarModalVisible(true)
     setCategoryModalVisible(false)
+    setArticleModalVisible(false)
   }
 
   const openCategoryModal = () => {
     setCategoryModalVisible(true)
     setCalendarModalVisible(false)
+    setArticleModalVisible(false)
   }
 
-  const [InitialRegion, setInitialRegion] = useState(
-    {
-      latitude: 37,
-      longitude: 128,
-      latitudeDelta: 1,
-      longitudeDelta: 1,
-    })
+  const openArticleModal = () => {
+    setArticleModalVisible(true)
+    setCategoryModalVisible(false)
+    setCalendarModalVisible(false)
+  }
 
   const getLocation = async() => {
     const {granted} = await Location.requestForegroundPermissionsAsync();
-    if (!granted) {
-      setOk(false);
-      
-    }
+    console.log(granted)
 
-    const {coords:{latitude,longitude}} = await Location.getCurrentPositionAsync().then( console.log("Hi"));
+    const {coords:{latitude,longitude}} = await Location.getCurrentPositionAsync();
     
-    setLon(longitude)
-    setLat(latitude)
-    const locate = await Location.reverseGeocodeAsync({latitude, longitude}, {useGoogleMaps:false});
-    // console.log()
-    // console.log(locate)
-    console.log(longitude,latitude)
-    setInitialRegion((prev) => ({
-      ...prev,
-      latitude : latitude,
-      longitude, longitude
-
-    }))
-    // console.log(mapRef.current)
+    if (lon !== longitude && lat !== latitude) {
+      setLon(longitude)
+      setLat(latitude)
+    }
+    
+    // const locate = await Location.reverseGeocodeAsync({latitude, longitude}, {useGoogleMaps:false});
 
     if (mapRef.current) {
       mapRef.current.animateToRegion({
@@ -71,36 +71,45 @@ export default function Gps({navigation}) {
   useEffect(()=>{
     getLocation()
     // console.log(INITIAL_REGION)
-  })
+  },[lat,lon])
 
-  // 마커 표시된 집합
-  const markerCoordinates = [
-    { latitude: lat, longitude: lon },
-    { latitude: lat + 0.001, longitude: lon },
-    { latitude: lat + 0.002, longitude: lon },
-    { latitude: lat + 0.003, longitude: lon },
-    { latitude: lat + 0.004, longitude: lon },
-    { latitude: lat + 0.005, longitude: lon },
-  ];
-
+  const getFiltered = (gpsInformation) => {
+    const temp = []
+    const globalList = useRecoilValue(testDefaultGps)
+    const filtered = gpsInformation.forEach((item) => {
+        globalList.forEach((gps,idx) => {
+          if (gps.latitude===item[1] && gps.longitude===item[0]) {
+            temp.push(gps)
+          }
+        })
+    })
+    // console.log("temp=",temp)
+    return temp
+}
+  const testCoordinates = useRecoilValue(testDefaultGps)
   return (
-    <View style={styles.container}>
+    <SafeAreaProvider style={styles.container}>
       
       {/* 지도 구현   */}
       <View>
         <MapView 
-          onClusterPress={(cluster, children) => {
-            const geoList = []
-            children.map((item)=> geoList.push(item.geometry.coordinates))
-            console.log(geoList)
-          }}
-          ref={mapRef} 
-          initialRegion={InitialRegion} 
+          ref={mapRef}
+          initialRegion={{
+            latitude: lat,
+            longitude: lon,
+            latitudeDelta: 0.07,
+            longitudeDelta: 0.07,
+          }} 
           style={styles.map}
           rotateEnabled={false}
+          onClusterPress={(cluster,children) => {
+            temp = []
+            children.map((item) => temp.push(item.geometry.coordinates))
+            setGpsList(temp)
+          }}
           // icon={require("./assets/fish.png")}
           >
-            {markerCoordinates.map((coordinate, index) => (
+            {testCoordinates.map((coordinate, index) => (
               <Marker
                 key={index}
                 coordinate={coordinate}
@@ -128,10 +137,26 @@ export default function Gps({navigation}) {
             <Text style={styles.categoryButtonText}>어종</Text>
           </TouchableOpacity>
           <ModalFishCategory CategoryModalVisible={CategoryModalVisible} setCategoryModalVisible={setCategoryModalVisible}></ModalFishCategory>
+          
+                
+          <TouchableOpacity 
+            style={styles.categoryButton}
+            onPress={openArticleModal}
+            >
+            <Text style={styles.categoryButtonText}>게시글</Text>
+          </TouchableOpacity>
+          <ModalArticle ArticleModalVisible={ArticleModalVisible} setArticleModalVisible={setArticleModalVisible} filteredList={getFiltered(gpsList)} city={city} />
+
+          <TouchableOpacity 
+            style={styles.categoryButton}
+            onPress={() =>getLocation()}
+            >
+            <MaterialIcons name="gps-fixed" size={24} color="red" />
+          </TouchableOpacity>  
         </View>
-        
+            
       </View>
-    </View>
+    </SafeAreaProvider>
   );
 }
 
@@ -159,7 +184,7 @@ const styles = StyleSheet.create({
     paddingHorizontal:10,
     alignItems : 'center',
     justifyContent : 'center',
-    width : "33%",
+    width : "22%",
   },
   categoryButtonText : {
     fontSize:18,

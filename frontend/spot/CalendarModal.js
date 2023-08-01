@@ -2,13 +2,11 @@ import React, { useState } from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View,TouchableWithoutFeedback } from 'react-native';
 import CalendarPicker from "react-native-calendar-picker";
 import { AntDesign } from '@expo/vector-icons';
-// import { TouchableWithoutFeedback } from 'react-native-web';
 
 export default function CalendarModal({calendarModalVisible,setCalendarModalVisible}) {
   // const [modalVisible, setModalVisible] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState(null);
   const [selectedEndDate, setSelectedEndDate] = useState(null);
-
   const closeCalendarModal = () => {
     setCalendarModalVisible(false)
     if (selectedStartDate && selectedStartDate) {
