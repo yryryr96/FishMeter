@@ -12,13 +12,15 @@ import ModalArticle from './ModalArticle';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { testDefaultGps } from '../component/recoil/selectors/testSelector';
 
+import { MaterialIcons } from '@expo/vector-icons';
+
 export default function Gps({navigation}) {
 
   const [lat,setLat] = useState(37);
   const [lon, setLon] = useState(126);
+  const [city, setCity] = useState(null);
 
   const [gpsList,setGpsList] = useRecoilState(testGpsList);
-
   const mapRef = useRef(null);
 
   const [calendarModalVisible, setCalendarModalVisible] = useState(false);
@@ -56,8 +58,6 @@ export default function Gps({navigation}) {
     
     // const locate = await Location.reverseGeocodeAsync({latitude, longitude}, {useGoogleMaps:false});
 
-    console.log("llllllllloaaaaaaaarrr",latitude,longitude)
-
     if (mapRef.current) {
       mapRef.current.animateToRegion({
         latitude: latitude,
@@ -73,38 +73,20 @@ export default function Gps({navigation}) {
     // console.log(INITIAL_REGION)
   },[lat,lon])
 
-  // 마커 표시된 집합
-  const markerCoordinates = [
-    { latitude: lat, longitude: lon },
-    { latitude: lat + 0.001, longitude: lon },
-    { latitude: lat + 0.002, longitude: lon },
-    { latitude: lat + 0.003, longitude: lon },
-    { latitude: lat + 0.004, longitude: lon },
-    { latitude: lat + 0.005, longitude: lon },
-    { latitude: lat + 0.005, longitude: lon },
-  ];
-
-  testCoordinates = [
-     [128.9104394,35.0925174 ],
-     [128.9104394, 35.0925174  + 0.001],
-     [128.9104394, 35.0925174  + 0.002],
-     [128.9104394, 35.0925174  + 0.003],
-     [128.9104394, 35.0925174  + 0.004],
-     [128.9104394, 35.0925174  + 0.005],
-     [128.9104394, 35.0925174  + 0.005],
-  ]
-
-
   const getFiltered = (gpsInformation) => {
     const temp = []
-    const [globalList,setGlobalList] = useRecoilState(testDefaultGps)
+    const globalList = useRecoilValue(testDefaultGps)
     const filtered = gpsInformation.forEach((item) => {
-        temp.push(globalList.filter((gps,idx) => gps.latitude===item[1] && gps.longitude===item[0]))
+        globalList.forEach((gps,idx) => {
+          if (gps.latitude===item[1] && gps.longitude===item[0]) {
+            temp.push(gps)
+          }
+        })
     })
-    console.log("temp=",temp)
+    // console.log("temp=",temp)
     return temp
 }
-
+  const testCoordinates = useRecoilValue(testDefaultGps)
   return (
     <SafeAreaProvider style={styles.container}>
       
@@ -124,11 +106,10 @@ export default function Gps({navigation}) {
             temp = []
             children.map((item) => temp.push(item.geometry.coordinates))
             setGpsList(temp)
-            console.log("gpsList",gpsList)
           }}
           // icon={require("./assets/fish.png")}
           >
-            {markerCoordinates.map((coordinate, index) => (
+            {testCoordinates.map((coordinate, index) => (
               <Marker
                 key={index}
                 coordinate={coordinate}
@@ -156,17 +137,24 @@ export default function Gps({navigation}) {
             <Text style={styles.categoryButtonText}>어종</Text>
           </TouchableOpacity>
           <ModalFishCategory CategoryModalVisible={CategoryModalVisible} setCategoryModalVisible={setCategoryModalVisible}></ModalFishCategory>
-
+          
+                
           <TouchableOpacity 
             style={styles.categoryButton}
             onPress={openArticleModal}
             >
             <Text style={styles.categoryButtonText}>게시글</Text>
           </TouchableOpacity>
-          <ModalArticle ArticleModalVisible={ArticleModalVisible} setArticleModalVisible={setArticleModalVisible} filterList={getFiltered(gpsList)} />
+          <ModalArticle ArticleModalVisible={ArticleModalVisible} setArticleModalVisible={setArticleModalVisible} filteredList={getFiltered(gpsList)} city={city} />
 
+          <TouchableOpacity 
+            style={styles.categoryButton}
+            onPress={() =>getLocation()}
+            >
+            <MaterialIcons name="gps-fixed" size={24} color="red" />
+          </TouchableOpacity>  
         </View>
-        
+            
       </View>
     </SafeAreaProvider>
   );
@@ -196,7 +184,7 @@ const styles = StyleSheet.create({
     paddingHorizontal:10,
     alignItems : 'center',
     justifyContent : 'center',
-    width : "30%",
+    width : "22%",
   },
   categoryButtonText : {
     fontSize:18,

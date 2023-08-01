@@ -3,19 +3,16 @@ import { atom,selector,selectorFamily } from "recoil"
 export const testDefaultGps = atom({
     key : 'testDefaultGps',
     default : [
-        { latitude: 35.0925174, longitude: 128.9104394, language : 'ko' },
-        { latitude: 35.0925174+0.001, longitude: 128.9104394, language : 'eu' },
-        { latitude: 35.0925174+0.002, longitude: 128.9104394, language : 'en'},
-        { latitude: 35.0925174+0.003, longitude: 128.9104394, language : 'jp'},
-        { latitude: 35.0925174+0.004, longitude: 128.9104394, language : 'ch' },
-        { latitude: 35.0925174+0.005, longitude: 128.9104394, language : 'nk' },
-        { latitude: 35.0925174+0.001, longitude: 128.9104394, language : 'jp' },
-        { latitude: 35.0925174+0.002, longitude: 128.9104394, language : 'ko' },
-        { latitude: 35.0925174+0.003, longitude: 128.9104394, language : 'ch' },
-        { latitude: 35.0925174+0.004, longitude: 128.9104394, language : 'jp' },
-        { latitude: 35.0925174+0.005, longitude: 128.9104394, language : 'ko' },
-        { latitude: 35.0925174+0.001, longitude: 128.9104394, language : 'nk' },
-        { latitude: 35.0925174+0.002, longitude: 128.9104394, language : 'eu' },
+        { latitude: 35.0968275, longitude: 128.8538282, language : 'ko' },
+        { latitude: 35.0968275+0.001, longitude: 128.8538282, language : 'eu' },
+        { latitude: 35.0968275+0.002, longitude: 128.8538282, language : 'en'},
+        { latitude: 35.0968275+0.003, longitude: 128.8538282, language : 'jp'},
+        { latitude: 35.0968275+0.004, longitude: 128.8538282, language : 'ch' },
+        { latitude: 35.0968275+0.005, longitude: 128.8538282, language : 'nk' },
+        { latitude: 35.0968275+0.006, longitude: 128.8538282, language : 'nk' },
+        { latitude: 35.0968275+0.007, longitude: 128.8538282, language : 'nk' },
+        { latitude: 35.0968275+0.008, longitude: 128.8538282, language : 'nk' },
+        { latitude: 35.0968275+0.009, longitude: 128.8538282, language : 'nk' },
     ]
 })
 

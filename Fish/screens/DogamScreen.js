@@ -159,7 +159,7 @@ const DATA = [
 ];
 
 const Stack = createStackNavigator();
-  
+
 const DogamScreen = ({ navigation }) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity

@@ -7,12 +7,11 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { filteredArticle, testDefaultGps } from '../component/recoil/selectors/testSelector';
 
 
-export default function ModalArticle({ArticleModalVisible,setArticleModalVisible,filterList}) {
-    console.log(filterList)
+export default function ModalArticle({ArticleModalVisible,setArticleModalVisible,filteredList,city}) {
+    console.log(filteredList)
     const closeArticleModal = () => {
         setArticleModalVisible(false)
     }
-    // const articles = 
     return (
         <Modal
         animationType="fade"
@@ -22,38 +21,48 @@ export default function ModalArticle({ArticleModalVisible,setArticleModalVisible
             setArticleModalVisible(!ArticleModalVisible);
         }
     }>  
-        {/* <TouchableWithoutFeedback onPress={closeCategoryModal}> */}
-        <View style={styles.articleContainer} onPress={closeArticleModal}>
-            <View style={{backgroundColor : 'white', width : "90%", paddingTop:20, borderRadius : 30, borderWidth:3}}>
+        <View style={styles.articleModalContainer} onPress={closeArticleModal}>
+            <View style={styles.modalInnerContainer}>
+                
                 <View style={styles.headerContainer}>
                     <Text style={{fontSize : 30, fontWeight : "600"}}>게시글</Text>
                     <MaterialIcons name="close" size={40} color="black" onPress={closeArticleModal} />
                 </View>
 
+                
                 <View>
-                    <Text style={styles.articleCountText}>{filterList.length}개의 게시글</Text>
+                    <Text style={styles.articleCountText}>{filteredList?.length}개의 게시글</Text>
                 </View>
                 
-                
-                    {filterList.map((item,index) => (
+                <ScrollView>
+                  <View>
+                    {filteredList.map((item,index) => (
                         <SpotArticle key={index} item={item}/>
                     ))}
+                  </View>
+                </ScrollView>
             </View>
         </View>
-        {/* </TouchableWithoutFeedback> */}
     </Modal>
 
     )
 }
 
 const styles = StyleSheet.create({
-    articleContainer : {
+  articleModalContainer : {
       backgroundColor : 'transparent',
       alignItems : 'center',
       justifyContent : 'center',
       flex : 1,
       width: '100%',
-      overflow:'scroll'
+    },
+    modalInnerContainer : {
+      backgroundColor : 'white', 
+      width : "90%", 
+      paddingTop:20, 
+      borderRadius : 30, 
+      borderWidth:3,
+      maxHeight:"60%"
     },
     modalButton1 : {
       backgroundColor : 'white',

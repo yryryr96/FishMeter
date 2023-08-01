@@ -2,13 +2,17 @@ import React, {useState} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 export default function SpotArticle({item}) {
+    console.log("item",item)
     return(
         <View style={styles.articleContainer}>
-            <View style={styles.imgContainer}><Text>{item.language}</Text></View>
+            <View style={styles.imgContainer}>
+                <Text style={{fontSize:50}}>{item.language}</Text>
+            </View>
+            
             <View style={styles.infoContainer}>
                 <Text>날짜</Text>
                 <Text>어종</Text>
-                <Text>위치</Text>
+                <Text>{item.latitude} {item.longitude}</Text>
             </View>
             
         </View>
@@ -36,7 +40,9 @@ const styles = StyleSheet.create({
         // width, margin 등의 스타일을 조정하여 수평선의 모양을 변경할 수 있습니다.
       },
       imgContainer : {
-        width:"30%"
+        width:"30%",
+        alignContent:'center',
+        justifyContent:'center'
       },
       infoContainer : {
         width:"70%"
