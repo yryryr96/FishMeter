@@ -53,6 +53,21 @@ export default function WebViewTest() {
       >
         <Text style={{ fontSize: 30, color: "white" }}>카카오 로그아웃</Text>
       </TouchableOpacity>
+      
+      <TouchableOpacity
+        style={{
+          width: "70%",
+          backgroundColor: "green",
+          alignItems: "center",
+          borderRadius: 20,
+          margin: 20,
+        }}
+        onPress={() =>
+          navigation.navigate("TestImage")
+        }
+      >
+        <Text style={{ fontSize: 30, color: "white" }}>이미지 선탣하러가기</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 }
