@@ -100,6 +100,7 @@ export default function Gps({navigation}) {
             latitudeDelta: 0.07,
             longitudeDelta: 0.07,
           }} 
+          // zoomEnabled = {false}
           style={styles.map}
           rotateEnabled={false}
           onClusterPress={(cluster,children) => {

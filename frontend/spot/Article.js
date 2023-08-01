@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View } from 'react-native';
 
 export default function SpotArticle({item}) {
     console.log("item",item)
     return(
         <View style={styles.articleContainer}>
             <View style={styles.imgContainer}>
-                <Text style={{fontSize:50}}>{item.language}</Text>
+                <Image source={{ uri : item.image}} style={{height:55, borderRadius:10}}/>
             </View>
             
             <View style={styles.infoContainer}>
@@ -42,7 +42,9 @@ const styles = StyleSheet.create({
       imgContainer : {
         width:"30%",
         alignContent:'center',
-        justifyContent:'center'
+        justifyContent:'center',
+        marginRight : "6%",
+        marginBottom : "5%"
       },
       infoContainer : {
         width:"70%"
