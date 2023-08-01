@@ -12,7 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { HeaderBackButton } from "@react-navigation/stack";
 import DogamDetail from "./DogamDetail";
-
+import useCustomFont from "../../font/useCustomFont";
 const DATA = [
   {
     id: "1",
@@ -71,6 +71,15 @@ const DATA = [
     src2: require("../../assets/dogam_number/Gamsoung.png"),
   },
 ];
+function FontText({ fontFileName, children }) {
+  const isFontLoaded = useCustomFont(fontFileName);
+
+  if (!isFontLoaded) {
+    return null;
+  }
+
+  return <Text style={styles.text}>{children}</Text>;
+}
 
 const DogamGallery = ({ route, navigation }) => {
   const [data, setData] = useState(DATA);
@@ -98,7 +107,7 @@ const DogamGallery = ({ route, navigation }) => {
         flexDirection: "row",
       }}
     >
-      <View style={{ width: "100%", marginVertical: 5, paddingHorizontal: 5 }}>
+      <View style={{ width: "100%", paddingVertical: 2, paddingHorizontal: 2 }}>
         <TouchableOpacity
           onPress={() => {
             navigation.navigate("DogamDetail", {
@@ -128,24 +137,44 @@ const DogamGallery = ({ route, navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity onPress={handleGoBack} style={{ marginBottom: 5 }}>
+      <TouchableOpacity onPress={handleGoBack}>
         <Icon name="arrow-left" size={35} color="#000" />
       </TouchableOpacity>
       <View
         style={{
+          paddingBottom: 5,
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <FontText
+          fontFileName={require("../../assets/fonts/Yeongdeok_Haeparang.ttf")}
+        >
+          <Text style={{ textAlign: "center", fontSize: 30 }}>{itemName}</Text>
+        </FontText>
+      </View>
+      <View
+        style={{
           paddingBottom: 15,
+          marginHorizontal: 15,
           borderBottomColor: "gray",
           borderBottomWidth: 1,
         }}
-      >
-        <Text style={{ textAlign: "center", fontSize: 25 }}>{itemName}</Text>
-      </View>
+      ></View>
       <View style={{ flexDirection: "row-reverse", marginVertical: 10 }}>
         <TouchableOpacity style={styles.button} onPress={handleSortBySize}>
-          <Text style={styles.button_title}>크기</Text>
+          <FontText
+            fontFileName={require("../../assets/fonts/Yeongdeok_Sea.ttf")}
+          >
+            <Text style={styles.button_title}>크기</Text>
+          </FontText>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={handleSortByDate}>
-          <Text style={styles.button_title}>날짜</Text>
+          <FontText
+            fontFileName={require("../../assets/fonts/Yeongdeok_Sea.ttf")}
+          >
+            <Text style={styles.button_title}>날짜</Text>
+          </FontText>
         </TouchableOpacity>
       </View>
       <View style={{ flex: 1 }}>
@@ -165,8 +194,8 @@ export default DogamGallery;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //alignItems: "center",
-    //justifyContent: "center",
+    // alignItems: "center",
+    // justifyContent: "center",
   },
   dogamItem: {
     width: "100%",
@@ -183,5 +212,9 @@ const styles = StyleSheet.create({
   },
   button_title: {
     fontSize: 15,
+  },
+  text: {
+    fontFamily: "customFont",
+    fontSize: 18,
   },
 });

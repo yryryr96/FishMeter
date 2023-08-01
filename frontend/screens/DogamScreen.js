@@ -11,8 +11,8 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
-
 import DogamGallery from "./dogam/DogamGallery";
+import useCustomFont from "../font/useCustomFont";
 
 const DATA = [
   {
@@ -157,29 +157,46 @@ const DATA = [
   },
 ];
 
+function FontText({ fontFileName, children }) {
+  const isFontLoaded = useCustomFont(fontFileName);
+
+  if (!isFontLoaded) {
+    return null;
+  }
+
+  return <Text style={styles.text}>{children}</Text>;
+}
+
 const Stack = createStackNavigator();
 
 const DogamScreen = ({ navigation }) => {
   const renderItem = ({ item }) => (
-    <TouchableOpacity
-      style={styles.dogamList}
-      onPress={() => {
-        navigation.navigate("DogamGallery", {
-          itemId: item.id,
-          itemName: item.title,
-        });
+    <View
+      style={{
+        width: "33%",
+        justifyContent: "space-around",
+        flexDirection: "row",
       }}
     >
-      <Image
-        //source={item.state ? { uri: item.src2 } : item.src1}
-        source={item.state ? item.src2 : item.src1}
-        style={styles.dogamItem}
-      />
-    </TouchableOpacity>
+      <View style={{ width: "100%", paddingVertical: 2, paddingHorizontal: 2 }}>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate("DogamGallery", {
+              itemId: item.id,
+              itemName: item.title,
+            });
+          }}
+        >
+          <Image
+            //source={item.state ? { uri: item.src2 } : item.src1}
+            source={item.state ? item.src2 : item.src1}
+            style={styles.dogamItem}
+          />
+        </TouchableOpacity>
+      </View>
+    </View>
   );
-  const handleGoBack = () => {
-    navigation.goBack();
-  };
+
   return (
     <SafeAreaView style={styles.container}>
       {/* <View>
@@ -191,23 +208,33 @@ const DogamScreen = ({ navigation }) => {
         </View>
       </View> */}
       <View style={styles.dogam}>
-        <Text style={styles.title}>도감</Text>
-        <Text style={styles.catchCnt}>잡은 수 : 7</Text>
+        <Text style={{ marginBottom: 10 }}>
+          <FontText
+            fontFileName={require("../assets/fonts/Yeongdeok_Haeparang.ttf")}
+          >
+            <Text style={styles.title}>도감</Text>
+          </FontText>
+        </Text>
+        <FontText fontFileName={require("../assets/fonts/Yeongdeok_Sea.ttf")}>
+          <Text style={styles.catchCnt}>잡은 수 : 7</Text>
+        </FontText>
       </View>
+      <View
+        style={{
+          borderBottomWidth: 1,
+          borderBottomColor: "black",
+          marginBottom: 10,
+          // marginHorizontal: 30,
+        }}
+      ></View>
       <View style={styles.flatList}>
         <FlatList
           data={DATA}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
-          numColumns={4}
+          numColumns={3}
         ></FlatList>
       </View>
-
-      <Text>DogamScreen</Text>
-      <Button
-        title="click here"
-        onPress={() => alert("button clicked!")}
-      ></Button>
     </SafeAreaView>
   );
 };
@@ -217,36 +244,24 @@ export default DogamScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
     justifyContent: "center",
-  },
-  dogamList: {
-    flex: 1,
-    height: 120,
-    width: "100%",
-    margin: 5,
-    //justifyContent: "center",
-    //alignItems: "center",
+    textAlign: "center",
+    alignItems: "center",
   },
   dogamItem: {
-    borderRadius: 8,
     width: "100%",
-    height: "100%",
+    height: 130,
   },
   dogam: {
     width: "100%",
     justifyContent: "center",
-    textAlign: "center",
-    paddingBottom: 10,
-    borderBottomWidth: 2,
-    borderBottomColor: "gray",
-    marginBottom: 15,
+    alignItems: "center",
+    paddingBottom: 20,
   },
   title: {
     color: "black",
     textAlign: "center",
     fontSize: 36,
-    marginBottom: 3,
   },
   catchCnt: {
     color: "black",
@@ -254,10 +269,16 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   flatList: {
-    flex: 1.2,
-    width: "100%",
-    justifyContent: "center",
-    alignContent: "center",
-    paddingBottom: 40,
+    flex: 1,
+    paddingBottom: 55,
+    // width: "100%",
+    // justifyContent: "center",
+    // alignContent: "center",
+    // paddingBottom: 40,
+  },
+  text: {
+    fontFamily: "customFont",
+    fontSize: 18,
+    textAlign: "center",
   },
 });

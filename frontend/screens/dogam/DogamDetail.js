@@ -16,6 +16,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import * as Location from "expo-location";
 import ViewShot from "react-native-view-shot";
 import * as Sharing from "expo-sharing";
+import useCustomFont from "../../font/useCustomFont";
 
 const DATA = [
   {
@@ -120,6 +121,16 @@ const GoogleMap = ({ latitude, longitude, setAddress }) => {
   );
 };
 
+function FontText({ fontFileName, children }) {
+  const isFontLoaded = useCustomFont(fontFileName);
+
+  if (!isFontLoaded) {
+    return null;
+  }
+
+  return <Text style={styles.text}>{children}</Text>;
+}
+
 const random = [
   "이게바로 낚시의 즐거움?",
   "즐거웠다",
@@ -208,24 +219,50 @@ const DogamDetail = ({ route, navigation }) => {
               }}
             >
               <Text>{DATA[0].date}</Text>
-              <Text
-                style={{ justifyContent: "center", alignContent: "center" }}
+              <FontText
+                fontFileName={require("../../assets/fonts/Yeongdeok_Sea.ttf")}
               >
                 날씨 <Icon size={20} name={weatherIcon[0].icon} />
-              </Text>
-              <Text>
+              </FontText>
+              <FontText
+                fontFileName={require("../../assets/fonts/Yeongdeok_Blueroad.ttf")}
+              >
                 {address}에서 감성돔 {itemSize}cm짜리를 잡았다.
-              </Text>
+              </FontText>
               {console.log(randomIndex)}
-              <Text>{randomValue}</Text>
+              <FontText
+                fontFileName={require("../../assets/fonts/Yeongdeok_Sea.ttf")}
+              >
+                {randomValue}
+              </FontText>
             </View>
 
             <View style={styles.detail}>
-              <Text>세부기록</Text>
-              <Text>어종 {itemSize}</Text>
-              <Text>크기 {itemSize}cm</Text>
-              <Text>날짜</Text>
-              <Text>장소 {address}</Text>
+              <FontText
+                fontFileName={require("../../assets/fonts/Yeongdeok_Sea.ttf")}
+              >
+                <Text style={{ fontSize: 25 }}>세부기록</Text>
+              </FontText>
+              <FontText
+                fontFileName={require("../../assets/fonts/Yeongdeok_Sea.ttf")}
+              >
+                어종 {itemSize}
+              </FontText>
+              <FontText
+                fontFileName={require("../../assets/fonts/Yeongdeok_Sea.ttf")}
+              >
+                크기 {itemSize}cm
+              </FontText>
+              <FontText
+                fontFileName={require("../../assets/fonts/Yeongdeok_Sea.ttf")}
+              >
+                날짜
+              </FontText>
+              <FontText
+                fontFileName={require("../../assets/fonts/Yeongdeok_Sea.ttf")}
+              >
+                장소 {address}
+              </FontText>
             </View>
             <View style={{ flex: 1 }}>
               <GoogleMap
@@ -264,5 +301,9 @@ const styles = StyleSheet.create({
   detail: {
     padding: 20,
     margin: 20,
+  },
+  text: {
+    fontFamily: "customFont",
+    fontSize: 18,
   },
 });

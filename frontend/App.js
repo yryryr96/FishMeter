@@ -21,19 +21,22 @@ import DogamGallery from "./screens/dogam/DogamGallery";
 import KaKaoLogin from "./KaKaoLogin";
 import KaKaoLogOut from "./KaKaoLogOut";
 import DogamDetail from "./screens/dogam/DogamDetail";
+import { RecoilRoot } from "recoil";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Root" component={Tabs} />
-        <Stack.Screen name="DogamGallery" component={DogamGallery} />
-        <Stack.Screen name="DogamDetail" component={DogamDetail} />
-        <Stack.Screen name="KaKaoLogin" component={KaKaoLogin} />
-        <Stack.Screen name="KaKaoLogOut" component={KaKaoLogOut} />
-      </Stack.Navigator>
+      <RecoilRoot>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="Root" component={Tabs} />
+          <Stack.Screen name="DogamGallery" component={DogamGallery} />
+          <Stack.Screen name="DogamDetail" component={DogamDetail} />
+          <Stack.Screen name="KaKaoLogin" component={KaKaoLogin} />
+          <Stack.Screen name="KaKaoLogOut" component={KaKaoLogOut} />
+        </Stack.Navigator>
+      </RecoilRoot>
     </NavigationContainer>
   );
 }
