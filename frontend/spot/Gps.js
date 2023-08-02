@@ -100,12 +100,14 @@ export default function Gps({navigation}) {
             latitudeDelta: 0.07,
             longitudeDelta: 0.07,
           }} 
+          // zoomEnabled = {false}
           style={styles.map}
           rotateEnabled={false}
           onClusterPress={(cluster,children) => {
             temp = []
             children.map((item) => temp.push(item.geometry.coordinates))
             setGpsList(temp)
+            openArticleModal()
           }}
           // icon={require("./assets/fish.png")}
           >
@@ -139,12 +141,6 @@ export default function Gps({navigation}) {
           <ModalFishCategory CategoryModalVisible={CategoryModalVisible} setCategoryModalVisible={setCategoryModalVisible}></ModalFishCategory>
           
                 
-          <TouchableOpacity 
-            style={styles.categoryButton}
-            onPress={openArticleModal}
-            >
-            <Text style={styles.categoryButtonText}>게시글</Text>
-          </TouchableOpacity>
           <ModalArticle ArticleModalVisible={ArticleModalVisible} setArticleModalVisible={setArticleModalVisible} filteredList={getFiltered(gpsList)} city={city} />
 
           <TouchableOpacity 

@@ -142,17 +142,16 @@ const random = [
 const randomIndex = Math.floor(Math.random() * random.length);
 const randomValue = random[randomIndex];
 
-const DogamDetail = ({ route, navigation }) => {
+const DogamDetailTest = ({ route, navigation }) => {
   const [address, setAddress] = useState(""); // Create a state to store address in DogamDetail
-
+  const item = route.params
   const handleGoBack = () => {
     navigation.goBack();
   };
-  console.log("route=",route)
-  const {itemId} = route.params;
-  const { itemSize } = route.params;
-  const { itemName } = route.params;
-  const { itemSrc } = route.params;
+  const itemId = item.id
+  const itemSrc = item.src1
+  const itemSize = item.size
+  const itemName = item.title
 
   console.log(itemId);
   console.log(itemSrc);
@@ -163,9 +162,9 @@ const DogamDetail = ({ route, navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <View style={{ flexDirection: "row", justifyContent: "space-between"}}>
           <TouchableOpacity onPress={handleGoBack} style={{ marginBottom: 5 }}>
-            <Icon name="arrow-left" size={35} color="#0a00" />
+            <Icon name="arrow-left" size={35} color="black" />
           </TouchableOpacity>
           <View style={{ flexDirection: "row" }}>
             <Pressable
@@ -268,8 +267,8 @@ const DogamDetail = ({ route, navigation }) => {
             </View>
             <View style={{ flex: 1 }}>
               <GoogleMap
-                latitude={DATA[0].lat}
-                longitude={DATA[0].lon}
+                latitude={item.latitude}
+                longitude={item.longitude}
                 setAddress={setAddress}
               ></GoogleMap>
             </View>
@@ -280,7 +279,7 @@ const DogamDetail = ({ route, navigation }) => {
   );
 };
 
-export default DogamDetail;
+export default DogamDetailTest;
 
 const styles = StyleSheet.create({
   container: {

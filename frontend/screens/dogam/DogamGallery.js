@@ -111,6 +111,7 @@ const DogamGallery = ({ route, navigation }) => {
         <TouchableOpacity
           onPress={() => {
             navigation.navigate("DogamDetail", {
+              itemId : item.id,
               itemSize: item.size,
               itemName: { itemName },
               itemSrc: item.src1,

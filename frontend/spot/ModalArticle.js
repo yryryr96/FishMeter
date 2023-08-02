@@ -37,7 +37,7 @@ export default function ModalArticle({ArticleModalVisible,setArticleModalVisible
                 <ScrollView>
                   <View>
                     {filteredList.map((item,index) => (
-                        <SpotArticle key={index} item={item}/>
+                        <SpotArticle key={index} item={item} ArticleModalVisible={ArticleModalVisible} setArticleModalVisible={setArticleModalVisible} />
                     ))}
                   </View>
                 </ScrollView>
