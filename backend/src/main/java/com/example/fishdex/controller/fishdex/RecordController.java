@@ -21,4 +21,9 @@ public class RecordController {
         return recordService.findList();
     }
 
+    @PostMapping("/records")
+    public void regist(@RequestBody RecordRequestDto recordRequestDto , @AuthenticationPrincipal OAuth2User principal){
+        long id  = principal.getAttribute("id");
+    }
+
 }
