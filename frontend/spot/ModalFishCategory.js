@@ -64,45 +64,46 @@ export default function ModalFishCategory({CategoryModalVisible,setCategoryModal
     }   
 
     return (
-    <Modal
-        animationType="fade"
-        transparent={true}
-        visible={CategoryModalVisible}
-        onRequestClose={() => {
-            setCategoryModalVisible(!CategoryModalVisible);
-        }
-    }>  
-        {/* <TouchableWithoutFeedback onPress={closeCategoryModal}> */}
-        <View style={styles.categoryContainer} onPress={closeCategoryModal}>
-            <View style={{backgroundColor : 'white', width : "90%", paddingTop:20, borderRadius : 30, borderWidth:3}}>
-                <View style={styles.headerContainer}>
-                    <Text style={{fontSize : 30, fontWeight : "600"}}>어종</Text>
-                    <MaterialIcons name="close" size={40} color="black" onPress={closeCategoryModal} />
-                </View>
+    
+        <Modal
+            animationType="fade"
+            transparent={true}
+            visible={CategoryModalVisible}
+            onRequestClose={() => {
+                setCategoryModalVisible(!CategoryModalVisible);
+            }
+        }>  
+            <TouchableWithoutFeedback onPress={closeCategoryModal}>
+            <View style={styles.categoryContainer} onPress={closeCategoryModal}>
+                <View style={{backgroundColor : 'white', width : "90%", paddingTop:20, borderRadius : 30, borderWidth:3}}>
+                    <View style={styles.headerContainer}>
+                        <Text style={{fontSize : 30, fontWeight : "600"}}>어종</Text>
+                        <MaterialIcons name="close" size={40} color="black" onPress={closeCategoryModal} />
+                    </View>
 
-                <View style={styles.line}></View>
+                    <View style={styles.line}></View>
 
-                <View style={{paddingHorizontal : "5%",justifyContent:'center', alignItems:'center'}}>
-                    <FlatList
-                        data={Fishes}
-                        renderItem={renderButtonRow}
-                        keyExtractor={(item) => item.id.toString()}
-                        numColumns={3}
-                    >
-                    </FlatList>
-                </View>
+                    <View style={{paddingHorizontal : "5%",justifyContent:'center', alignItems:'center'}}>
+                        <FlatList
+                            data={Fishes}
+                            renderItem={renderButtonRow}
+                            keyExtractor={(item) => item.id.toString()}
+                            numColumns={3}
+                        >
+                        </FlatList>
+                    </View>
+                    
+                    
+                    <View style={styles.modalButtonContainer}>
+                        <TouchableOpacity style={styles.modalButton2} onPress={ClickSetting}>
+                        <Text style={{fontSize:25, fontWeight:"600", color:'white'}}>확인</Text>
+                        </TouchableOpacity>
+                    </View>
                 
-                
-                <View style={styles.modalButtonContainer}>
-                    <TouchableOpacity style={styles.modalButton2} onPress={ClickSetting}>
-                    <Text style={{fontSize:25, fontWeight:"600", color:'white'}}>확인</Text>
-                    </TouchableOpacity>
                 </View>
-              
             </View>
-        </View>
-        {/* </TouchableWithoutFeedback> */}
-    </Modal>
+            </TouchableWithoutFeedback>
+        </Modal>
     )
 }
 
