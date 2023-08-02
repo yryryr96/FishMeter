@@ -23,10 +23,8 @@ export default function Home() {
                     latitude: 35.0968275,
                     longitude: 128.8538282,
                 }}
-                    title="하이"
-                    description="테스트"
-                    icon={{uri : "https://mblogthumb-phinf.pstatic.net/MjAyMTA2MDdfMjU5/MDAxNjIzMDcxOTIzNzEz.6dUa0UQGoXgrAqyPJtkbzU4oMn069zjD6qbNKwSlCsIg.VSexkq13-JCdjvGLbiv-vsawdrcrvG9dCq8_sAvzAOcg.JPEG.bestehno1/IMG_4495.jpg?type=w300"}}
-                    
+                    title="아니"
+                    description='못하겠다고'
                 />
             
             </MapView>

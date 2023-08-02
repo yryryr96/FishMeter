@@ -1,10 +1,12 @@
 import React, {useState} from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, View,TouchableOpacity, Alert } from 'react-native';
 
 export default function SpotArticle({item}) {
     console.log("item",item)
     return(
+        
         <View style={styles.articleContainer}>
+            <TouchableOpacity style={{flexDirection:'row'}} onPress={()=>Alert.alert('hh')}>
             <View style={styles.imgContainer}>
                 <Image source={{ uri : item.image}} style={{height:55, borderRadius:10}}/>
             </View>
@@ -14,7 +16,7 @@ export default function SpotArticle({item}) {
                 <Text>어종</Text>
                 <Text>{item.latitude} {item.longitude}</Text>
             </View>
-            
+            </TouchableOpacity>
         </View>
     )
 }

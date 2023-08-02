@@ -148,7 +148,7 @@ const DogamDetail = ({ route, navigation }) => {
   const handleGoBack = () => {
     navigation.goBack();
   };
-
+  console.log("route=",route)
   const { itemSize } = route.params;
   const { itemName } = route.params;
   const { itemSrc } = route.params;
@@ -246,7 +246,7 @@ const DogamDetail = ({ route, navigation }) => {
               <FontText
                 fontFileName={require("../../assets/fonts/Yeongdeok_Sea.ttf")}
               >
-                어종 {itemSize}
+                어종 {itemName}
               </FontText>
               <FontText
                 fontFileName={require("../../assets/fonts/Yeongdeok_Sea.ttf")}
