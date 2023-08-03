@@ -8,6 +8,7 @@ import Gps from "../spot/Gps";
 import Profile from "../screens/Profile";
 import WebViewTest from "../WebViewTest";
 import WebView from "react-native-webview";
+import Home from "../Home";
 
 const Tab = createBottomTabNavigator();
 
@@ -67,7 +68,7 @@ const Tabs = () => {
     >
       <Tab.Screen
         name="Home"
-        component={WebViewTest}
+        component={Home}
         options={{
           tabBarIcon: (props) =>
             IonIcon({

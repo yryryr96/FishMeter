@@ -25,24 +25,38 @@ import { RecoilRoot } from "recoil";
 import TestImage from "./TestImage";
 import Home from "./Home";
 import DogamDetailTest from "./screens/dogam/DogamDetailTest";
+import WebView from "react-native-webview";
 
 const Stack = createNativeStackNavigator();
 
 export default function App() {
+  const [state,setState] = useState(false)
   return (
-    <NavigationContainer>
-      <RecoilRoot>
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="Root" component={Tabs} />
-          <Stack.Screen name="DogamGallery" component={DogamGallery} />
-          <Stack.Screen name="DogamDetail" component={DogamDetail} />
-          <Stack.Screen name="DogamDetailTest" component={DogamDetailTest} />
-          <Stack.Screen name="KaKaoLogin" component={KaKaoLogin} />
-          <Stack.Screen name="KaKaoLogOut" component={KaKaoLogOut} />
-          <Stack.Screen name="TestImage" component={TestImage} />
-          <Stack.Screen name="HomeTest" component={Home} />
-        </Stack.Navigator>
-      </RecoilRoot>
-    </NavigationContainer>
+    <View style={{flex:1}}>
+      {!state ? 
+      <View>
+        <TouchableOpacity onPress={()=>setState(true)}>
+          <Text style={{fontSize:100}}>CLICK</Text>
+        </TouchableOpacity>
+      </View>
+      :
+      <NavigationContainer>
+        <RecoilRoot>
+          <Stack.Navigator screenOptions={{ headerShown: false }}>
+            {/* <Stack.Screen name="Login" component={WebView} /> */}
+            <Stack.Screen name="Root" component={Tabs} />
+            <Stack.Screen name="DogamGallery" component={DogamGallery} />
+            <Stack.Screen name="DogamDetail" component={DogamDetail} />
+            <Stack.Screen name="DogamDetailTest" component={DogamDetailTest} />
+            <Stack.Screen name="KaKaoLogin" component={KaKaoLogin} />
+            <Stack.Screen name="KaKaoLogOut" component={KaKaoLogOut} />
+            <Stack.Screen name="TestImage" component={TestImage} />
+            <Stack.Screen name="HomeTest" component={Home} />
+          </Stack.Navigator>
+        </RecoilRoot>
+      </NavigationContainer>
+      }
+      
+    </View>
   );
 }
