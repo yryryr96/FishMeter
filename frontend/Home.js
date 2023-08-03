@@ -1,4 +1,4 @@
-import { View, StyleSheet, TouchableOpacity,Text } from 'react-native';
+import { View, StyleSheet, TouchableOpacity,Text,Image } from 'react-native';
 import {Marker} from 'react-native-maps';
 import MapView from 'react-native-maps';
 import { testDefaultGps } from './component/recoil/selectors/testSelector';
@@ -14,7 +14,9 @@ export default function Home() {
     const [id, setId] = useState(11);
     const [lat, setLat] = useState(35.0968275 + 0.01);
     const [lon, setLon] = useState(128.8538282 + 0.01);
-    const [title,setTitle] = useState('불가사리')
+    const [title,setTitle] = useState('불가사리');
+    const [newData, setNewData] = useState([]);
+
 
     const toastRef = useRef();
     const showCopyToast = useCallback(() => {
@@ -38,9 +40,10 @@ export default function Home() {
           .then((response) => {
               // console.log("서버 응답:", response.data);
             // console.log('res= ',response.data)
-            setTotalMarker(response.data);
             showCopyToast({id : response.data[response.data.length - 1].id, title: response.data[response.data.length - 1].title})
-
+            
+            setTotalMarker(response.data);
+            setNewData((prev)=>[...prev,response.data[response.data.length - 1]])
             setId(prevId => prevId + 1);
             setLat(prevLat => prevLat + Math.random()*0.12);
             setLon(prevLon => prevLon - Math.random()*0.12);
@@ -79,9 +82,9 @@ export default function Home() {
                     />
                 ))}
                 
-            
             </MapView>
-            <View style={{position:'absolute',marginHorizontal:30, marginVertical : 30, backgroundColor : 'red'}}>
+            
+            <View style={{position:'absolute',marginHorizontal:30, marginVertical : 30}}>
                 <Toast ref={toastRef}
                     position='top'
                     // positionValue={300}
@@ -98,6 +101,20 @@ export default function Home() {
                     textStyle={{color:'white', fontSize:17}}
                     />
             </View>
+            
+            <View style={{position:'absolute', top:50, right:20}}>
+                {newData.length !== 0 ?
+                    <TouchableOpacity onPress={()=>console.log(newData)}>
+                        <Image style={{width:50, height:50}} source={require("./assets/bell.png")}/>
+                    </TouchableOpacity>
+                    :
+                    <TouchableOpacity onPress={()=>setNewData((prev)=>[...prev,1])}>
+                        <Text>add data</Text>
+                    </TouchableOpacity>
+                }
+                
+            </View>
+
             <View style={{position:'absolute', bottom:120, marginHorizontal:30}}>
                 <TouchableOpacity onPress={handleUpdate}>
                     <Entypo name="camera" size={50} color="black" />
