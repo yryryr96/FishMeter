@@ -82,27 +82,8 @@ function FontText({ fontFileName, children }) {
   return <Text style={styles.text}>{children}</Text>;
 }
 
-const DogamGallery = ({ route, navigation }) => {
+const CalendarGallery = ({ route, navigation }) => {
   const [data, setData] = useState(DATA);
-  const [isSorted, setIsSorted] = useState(false);
-  const [selectedButton, setSelectedButton] = useState(""); // 선택한 버튼을 추적하기 위한 상태 변수
-
-  // 정렬 함수
-  const handleSortBySize = () => {
-    // 크기(size) 순으로 정렬
-    const sortedData = [...data].sort((a, b) => b.size - a.size);
-    setData(sortedData);
-    setSelectedButton("size"); // 선택한 버튼을 "size"로 설정
-
-    //setIsSorted(true);
-  };
-
-  const handleSortByDate = () => {
-    // 날짜(date) 순으로 정렬
-    const sortedData = [...data].sort((a, b) => b.date - a.date);
-    setData(sortedData);
-    setSelectedButton("date"); // 선택한 버튼을 "date"로 설정
-  };
 
   const renderItem = ({ item }) => (
     <View
@@ -137,9 +118,6 @@ const DogamGallery = ({ route, navigation }) => {
     navigation.goBack();
   };
 
-  const { itemId } = route.params;
-  const { itemName } = route.params;
-
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity onPress={handleGoBack}>
@@ -155,71 +133,12 @@ const DogamGallery = ({ route, navigation }) => {
         <FontText
           fontFileName={require("../../assets/fonts/Yeongdeok_Haeparang.ttf")}
         >
-          <Text style={{ textAlign: "center", fontSize: 30 }}>{itemName}</Text>
+          <Text style={{ textAlign: "center", fontSize: 30 }}>
+            날짜보여주셈
+          </Text>
         </FontText>
       </View>
-      <View
-        style={{
-          paddingBottom: 15,
-          marginHorizontal: 15,
-          borderBottomColor: "gray",
-          borderBottomWidth: 1,
-        }}
-      ></View>
-      <View style={{ flexDirection: "row-reverse", marginVertical: 10 }}>
-        <TouchableOpacity
-          style={[
-            styles.button,
-            // 버튼이 선택되었을 때 커스텀 스타일을 적용합니다.
-            selectedButton === "size" && {
-              backgroundColor: "#A8C8E3",
-              // borderBottomColor: "#2D63E2",
-              // borderBottomWidth: 2,
-            },
-          ]}
-          onPress={handleSortBySize}
-        >
-          <FontText
-            fontFileName={require("../../assets/fonts/Yeongdeok_Sea.ttf")}
-          >
-            <Text
-              style={[
-                styles.button_title,
-                // 버튼이 선택되었을 때 글자 색을 커스텀합니다.
-                //selectedButton === "size" && { color: "#2D63E2" },
-              ]}
-            >
-              크기
-            </Text>
-          </FontText>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[
-            styles.button,
-            // 버튼이 선택되었을 때 커스텀 스타일을 적용합니다.
-            selectedButton === "date" && {
-              backgroundColor: "#A8C8E3",
-              // borderBottomColor: "#2D63E2",
-              // borderBottomWidth: 2,
-            },
-          ]}
-          onPress={handleSortByDate}
-        >
-          <FontText
-            fontFileName={require("../../assets/fonts/Yeongdeok_Sea.ttf")}
-          >
-            <Text
-              style={[
-                styles.button_title,
-                // 버튼이 선택되었을 때 글자 색을 커스텀합니다.
-                // selectedButton === "date" && { color: "#2D63E2" },
-              ]}
-            >
-              날짜
-            </Text>
-          </FontText>
-        </TouchableOpacity>
-      </View>
+
       <View style={{ flex: 1 }}>
         <FlatList
           data={data}
@@ -232,7 +151,7 @@ const DogamGallery = ({ route, navigation }) => {
   );
 };
 
-export default DogamGallery;
+export default CalendarGallery;
 
 const styles = StyleSheet.create({
   container: {
