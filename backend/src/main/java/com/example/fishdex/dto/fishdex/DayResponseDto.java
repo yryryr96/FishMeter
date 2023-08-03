@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class FishResponseDto {
+public class DayResponseDto {
     private long id;
-    private String species;
+    private String day;
 }

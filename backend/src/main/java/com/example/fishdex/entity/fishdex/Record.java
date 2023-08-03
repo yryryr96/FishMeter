@@ -1,9 +1,7 @@
 package com.example.fishdex.entity.fishdex;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.example.fishdex.dto.fishdex.RecordRequestDto;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,9 +9,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.sql.Timestamp;
 
+
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-
+@AllArgsConstructor
+@Builder
 @Setter
 @Getter
 public class Record {
@@ -25,13 +25,13 @@ public class Record {
     private double length;
     private double latitude;
     private double longitude;
-    private Timestamp createdAt;
     private double temperature;
     private String weather;
     private double precipitation;
     private int windDirection;
     private double windSpeed;
     private boolean favorite;
-    private int userId;
-    private int fishId;
+    private long dayId;
+    private long userId;
+    private long fishId;
 }
