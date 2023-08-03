@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 //import org.springframework.security.core.annotation.AuthenticationPrincipal;
 //import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,8 +27,8 @@ public class RecordController {
         return recordService.findAll();
     }
 
-    @PostMapping("/records")
-    public void regist(@RequestBody RecordRequestDto recordRequestDto) throws IOException {
+    @PostMapping(value = "/records", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public void regist(@RequestPart RecordRequestDto recordRequestDto, @RequestPart MultipartFile image) throws IOException {
 //        , @AuthenticationPrincipal OAuth2User principal
 //        long id  = principal.getAttribute("id");
         System.out.println(recordRequestDto.getSpecies());
@@ -38,7 +39,6 @@ public class RecordController {
         long userId = 1;
         long fishId = recordService.getFishId(recordRequestDto.getSpecies());
         recordRequestDto.setFishId(fishId);
-
 
         String imageUrl = s3Uploader.upload(image, "images");
         recordRequestDto.setImageUrl(imageUrl);

@@ -25,12 +25,11 @@ public class RecordRequestDto {
     private double windSpeed;
     private boolean favorite;
     private String species;
-    private String image;
     private long dayId;
     private long userId;
     private long fishId;
 
-    public RecordRequestDto(double length, double latitude, double longitude, Timestamp createdAt, double temperature, String weather, double precipitation, int windDirection, double windSpeed, boolean favorite, String species, String image) {
+    public RecordRequestDto(double length, double latitude, double longitude, Timestamp createdAt, double temperature, String weather, double precipitation, int windDirection, double windSpeed, boolean favorite, String species) {
         this.length = length;
         this.latitude = latitude;
         this.longitude = longitude;
@@ -42,7 +41,6 @@ public class RecordRequestDto {
         this.windSpeed = windSpeed;
         this.favorite = favorite;
         this.species = species;
-        this.image = image;
     }
 
     public Record toEntity(){
