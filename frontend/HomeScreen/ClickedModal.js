@@ -13,7 +13,7 @@ export default function ClickedMarkerModal({ClickedModalVisible, setClickedModal
             transparent={true}
             visible={ClickedModalVisible}
             onRequestClose={() => {
-                setNewDataModalVisible(false);
+                setClickedModalVisible(false);
             }
         }>  
             <TouchableWithoutFeedback onPress={closeClickedModalVisible}>
@@ -32,6 +32,7 @@ export default function ClickedMarkerModal({ClickedModalVisible, setClickedModal
                                 </View>
 
                                 <View style={{justifyContent:'space-between', marginTop : 20 }}>
+                                    <Text style={{fontSize : 16, marginBottom:5}}>주소 : {item.address}</Text>
                                     <Text style={{fontSize : 16, marginBottom:5}}>닉네임 : {item.id}</Text>
                                     <Text style={{fontSize : 16, marginBottom:5}}>어종 :{item.title}</Text>
                                     <Text style={{fontSize : 16, marginBottom:5}}>크기 : {item.size}cm</Text>
