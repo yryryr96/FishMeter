@@ -1,5 +1,8 @@
 package com.example.fishdex.dto.fishdex;
 
+import com.example.fishdex.entity.fishdex.Day;
+import com.example.fishdex.entity.fishdex.Fish;
+import com.example.fishdex.entity.user.User;
 import lombok.*;
 
 import com.example.fishdex.entity.fishdex.Record;
@@ -25,9 +28,9 @@ public class RecordRequestDto {
     private double windSpeed;
     private boolean favorite;
     private String species;
-    private long dayId;
-    private long userId;
-    private long fishId;
+    private Day day;
+    private User user;
+    private Fish fish;
 
     public RecordRequestDto(double length, double latitude, double longitude, Timestamp createdAt, double temperature, String weather, double precipitation, int windDirection, double windSpeed, boolean favorite, String species) {
         this.length = length;
@@ -54,9 +57,9 @@ public class RecordRequestDto {
                 .windDirection(this.windDirection)
                 .windSpeed(this.windSpeed)
                 .favorite(this.favorite)
-                .dayId(this.dayId)
-                .userId(this.userId)
-                .fishId(this.fishId)
+                .day(this.day)
+                .user(this.user)
+                .fish(this.fish)
                 .build();
     }
 }

@@ -6,13 +6,16 @@ import com.example.fishdex.dto.fishdex.RecordRequestDto;
 import com.example.fishdex.entity.fishdex.Day;
 import com.example.fishdex.entity.fishdex.Fish;
 import com.example.fishdex.entity.fishdex.Record;
+import com.example.fishdex.entity.user.User;
 import com.example.fishdex.repository.fishdex.DayRepository;
 import com.example.fishdex.repository.fishdex.FishRepository;
 import com.example.fishdex.repository.fishdex.RecordRepository;
+import com.example.fishdex.repository.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +24,7 @@ public class RecordService {
     private final RecordRepository recordRepository;
     private final FishRepository fishRepository;
     private final DayRepository dayRepository;
+    private final UserRepository userRepository;
 
     public List<FishResponseDto> findAll() {
         List<Fish> fishEntity = fishRepository.findAll();
@@ -30,10 +34,9 @@ public class RecordService {
         return fishResponseDto;
     }
 
-    public long getDayId(DayRequestDto dto) {
+    public Day getDay(DayRequestDto dto) {
         Day day = new Day(dto.getDay());
-        Day saveDay =  dayRepository.save(day);
-        return saveDay.getId();
+        return dayRepository.save(day);
     }
 
     public void save(RecordRequestDto recordRequestDto) {
@@ -41,9 +44,11 @@ public class RecordService {
         recordRepository.save(record);
     }
 
-    public long getFishId(String species) {
-        Fish fish = fishRepository.findBySpecies(species);
-        System.out.println(fish.toString());
-        return fish.getId();
+    public Fish getFish(String species) {
+        return fishRepository.findBySpecies(species);
     }
+
+    public User getUser(long userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        return optionalUser.orElse(null);    }
 }

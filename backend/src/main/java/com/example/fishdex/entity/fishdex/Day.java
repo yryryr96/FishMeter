@@ -2,10 +2,7 @@ package com.example.fishdex.entity.fishdex;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
@@ -15,6 +12,7 @@ import java.sql.Timestamp;
 public class Day {
 
     @Id
+    @Column(name="day_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Timestamp createdAt;

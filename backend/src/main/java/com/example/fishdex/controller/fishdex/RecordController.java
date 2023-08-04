@@ -3,7 +3,11 @@ package com.example.fishdex.controller.fishdex;
 import com.example.fishdex.dto.fishdex.DayRequestDto;
 import com.example.fishdex.dto.fishdex.FishResponseDto;
 import com.example.fishdex.dto.fishdex.RecordRequestDto;
+import com.example.fishdex.entity.fishdex.Day;
+import com.example.fishdex.entity.fishdex.Fish;
+import com.example.fishdex.entity.user.User;
 import com.example.fishdex.service.fishdex.RecordService;
+import com.example.fishdex.service.user.UserService;
 import com.example.fishdex.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RecordController {
     private final RecordService recordService;
+    private final UserService userService;
     private final S3Uploader s3Uploader;
 
     @GetMapping("/fishes")
@@ -30,19 +35,22 @@ public class RecordController {
     @PostMapping(value = "/records", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public void regist(@RequestPart RecordRequestDto recordRequestDto, @RequestPart MultipartFile image) throws IOException {
 //        , @AuthenticationPrincipal OAuth2User principal
-//        long id  = principal.getAttribute("id");
+//        long userId  = principal.getAttribute("id");
+        long userId  = 1;
         System.out.println(recordRequestDto.getSpecies());
         DayRequestDto dayRequestDto = new DayRequestDto();
         dayRequestDto.setDay(recordRequestDto.getCreatedAt());
-        long dayId = recordService.getDayId(dayRequestDto);
-        recordRequestDto.setDayId(dayId);
-        long userId = 1;
-        long fishId = recordService.getFishId(recordRequestDto.getSpecies());
-        recordRequestDto.setFishId(fishId);
+
+        Day day = recordService.getDay(dayRequestDto);
+        recordRequestDto.setDay(day);
+
+        User user = recordService.getUser(userId);
+        recordRequestDto.setUser(user);
+        Fish fish = recordService.getFish(recordRequestDto.getSpecies());
+        recordRequestDto.setFish(fish);
 
         String imageUrl = s3Uploader.upload(image, "images");
         recordRequestDto.setImageUrl(imageUrl);
-        recordRequestDto.setUserId(userId);
 
         recordService.save(recordRequestDto);
     }
