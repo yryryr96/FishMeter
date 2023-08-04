@@ -115,7 +115,7 @@ export default function Gps({navigation}) {
               <Marker
                 key={index}
                 coordinate={coordinate}
-                icon={require("../assets/fish.png")}
+                icon={require("../assets/location.png")}
                 onPress={() => {console.log(coordinate.latitude)}}
               />)
             )}

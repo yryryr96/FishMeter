@@ -40,7 +40,8 @@ export default function NewDataModal({newDataModalVisible, setNewDataModalVisibl
                                         <Image source={{uri : item.src1}} style={{width:120,height:120,borderRadius : 10}} />
                                     </View>
 
-                                    <View style={{marginHorizontal : 20}}>
+                                    <View style={{marginHorizontal : 22, justifyContent : 'space-between'}}>
+                                        <Text style={{fontSize : 13, marginBottom:5}}>{item.address}</Text>
                                         <Text style={{fontSize : 16, marginBottom:5}}>{item.id}</Text>
                                         <Text style={{fontSize : 16, marginBottom:5}}>{item.title}</Text>
                                         <Text style={{fontSize : 16, marginBottom:5}}>{item.size}cm</Text>
