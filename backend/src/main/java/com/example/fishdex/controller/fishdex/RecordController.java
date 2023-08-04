@@ -29,7 +29,8 @@ public class RecordController {
 
     @GetMapping("/fishes")
     public List<FishResponseDto> findAll(){
-        return recordService.findAll();
+        long userId = 1;
+        return recordService.findAll(userId);
     }
 
     @PostMapping(value = "/records", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})

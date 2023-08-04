@@ -26,8 +26,8 @@ public class RecordService {
     private final DayRepository dayRepository;
     private final UserRepository userRepository;
 
-    public List<FishResponseDto> findAll() {
-        List<Fish> fishEntity = fishRepository.findAll();
+    public List<FishResponseDto> findAll(Long userId) {
+        List<Fish> fishEntity = recordRepository.findFishByUserId(userId);
         List<FishResponseDto> fishResponseDto = fishEntity.stream()
                 .map(fish -> new FishResponseDto(fish.getId(), fish.getSpecies()))
                 .collect(Collectors.toList());
