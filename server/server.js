@@ -36,7 +36,7 @@ async function getAddressFromCoordinates(longitude, latitude) {
         Authorization: `KakaoAK ${apiKey}`
       }
     });
-    console.log(response.data.documents[0].address);
+    // console.log(response.data.documents[0].address);
     return response.data.documents[0].address;
   }
   catch(error) {
@@ -81,7 +81,7 @@ app.post('/update', async (req, res) => {
   
   // 서버 데이터를 업데이트합니다.
   
-  console.log(data)
+  // console.log(data)
   // API를 통해 주소 정보를 가져옵니다.
   try {
     const address = await getAddressFromCoordinates(newData.longitude, newData.latitude);
@@ -101,8 +101,9 @@ app.post('/update', async (req, res) => {
   
   defaultData.push(data)
   // 연결된 모든 SSE 클라이언트에게 업데이트된 데이터를 전송합니다.
+  console.log(defaultData)
   clients.forEach((client) => {
-    client.emit('dataUpdated', defaultData);
+    client.emit('dataUpdate', defaultData);
   });
 
   res.status(200).json(defaultData);

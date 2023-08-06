@@ -21,7 +21,9 @@ const ImageUrl = [
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7raSez3h9QZIwPSax1M9D7JoHHfkBWCLySg&usqp=CAU',
     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ1facy446KgNB67l8GPE9jWsLJcNqV73HNWQ&usqp=CAU'
 ]
-const socket = io('http://192.168.123.101:8082');
+
+const fishes = ['광어','상어','고래','참돔','돌돔','망둥어']
+const socket = io('http://192.168.123.102:8082');
 
 export default function Home() {
     const [totalMarker, setTotalMarker] = useRecoilState(testDefaultGps)
@@ -31,6 +33,7 @@ export default function Home() {
     const [lon, setLon] = useState(128.8538282 + 0.01);
     const [title,setTitle] = useState('배스');
     const [newData, setNewData] = useState([]);
+    const [newMessage, setNewMessage] = useState([]);
     
     // 모달
     const [newDataModalVisible, setNewDataModalVisible] = useState(false);
@@ -75,25 +78,29 @@ export default function Home() {
       useEffect(()=>{
         getLocation()
         // console.log(INITIAL_REGION)
+        socket.on('dataUpdate', (data) => {
+            // 서버로부터 데이터 업데이트 이벤트가 오면 해당 데이터를 받아와서 클라이언트에 반영
+            // console.log('Received updated data:', data);
+            // console.log('data=',data)
+            setTotalMarker(data);
+            setNewData((prev)=>[...prev,data[data.length - 1]])
+            const newM = [data[data.length - 1]['id'],data[data.length - 1]['title']]
+            setNewMessage((prev) => [...prev, newM].slice(-5))
+            // console.log(newMessage)
+
+        });
+
+        return () => {
+            socket.off('dataUpdate')
+        }
       },[])
-
-    const toastRef = useRef();
-    const showCopyToast = useCallback(() => {
-        toastRef.current.show(`유저 ${id}님이 ${title} 을/를 낚았습니다!!`);
-      }, [id,title]);
-
-    socket.on('dataUpdate', (data) => {
-        // 서버로부터 데이터 업데이트 이벤트가 오면 해당 데이터를 받아와서 클라이언트에 반영
-        console.log('Received updated data:', data);
-        setTotalMarker(data);
-    });
     
     const handleUpdate = () => {
     // 서버로 보낼 데이터 객체를 생성합니다.
         const newData = {
             id : id, // user ID
             size : 40, // 물고기 크기
-            title : title, // 물고기 이름
+            title : fishes[Math.floor(Math.random()*fishes.length)], // 물고기 이름
             latitude : lat, 
             longitude : lon,
             src1 : ImageUrl[Math.floor(Math.random()*ImageUrl.length)]
@@ -101,14 +108,13 @@ export default function Home() {
         };
 
         // 서버로 POST 요청을 보냅니다.
-        axios.post("http://192.168.123.101:8082/update", newData)
+        axios.post("http://192.168.123.102:8082/update", newData)
             .then((response) => {
                 // console.log("서버 응답:", response.data);
             // console.log('res= ',response.data)
-            showCopyToast({id : response.data[response.data.length - 1].id, title: response.data[response.data.length - 1].title})
+            // showCopyToast({id : response.data[response.data.length - 1].id, title: response.data[response.data.length - 1].title})
             
             // setTotalMarker(response.data);
-            setNewData((prev)=>[...prev,response.data[response.data.length - 1]])
             setId(prevId => prevId + 1);
             setLat(prevLat => prevLat + Math.random()*0.12);
             setLon(prevLon => prevLon - Math.random()*0.12);
@@ -152,26 +158,6 @@ export default function Home() {
                 
             </MapView>
             
-            <View style={{position:'absolute',marginHorizontal:30, marginVertical : 30}}>
-                <Toast ref={toastRef}
-                    position='top'
-                    // positionValue={300}
-                    fadeInDuration={200}
-                    fadeOutDuration={2000}
-                    style={{
-                        backgroundColor:'#636363',
-                        borderRadius : 20,
-                        width : 300,
-                        marginLeft:330,
-                        marginTop:-20,
-                        justifyContent:'center',
-                        alignItems:'center'
-                    }}
-                    opacity={0.8}
-                    textStyle={{color:'yellow', fontSize:17}}
-                    />
-            </View>
-            
             <View style={{position:'absolute', top:50, right:20}}>
                 {newData.length !== 0 ?
                     <TouchableOpacity onPress={()=>setNewDataModalVisible(true)}>
@@ -186,6 +172,17 @@ export default function Home() {
                 <TouchableOpacity onPress={handleUpdate}>
                     <Entypo name="camera" size={50} color="black" />
                 </TouchableOpacity>
+            </View>
+            
+             {/* 실시간 알림 */}
+            <View style={{backgroundColor: 'rgba(0, 0, 0, 0.5)',borderRadius : 10, position:'absolute', bottom : 100, left:100}}>
+                {newMessage.map((item,index) => (
+                    <View key={index} style={{flexDirection:'row', margin:10}}>
+                        <Text style={{color:'white'}}>{item[0]}님이 </Text>
+                        <Text style={{color:'yellow'}}>{item[1]}을/를 </Text>
+                        <Text style={{color:'white'}}>잡았습니다.</Text>
+                    </View>
+                ))}
             </View>
             
             <NewDataModal newData={newData} newDataModalVisible={newDataModalVisible} setNewDataModalVisible={setNewDataModalVisible} ></NewDataModal>
