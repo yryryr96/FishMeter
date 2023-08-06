@@ -3,7 +3,7 @@ import React, {useState} from 'react';
 import { Image, StyleSheet, Text, View,TouchableOpacity, Alert } from 'react-native';
 
 export default function SpotArticle({item,ArticleModalVisible,setArticleModalVisible}) {
-    console.log("item",item)
+    // console.log("item",item)
 
     const navigation = useNavigation();
     

@@ -116,7 +116,7 @@ export default function Gps({navigation}) {
                 key={index}
                 coordinate={coordinate}
                 icon={require("../assets/location.png")}
-                onPress={() => {console.log(coordinate.latitude)}}
+                // onPress={() => {console.log(coordinate.latitude)}}
               />)
             )}
         </MapView>

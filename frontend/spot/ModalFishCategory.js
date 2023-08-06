@@ -19,7 +19,7 @@ export default function ModalFishCategory({CategoryModalVisible,setCategoryModal
     }
 
     const ClickSetting = () => {
-        console.log(selectedFishes)
+        // console.log(selectedFishes)
         setSelectedFishes([])
         setCategoryModalVisible(false)
     }

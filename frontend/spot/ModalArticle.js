@@ -8,7 +8,7 @@ import { filteredArticle, testDefaultGps } from '../component/recoil/selectors/t
 
 
 export default function ModalArticle({ArticleModalVisible,setArticleModalVisible,filteredList,city}) {
-    console.log(filteredList)
+    // console.log(filteredList)
     const closeArticleModal = () => {
         setArticleModalVisible(false)
     }
