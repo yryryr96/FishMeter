@@ -1,5 +1,6 @@
 package com.example.fishdex.entity.fishdex;
 
+import com.example.fishdex.dto.fishdex.DayDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -19,5 +20,12 @@ public class Day {
 
     public Day(Timestamp day) {
         this.createdAt = day;
+    }
+
+    public DayDto toDto(){
+        return DayDto.builder()
+                .id(this.id)
+                .createdAt(this.createdAt)
+                .build();
     }
 }

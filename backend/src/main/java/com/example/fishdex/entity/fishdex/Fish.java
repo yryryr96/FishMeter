@@ -1,5 +1,6 @@
 package com.example.fishdex.entity.fishdex;
 
+import com.example.fishdex.dto.fishdex.FishDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -15,4 +16,11 @@ public class Fish {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String species;
+
+    public FishDto toDto(){
+        return FishDto.builder()
+                .id(this.id)
+                .species(this.species)
+                .build();
+    }
 }

@@ -1,8 +1,6 @@
 package com.example.fishdex.service.fishdex;
 
-import com.example.fishdex.dto.fishdex.DayRequestDto;
-import com.example.fishdex.dto.fishdex.FishResponseDto;
-import com.example.fishdex.dto.fishdex.RecordRequestDto;
+import com.example.fishdex.dto.fishdex.*;
 import com.example.fishdex.entity.fishdex.Day;
 import com.example.fishdex.entity.fishdex.Fish;
 import com.example.fishdex.entity.fishdex.Record;
@@ -51,4 +49,42 @@ public class RecordService {
     public User getUser(long userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
         return optionalUser.orElse(null);    }
+
+    public List<RecordResponseDto> findRecordsByFishId(long userId, long fishId) {
+        List<Record> recordEntity = recordRepository.findRecordsByFishId(userId, fishId);
+        List<RecordResponseDto> recordResponseDtos = recordEntity.stream()
+                .map(record -> record.toResponseDto())
+                .collect(Collectors.toList());
+        return recordResponseDtos;
+    }
+
+    public List<RecordResponseDto> findAllRecords() {
+        List<Record> recordEntity = recordRepository.findAll();
+        List<RecordResponseDto> recordResponseDtos = recordEntity.stream()
+                .map(record -> record.toResponseDto())
+                .collect(Collectors.toList());
+        return recordResponseDtos;
+    }
+
+    public RecordResponseDto update(RecordUpdateDto recordUpdateDto) {
+        Optional<Record> optionalRecord = recordRepository.findById(recordUpdateDto.getId());
+        if (optionalRecord.isPresent()) {
+            Record existingRecord = optionalRecord.get();
+            existingRecord.setLength(recordUpdateDto.getLength());
+            Record updatedRecord = recordRepository.save(existingRecord);
+            return updatedRecord.toResponseDto();
+        } else {
+            return null;
+        }
+    }
+
+    public void delete(long recordId) {
+        Optional<Record> optionalRecord = recordRepository.findById(recordId);
+        if (optionalRecord.isPresent()) {
+            Record existingRecord = optionalRecord.get();
+            recordRepository.delete(existingRecord);
+        } else {
+            System.out.println("null");
+        }
+    }
 }
