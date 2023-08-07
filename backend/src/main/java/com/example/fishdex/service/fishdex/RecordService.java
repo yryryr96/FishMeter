@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -44,7 +45,11 @@ public class RecordService {
     public void save(RecordRequestDto recordRequestDto) {
 
         DayRequestDto dayRequestDto = new DayRequestDto();
-        dayRequestDto.setDay(recordRequestDto.getCreatedAt());
+        long currentTimeMillis = System.currentTimeMillis();
+        java.util.Date currentDate = new java.util.Date(currentTimeMillis);
+        Timestamp currentTimestamp = new Timestamp(currentDate.getTime());
+
+        dayRequestDto.setDay(currentTimestamp);
         recordRequestDto.setDayRequestDto(dayRequestDto);
         Day day = getDay(dayRequestDto);
         User user = getUser(recordRequestDto.getUserId());
