@@ -1,5 +1,6 @@
 package com.example.fishdex.entity.user;
 
+import com.example.fishdex.dto.fishdex.UserDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,5 +35,16 @@ public class User {
         this.password = password;
         this.name = name;
         this.nickname = nickname;
+    }
+
+    public UserDto toDto(){
+        return UserDto.builder()
+                .id(this.id)
+                .email(this.email)
+                .password(this.password)
+                .name(this.name)
+                .nickname(this.nickname)
+                .profile_image(this.profile_image)
+                .build();
     }
 }

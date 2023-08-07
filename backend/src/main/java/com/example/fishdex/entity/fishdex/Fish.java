@@ -1,20 +1,26 @@
 package com.example.fishdex.entity.fishdex;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.example.fishdex.dto.fishdex.FishDto;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@ToString
 public class Fish {
 
     @Id
+    @Column(name="fish_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String species;
+
+    public FishDto toDto(){
+        return FishDto.builder()
+                .id(this.id)
+                .species(this.species)
+                .build();
+    }
 }
