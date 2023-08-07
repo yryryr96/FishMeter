@@ -16,6 +16,7 @@ import Gps from './spot/Gps';
 import SwitchSelector from "react-native-switch-selector";
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import RNEventSource from 'react-native-event-source';
 
 
 const ImageUrl = [
@@ -27,7 +28,7 @@ const ImageUrl = [
 ]
 
 const fishes = ['광어','상어','고래','참돔','돌돔','망둥어']
-const socket = io('http://192.168.30.136:8082');
+const socket = io('http://192.168.166.11:8082');
 
 export default function Home() {
     const [totalMarker, setTotalMarker] = useRecoilState(testDefaultGps)
@@ -83,6 +84,25 @@ export default function Home() {
       useEffect(()=>{
         getLocation()
         // console.log(INITIAL_REGION)
+        
+        
+        // SSE
+        // const es = new RNEventSource("http://54.206.147.12/sse/connect");
+
+        // es.addEventListener("count", (event) => {
+        // console.log('connect')
+        // const eventData = JSON.parse(event.data);
+        // console.log("새로운 메시지 이벤트:", eventData);
+        // });
+
+        // // SSE 연결이 닫히면 다시 연결합니다.
+        // es.addEventListener("close", (event) => {
+        // console.log("SSE 연결이 종료되었습니다. 재연결 중...");
+        // es.reconnect(); // 서버로 재연결합니다.
+        // });
+
+        
+        // WebSocket
         socket.on('dataUpdate', (data) => {
             // 서버로부터 데이터 업데이트 이벤트가 오면 해당 데이터를 받아와서 클라이언트에 반영
             // console.log('Received updated data:', data);
@@ -96,7 +116,10 @@ export default function Home() {
         });
 
         return () => {
-            socket.off('dataUpdate')
+        // 컴포넌트가 언마운트될 때 SSE 연결을 닫습니다.
+            // es.removeAllEventListeners();
+            socket.off('dataUpdate') // WebSocket 종료
+
         }
       },[])
     
@@ -113,7 +136,7 @@ export default function Home() {
         };
 
         // 서버로 POST 요청을 보냅니다.
-        axios.post("http://192.168.30.136:8082/update", newData)
+        axios.post("http://192.168.166.11:8082/update", newData)
             .then((response) => {
                 // console.log("서버 응답:", response.data);
             // console.log('res= ',response.data)
@@ -128,6 +151,7 @@ export default function Home() {
             .catch((error) => {
             console.error("데이터 업데이트 오류:", error);
             });
+        
     };
     
 
@@ -138,6 +162,7 @@ export default function Home() {
     ]
     return (
         <SafeAreaProvider style={styles.container}>
+        
         {state ?
             <View>
                 <SafeAreaView>
@@ -173,9 +198,23 @@ export default function Home() {
             
             <View style={styles.newModal}>
                 {newData.length !== 0 ?
-                    <TouchableOpacity onPress={()=>setNewDataModalVisible(true)}>
-                        <Image style={{width:50, height:50}} source={require("./assets/notification.png")}/>
-                    </TouchableOpacity>
+                <View>
+                    <View style={{right : 10}}>
+                        <TouchableOpacity onPress={()=>setNewDataModalVisible(true)}>
+                        <Image style={{width:50, height:50}} source={require("./assets/idea.gif")}/>
+                        </TouchableOpacity>
+                    </View>
+                    
+                    <View style={styles.balloonContainer}>
+                        
+                        <View style={styles.balloon}>
+                            <Text style={{fontSize : 13, position:'absolute',color : 'white'}}>{newData.length}개의 알림이 있습니다.</Text>
+                        </View>
+                        <View style={styles.triangle} />
+                    
+                    </View>
+                </View>
+
                     :
                     <></>
                 }
@@ -198,7 +237,7 @@ export default function Home() {
                 ))}
             </View>
             
-            <NewDataModal newData={newData} newDataModalVisible={newDataModalVisible} setNewDataModalVisible={setNewDataModalVisible} ></NewDataModal>
+            <NewDataModal newData={newData} newDataModalVisible={newDataModalVisible} setNewDataModalVisible={setNewDataModalVisible} setNewData={setNewData} ></NewDataModal>
             <ClickedMarkerModal item={totalMarker[MarkerKey]} ClickedModalVisible={ClickedMarkerModalVisible} setClickedModalVisible={setClickedMarkerModalVisible} />
             </View>
             
@@ -206,12 +245,12 @@ export default function Home() {
             <Gps />
                     
             }
-            <View style={{position:'absolute', backgroundColor : 'red'}}>
+            <View style={{position:'absolute'}}>
                 {/* <Text style={{fontSize:50}}>어디</Text> */}
                 <SwitchSelector
                     initial={0}
                     style={{position:'absolute', top:70, marginLeft : 20,width:170}}
-                    onPress={(value) => value == 0 ? 
+                    onPress={(value) => value === '1' ? 
                         setState(true) : setState(false)
                     }
                     options={options}
@@ -221,23 +260,24 @@ export default function Home() {
                     
                 >
                 </SwitchSelector>
+                
             </View>
             { state ? 
-                <View style={{position:'absolute', right :10, bottom:110}}>
+                <View style={{position:'absolute', right :20, bottom:110}}>
                     <TouchableOpacity 
                     // style={styles.categoryButton}
                     onPress={() => getLocation()}
                     >
                         <View style={{backgroundColor:'white', borderRadius : 30, width:40, height:40, justifyContent:'center', alignItems:'center'}}>
-                        <Image source={require("./assets/gps.png")} style={{width:30, height:30}}/>
+                        <Image source={require("./assets/gps.png")} style={{width:25, height:25}}/>
                         </View>
                     
                     </TouchableOpacity>  
                 </View>
                 :
                 <></>
-            }        
-            
+            }
+
         </SafeAreaProvider>
     )
 
@@ -253,6 +293,37 @@ const styles = StyleSheet.create({
     },
     newModal : {
         position:'absolute', 
-        top:60, right:20
-    }
+        top:60, right:20,
+    },
+    balloonContainer: {
+        position: 'absolute',
+        backgroundColor:'transparent',
+        right : 1,
+        top : 60
+    },
+    balloon: {
+        width: 205,
+        height: 40,
+        backgroundColor: 'green',
+        color: 'white',
+        borderRadius: 20,
+        padding: 12,
+        zIndex: 1,
+        alignItems : 'center',
+        justifyContent : 'center'
+    },
+    triangle: {
+        position: 'absolute',
+        bottom: 40,
+        left: 160,
+        borderTopWidth: 0,
+        borderLeftWidth: 10,
+        borderRightWidth: 10,
+        borderBottomWidth: 10,
+        borderTopColor: 'transparent',
+        borderLeftColor: 'transparent',
+        borderRightColor: 'transparent',
+        borderBottomColor: 'green',
+        zIndex: 0,
+    },
 })

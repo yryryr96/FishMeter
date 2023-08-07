@@ -146,13 +146,13 @@ export default function Gps({navigation}) {
           
         </View>
         
-        <View style={{position:'absolute', right :20, bottom:110}}>
+        <View style={{position:'absolute', right :10, bottom:110}}>
           <TouchableOpacity 
             // style={styles.categoryButton}
             onPress={() =>getLocation()}
             >
               <View style={styles.IconBox}>
-                <Image source={require("../assets/gps.png")} style={{width:30, height:30}}/>
+                <Image source={require("../assets/gps.png")} style={{width:25, height:25}}/>
               </View>
             
           </TouchableOpacity>  
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     height:40, 
     justifyContent:'center', 
     alignItems:'center',
-    marginVertical : 10
+    // marginVertical : 10
   },
   categoryBox : {
     backgroundColor:'white',

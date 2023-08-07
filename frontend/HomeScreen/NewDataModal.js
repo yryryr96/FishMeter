@@ -1,10 +1,11 @@
 import {Alert, Modal, StyleSheet, Text, View,ScrollView, Image, TouchableWithoutFeedback} from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
-export default function NewDataModal({newDataModalVisible, setNewDataModalVisible, newData}) {
+export default function NewDataModal({newDataModalVisible, setNewDataModalVisible, newData, setNewData}) {
     // console.log(newData)
     const closeNewDataModal = () => {
         setNewDataModalVisible(false)
+        setNewData([])
     }
     
     const reversedNewData = newData.slice().reverse()
@@ -40,7 +41,7 @@ export default function NewDataModal({newDataModalVisible, setNewDataModalVisibl
                                         <Image source={{uri : item.src1}} style={{width:120,height:120,borderRadius : 10}} />
                                     </View>
 
-                                    <View style={{marginHorizontal : 22, justifyContent : 'space-between'}}>
+                                    <View style={{marginHorizontal : 7, justifyContent : 'space-between'}}>
                                         <Text style={{fontSize : 13, marginBottom:5}}>{item.address}</Text>
                                         <Text style={{fontSize : 16, marginBottom:5}}>{item.id}</Text>
                                         <Text style={{fontSize : 16, marginBottom:5}}>{item.title}</Text>
