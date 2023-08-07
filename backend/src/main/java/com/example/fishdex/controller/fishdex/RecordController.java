@@ -23,8 +23,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RecordController {
     private final RecordService recordService;
-    private final S3Uploader s3Uploader;
-
 
     @GetMapping("/fishes")
     public List<FishResponseDto> findAll() {
@@ -51,24 +49,13 @@ public class RecordController {
     }
 
     @PostMapping(value = "/records", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public void regist(@RequestPart RecordRequestDto recordRequestDto, @RequestPart MultipartFile image) throws IOException {
+    public void regist(@RequestPart RecordRequestDto recordRequestDto, @RequestPart MultipartFile image) {
 //        , @AuthenticationPrincipal OAuth2User principal
 //        long userId  = principal.getAttribute("id");
         long userId = 1;
-        System.out.println(recordRequestDto.getSpecies());
-        DayRequestDto dayRequestDto = new DayRequestDto();
-        dayRequestDto.setDay(recordRequestDto.getCreatedAt());
 
-        Day day = recordService.getDay(dayRequestDto);
-        recordRequestDto.setDay(day);
-
-        User user = recordService.getUser(userId);
-        recordRequestDto.setUser(user);
-        Fish fish = recordService.getFish(recordRequestDto.getSpecies());
-        recordRequestDto.setFish(fish);
-
-        String imageUrl = s3Uploader.upload(image, "images");
-        recordRequestDto.setImageUrl(imageUrl);
+        recordRequestDto.setUserId(userId);
+        recordRequestDto.setImage(image);
 
         recordService.save(recordRequestDto);
     }
