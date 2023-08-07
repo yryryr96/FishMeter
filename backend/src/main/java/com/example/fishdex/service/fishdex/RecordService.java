@@ -9,9 +9,12 @@ import com.example.fishdex.repository.fishdex.DayRepository;
 import com.example.fishdex.repository.fishdex.FishRepository;
 import com.example.fishdex.repository.fishdex.RecordRepository;
 import com.example.fishdex.repository.user.UserRepository;
+import com.example.fishdex.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,6 +26,7 @@ public class RecordService {
     private final FishRepository fishRepository;
     private final DayRepository dayRepository;
     private final UserRepository userRepository;
+    private final S3Uploader s3Uploader;
 
     public List<FishResponseDto> findAll(Long userId) {
         List<Fish> fishEntity = recordRepository.findFishByUserId(userId);
@@ -38,6 +42,27 @@ public class RecordService {
     }
 
     public void save(RecordRequestDto recordRequestDto) {
+
+        DayRequestDto dayRequestDto = new DayRequestDto();
+        dayRequestDto.setDay(recordRequestDto.getCreatedAt());
+        recordRequestDto.setDayRequestDto(dayRequestDto);
+        Day day = getDay(dayRequestDto);
+        User user = getUser(recordRequestDto.getUserId());
+        Fish fish = getFish(recordRequestDto.getSpecies());
+
+        recordRequestDto.setDay(day);
+        recordRequestDto.setUser(user);
+        recordRequestDto.setFish(fish);
+
+        MultipartFile image = recordRequestDto.getImage();
+        String imageUrl = null;
+        try {
+            imageUrl = s3Uploader.upload(image, "images");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        recordRequestDto.setImageUrl(imageUrl);
+
         Record record = recordRequestDto.toEntity();
         recordRepository.save(record);
     }
@@ -48,7 +73,8 @@ public class RecordService {
 
     public User getUser(long userId) {
         Optional<User> optionalUser = userRepository.findById(userId);
-        return optionalUser.orElse(null);    }
+        return optionalUser.orElse(null);
+    }
 
     public List<RecordResponseDto> findRecordsByFishId(long userId, long fishId) {
         List<Record> recordEntity = recordRepository.findRecordsByFishId(userId, fishId);
@@ -67,24 +93,25 @@ public class RecordService {
     }
 
     public RecordResponseDto update(RecordUpdateDto recordUpdateDto) {
-        Optional<Record> optionalRecord = recordRepository.findById(recordUpdateDto.getId());
+        long recordId = recordUpdateDto.getId();
+        Optional<Record> optionalRecord = recordRepository.findById(recordId);
         if (optionalRecord.isPresent()) {
             Record existingRecord = optionalRecord.get();
             existingRecord.setLength(recordUpdateDto.getLength());
             Record updatedRecord = recordRepository.save(existingRecord);
             return updatedRecord.toResponseDto();
         } else {
-            return null;
+            throw new NullPointerException("Record not found with id: " + recordId);
         }
     }
 
     public void delete(long recordId) {
         Optional<Record> optionalRecord = recordRepository.findById(recordId);
         if (optionalRecord.isPresent()) {
-            Record existingRecord = optionalRecord.get();
-            recordRepository.delete(existingRecord);
+            Record record = optionalRecord.get();
+            recordRepository.delete(record);
         } else {
-            System.out.println("null");
+            throw new IllegalArgumentException("Record not found with id: " + recordId);
         }
     }
 }
