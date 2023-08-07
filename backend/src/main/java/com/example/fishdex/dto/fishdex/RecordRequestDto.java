@@ -6,6 +6,7 @@ import com.example.fishdex.entity.user.User;
 import lombok.*;
 
 import com.example.fishdex.entity.fishdex.Record;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 
@@ -31,6 +32,11 @@ public class RecordRequestDto {
     private Day day;
     private User user;
     private Fish fish;
+    private long userId;
+    private long fishId;
+    private long dayId;
+    private DayRequestDto dayRequestDto;
+    MultipartFile image;
 
     public RecordRequestDto(double length, double latitude, double longitude, Timestamp createdAt, double temperature, String weather, double precipitation, int windDirection, double windSpeed, boolean favorite, String species) {
         this.length = length;
