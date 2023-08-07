@@ -1,5 +1,5 @@
 import React, { useState,useEffect, useRef } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Modal, Alert } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Modal, Alert, Image } from 'react-native';
 import { Marker } from "react-native-maps";
 import MapView from "react-native-map-clustering";
 
@@ -9,7 +9,7 @@ import ModalFishCategory from './ModalFishCategory';
 import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
 import { testGpsList } from '../component/recoil/atoms/test';
 import ModalArticle from './ModalArticle';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaProvider,SafeAreaView } from 'react-native-safe-area-context';
 import { testDefaultGps } from '../component/recoil/selectors/testSelector';
 
 import { MaterialIcons } from '@expo/vector-icons';
@@ -91,7 +91,7 @@ export default function Gps({navigation}) {
     <SafeAreaProvider style={styles.container}>
       
       {/* 지도 구현   */}
-      <View>
+      <SafeAreaView>
         <MapView 
           ref={mapRef}
           initialRegion={{
@@ -120,38 +120,47 @@ export default function Gps({navigation}) {
               />)
             )}
         </MapView>
-        
+        </SafeAreaView>
         {/* 버튼  */}
         <View style={styles.ButtonContainer}>
-          <TouchableOpacity 
-            style={styles.categoryButton}
-            onPress={openCalendarModal}
-            >
-            <Text style={styles.categoryButtonText}>달력</Text>
-          </TouchableOpacity>
-          <CalendarModal calendarModalVisible={calendarModalVisible} setCalendarModalVisible={setCalendarModalVisible}></CalendarModal>
-
-
-          <TouchableOpacity 
-            style={styles.categoryButton}
-            onPress={openCategoryModal}
-          >
-            <Text style={styles.categoryButtonText}>어종</Text>
-          </TouchableOpacity>
-          <ModalFishCategory CategoryModalVisible={CategoryModalVisible} setCategoryModalVisible={setCategoryModalVisible}></ModalFishCategory>
+          <View style={styles.categoryBox}>
+            <TouchableOpacity 
+              style={styles.categoryButton}
+              onPress={openCalendarModal}
+              >
+              <Image source={require("../assets/calendar.png")} style={{width:25, height:25, marginRight : 10}}/>
+              <Text style={{fontSize : 15}}>달력</Text>
+            </TouchableOpacity>
+          </View>
           
-                
-          <ModalArticle ArticleModalVisible={ArticleModalVisible} setArticleModalVisible={setArticleModalVisible} filteredList={getFiltered(gpsList)} city={city} />
 
+          <View  style={styles.categoryBox}>
+            <TouchableOpacity
+              style={styles.categoryButton}
+              onPress={openCategoryModal}
+            >
+              <Image source={require("../assets/fishCategory.png")} style={{width:25, height:25, marginRight : 5}}/>
+              <Text style={{fontSize:15}}>어종</Text>
+            </TouchableOpacity>
+          </View>
+          
+        </View>
+        
+        <View style={{position:'absolute', right :20, bottom:110}}>
           <TouchableOpacity 
-            style={styles.categoryButton}
+            // style={styles.categoryButton}
             onPress={() =>getLocation()}
             >
-            <MaterialIcons name="gps-fixed" size={24} color="red" />
+              <View style={styles.IconBox}>
+                <Image source={require("../assets/gps.png")} style={{width:30, height:30}}/>
+              </View>
+            
           </TouchableOpacity>  
         </View>
-            
-      </View>
+
+        <CalendarModal calendarModalVisible={calendarModalVisible} setCalendarModalVisible={setCalendarModalVisible}></CalendarModal>
+        <ModalFishCategory CategoryModalVisible={CategoryModalVisible} setCategoryModalVisible={setCategoryModalVisible}></ModalFishCategory>
+        <ModalArticle ArticleModalVisible={ArticleModalVisible} setArticleModalVisible={setArticleModalVisible} filteredList={getFiltered(gpsList)} city={city} />
     </SafeAreaProvider>
   );
 }
@@ -166,26 +175,32 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   ButtonContainer : {
+    flexDirection : 'row',
     position : 'absolute',
-    flexDirection : "row",
-    paddingLeft : 20,
+    top : 70,
+    right : 20
   },
-  categoryButton : {
-    marginTop:70,
-    marginLeft: 10,
-    backgroundColor:"#5c7db4",
-    borderRadius : 20,
-    // borderWidth : 1,
-    padding : 10,
-    paddingHorizontal:10,
-    alignItems : 'center',
-    justifyContent : 'center',
-    width : "22%",
+  IconBox : {
+    backgroundColor:'white',
+    borderRadius : 30,
+    width:40,
+    height:40, 
+    justifyContent:'center', 
+    alignItems:'center',
+    marginVertical : 10
   },
-  categoryButtonText : {
-    fontSize:18,
-    fontWeight:"600", 
-    color:"white"
+  categoryBox : {
+    backgroundColor:'white',
+    borderRadius : 30,
+    justifyContent:'center', 
+    alignItems:'center',
+    marginHorizontal : 5,
+    padding : 6
   },
 
+  categoryButton : {
+    flexDirection : 'row',
+    justifyContent : 'center',
+    alignItems : 'center'
+  }
 });

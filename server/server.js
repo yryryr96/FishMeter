@@ -101,7 +101,7 @@ app.post('/update', async (req, res) => {
   
   defaultData.push(data)
   // 연결된 모든 SSE 클라이언트에게 업데이트된 데이터를 전송합니다.
-  console.log(defaultData)
+  // console.log(defaultData)
   clients.forEach((client) => {
     client.emit('dataUpdate', defaultData);
   });

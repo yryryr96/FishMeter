@@ -1,4 +1,4 @@
-import { View, StyleSheet, TouchableOpacity,Text,Image } from 'react-native';
+import { View, StyleSheet, TouchableOpacity,Text,Image, Touchable } from 'react-native';
 import {Marker} from 'react-native-maps';
 import MapView from 'react-native-maps';
 import { testDefaultGps } from './component/recoil/selectors/testSelector';
@@ -12,6 +12,10 @@ import NewDataModal from './HomeScreen/NewDataModal';
 import ClickedMarkerModal from './HomeScreen/ClickedModal';
 import * as Location from 'expo-location';
 import io from 'socket.io-client';
+import Gps from './spot/Gps';
+import SwitchSelector from "react-native-switch-selector";
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 const ImageUrl = [
@@ -23,7 +27,7 @@ const ImageUrl = [
 ]
 
 const fishes = ['광어','상어','고래','참돔','돌돔','망둥어']
-const socket = io('http://192.168.123.102:8082');
+const socket = io('http://192.168.30.136:8082');
 
 export default function Home() {
     const [totalMarker, setTotalMarker] = useRecoilState(testDefaultGps)
@@ -64,8 +68,9 @@ export default function Home() {
         }
         
         // const locate = await Location.reverseGeocodeAsync({latitude, longitude}, {useGoogleMaps:false});
-
+        
         if (mapRef.current) {
+            console.log('ananannanan')
             mapRef.current.animateToRegion({
             latitude: latitude,
             longitude: longitude,
@@ -108,7 +113,7 @@ export default function Home() {
         };
 
         // 서버로 POST 요청을 보냅니다.
-        axios.post("http://192.168.123.102:8082/update", newData)
+        axios.post("http://192.168.30.136:8082/update", newData)
             .then((response) => {
                 // console.log("서버 응답:", response.data);
             // console.log('res= ',response.data)
@@ -126,22 +131,29 @@ export default function Home() {
     };
     
 
-
+    const [state, setState] = useState(true);
+    const options = [
+        { label : '실시간', value:"1"},
+        { label : '스팟 조회', value:"2"}
+    ]
     return (
-        <View style={styles.container}>
-            <MapView
-                ref={mapRef}
-                style={styles.map}
-                initialRegion={{
-                    latitude: lat,
-                    longitude: lon,
-                    latitudeDelta: 0.1,
-                    longitudeDelta: 0.1,
-                }}
-                rotateEnabled={false}
-                // zoomEnabled={false}
+        <SafeAreaProvider style={styles.container}>
+        {state ?
+            <View>
+                <SafeAreaView>
+                <MapView
+                    ref={mapRef}
+                    style={styles.map}
+                    initialRegion={{
+                        latitude: lat,
+                        longitude: lon,
+                        latitudeDelta: 0.1,
+                        longitudeDelta: 0.1,
+                    }}
+                    rotateEnabled={false}
+                    // zoomEnabled={false}
 
-                >
+                    >
                 {totalMarker.map((item,index) => (
                     <Marker
                         key = {index}
@@ -157,8 +169,9 @@ export default function Home() {
                 ))}
                 
             </MapView>
+            </SafeAreaView>
             
-            <View style={{position:'absolute', top:50, right:20}}>
+            <View style={styles.newModal}>
                 {newData.length !== 0 ?
                     <TouchableOpacity onPress={()=>setNewDataModalVisible(true)}>
                         <Image style={{width:50, height:50}} source={require("./assets/notification.png")}/>
@@ -187,17 +200,59 @@ export default function Home() {
             
             <NewDataModal newData={newData} newDataModalVisible={newDataModalVisible} setNewDataModalVisible={setNewDataModalVisible} ></NewDataModal>
             <ClickedMarkerModal item={totalMarker[MarkerKey]} ClickedModalVisible={ClickedMarkerModalVisible} setClickedModalVisible={setClickedMarkerModalVisible} />
-        </View>
+            </View>
+            
+            :
+            <Gps />
+                    
+            }
+            <View style={{position:'absolute', backgroundColor : 'red'}}>
+                {/* <Text style={{fontSize:50}}>어디</Text> */}
+                <SwitchSelector
+                    initial={0}
+                    style={{position:'absolute', top:70, marginLeft : 20,width:170}}
+                    onPress={(value) => value == 0 ? 
+                        setState(true) : setState(false)
+                    }
+                    options={options}
+                    buttonColor={'#0b74f4'}
+                    borderColor={'#0b74f4'}
+                    hasPadding
+                    
+                >
+                </SwitchSelector>
+            </View>
+            { state ? 
+                <View style={{position:'absolute', right :10, bottom:110}}>
+                    <TouchableOpacity 
+                    // style={styles.categoryButton}
+                    onPress={() => getLocation()}
+                    >
+                        <View style={{backgroundColor:'white', borderRadius : 30, width:40, height:40, justifyContent:'center', alignItems:'center'}}>
+                        <Image source={require("./assets/gps.png")} style={{width:30, height:30}}/>
+                        </View>
+                    
+                    </TouchableOpacity>  
+                </View>
+                :
+                <></>
+            }        
+            
+        </SafeAreaProvider>
     )
 
 }
 
 const styles = StyleSheet.create({
-	container:{
-      flex:1
+    container:{
+        flex:1
     },
-  	map:{
-	  width: "100%",
-  	  height : "100%"
-	},
+    map:{
+        width: "100%",
+        height : "100%"
+    },
+    newModal : {
+        position:'absolute', 
+        top:60, right:20
+    }
 })
