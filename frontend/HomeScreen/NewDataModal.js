@@ -14,10 +14,8 @@ export default function NewDataModal({newDataModalVisible, setNewDataModalVisibl
             animationType="fade"
             transparent={true}
             visible={newDataModalVisible}
-            onRequestClose={() => {
-                setNewDataModalVisible(false);
-            }
-        }>  
+            onRequestClose={closeNewDataModal}
+        >  
             <View style={styles.ModalOuterContainer} onPress={closeNewDataModal}>
                 <View style={styles.modalInnerContainer}>
                     
@@ -61,20 +59,20 @@ export default function NewDataModal({newDataModalVisible, setNewDataModalVisibl
 
 const styles = StyleSheet.create({
     ModalOuterContainer : {
-        backgroundColor : 'transparent',
+        backgroundColor : 'rgba(0,0,0,0.5)',
         alignItems : 'center',
         justifyContent : 'center',
         flex : 1,
         width: '100%',
     },
     modalInnerContainer : {
-        backgroundColor : 'rgba(255, 255, 255, 1)', 
+        backgroundColor : 'white', 
         width : "90%", 
         paddingTop:20, 
         borderRadius : 30, 
-        borderWidth:3,
+        borderWidth: 2,
         maxHeight:"60%",
-        opacity:0.8
+        // opacity:0.8
     },
     
     headerContainer : {

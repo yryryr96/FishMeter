@@ -28,7 +28,7 @@ const ImageUrl = [
 ]
 
 const fishes = ['광어','상어','고래','참돔','돌돔','망둥어']
-const socket = io('http://192.168.166.11:8082');
+const socket = io('http://192.168.123.100:8082');
 
 export default function Home() {
     const [totalMarker, setTotalMarker] = useRecoilState(testDefaultGps)
@@ -136,7 +136,7 @@ export default function Home() {
         };
 
         // 서버로 POST 요청을 보냅니다.
-        axios.post("http://192.168.166.11:8082/update", newData)
+        axios.post("http://192.168.123.100:8082/update", newData)
             .then((response) => {
                 // console.log("서버 응답:", response.data);
             // console.log('res= ',response.data)
@@ -208,7 +208,7 @@ export default function Home() {
                     <View style={styles.balloonContainer}>
                         
                         <View style={styles.balloon}>
-                            <Text style={{fontSize : 13, position:'absolute',color : 'white'}}>{newData.length}개의 알림이 있습니다.</Text>
+                            <Text style={styles.alramText}>{newData.length}개의 알림이 있습니다.</Text>
                         </View>
                         <View style={styles.triangle} />
                     
@@ -227,12 +227,12 @@ export default function Home() {
             </View>
             
              {/* 실시간 알림 */}
-            <View style={{backgroundColor: 'rgba(0, 0, 0, 0.5)',borderRadius : 10, position:'absolute', bottom : 100, left:100}}>
+            <View style={{backgroundColor: 'rgba(0, 0, 0, 0.3)',borderRadius : 10, position:'absolute', bottom : 100, left:100}}>
                 {newMessage.map((item,index) => (
                     <View key={index} style={{flexDirection:'row', margin:10}}>
-                        <Text style={{color:'white'}}>{item[0]}님이 </Text>
-                        <Text style={{color:'yellow'}}>{item[1]}을/를 </Text>
-                        <Text style={{color:'white'}}>잡았습니다.</Text>
+                        <Text style={{color:'white' , fontWeight:'bold'}}>{item[0]}님이 </Text>
+                        <Text style={{color:'yellow', fontWeight:'bold'}}>{item[1]}을/를 </Text>
+                        <Text style={{color:'white' , fontWeight:'bold'}}>잡았습니다.</Text>
                     </View>
                 ))}
             </View>
@@ -302,9 +302,9 @@ const styles = StyleSheet.create({
         top : 60
     },
     balloon: {
-        width: 205,
+        width: 150,
         height: 40,
-        backgroundColor: 'green',
+        backgroundColor: 'rgba(0,0,0,0.5)',
         color: 'white',
         borderRadius: 20,
         padding: 12,
@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
     triangle: {
         position: 'absolute',
         bottom: 40,
-        left: 160,
+        right: 23,
         borderTopWidth: 0,
         borderLeftWidth: 10,
         borderRightWidth: 10,
@@ -323,7 +323,13 @@ const styles = StyleSheet.create({
         borderTopColor: 'transparent',
         borderLeftColor: 'transparent',
         borderRightColor: 'transparent',
-        borderBottomColor: 'green',
+        borderBottomColor: 'rgba(0,0,0,0.5)',
         zIndex: 0,
     },
+    alramText : {
+        fontSize : 13, 
+        fontWeight:"bold",
+        position:'absolute',
+        color : 'white'
+    }
 })

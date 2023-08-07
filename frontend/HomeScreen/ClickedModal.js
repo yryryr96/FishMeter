@@ -55,11 +55,11 @@ const styles = StyleSheet.create({
         width: '100%',
     },
     modalInnerContainer : {
-        backgroundColor : 'rgba(194, 194, 194, 0.71)', 
+        backgroundColor : 'white', 
         width : "90%", 
         paddingTop:20, 
         borderRadius : 30, 
-        borderWidth:3,
+        borderWidth:2,
         // opacity:0.8
     },
     headerContainer : {
