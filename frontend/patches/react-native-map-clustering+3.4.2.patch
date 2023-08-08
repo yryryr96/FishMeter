@@ -1,0 +1,15 @@
+diff --git a/node_modules/react-native-map-clustering/lib/ClusteredMapView.js b/node_modules/react-native-map-clustering/lib/ClusteredMapView.js
+index 9e44320..1dabc2d 100644
+--- a/node_modules/react-native-map-clustering/lib/ClusteredMapView.js
++++ b/node_modules/react-native-map-clustering/lib/ClusteredMapView.js
+@@ -164,10 +164,6 @@ const ClusteredMapView = forwardRef(
+         longitude: geometry.coordinates[0],
+       }));
+ 
+-      mapRef.current.fitToCoordinates(coordinates, {
+-        edgePadding: restProps.edgePadding,
+-      });
+-
+       onClusterPress(cluster, children);
+     };
+ 
