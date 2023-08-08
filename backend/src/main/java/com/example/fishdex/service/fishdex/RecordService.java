@@ -119,4 +119,15 @@ public class RecordService {
             throw new IllegalArgumentException("Record not found with id: " + recordId);
         }
     }
+
+    public List<RecordResponseDto> findImages(ImageRequestDto imageRequestDto) {
+        long userId = imageRequestDto.getUserId();
+        long recordId = imageRequestDto.getRecordid();
+        Timestamp date = imageRequestDto.getCreatedAt();
+        List<Record> recordEntity = recordRepository.findImages(userId, recordId, date);
+        List<RecordResponseDto> recordResponseDtos = recordEntity.stream()
+                .map(record -> record.toResponseDto())
+                .collect(Collectors.toList());
+        return recordResponseDtos;
+    }
 }
