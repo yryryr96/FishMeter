@@ -9,6 +9,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @NoArgsConstructor
@@ -20,24 +21,30 @@ public class SseService {
 
     @Async
     public SseEmitter add(){
-        SseEmitter emitter = new SseEmitter(60*1000L); // 60분 설정
+        SseEmitter emitter = new SseEmitter(3*60*1000L); // 1분 설정
 
-        this.emitters.add(emitter);
+        AtomicInteger userCount = new AtomicInteger();
+
+        emitters.add(emitter);
         log.info("new emitter added: {}", emitter);
         log.info("emitter list size: {}", emitters.size());
         log.info("emitter list: {}", emitters);
         emitter.onCompletion(() -> {
             log.info("onCompletion callback");
-            this.emitters.remove(emitter);
-            int userCount = emitters.size();
+            emitters.remove(emitter);
+            emitter.complete();
+            userCount.set(emitters.size());
             sendData("count", userCount);
         });
         emitter.onTimeout(() -> {
             log.info("onTimeout callback");
+            emitters.remove(emitter);
             emitter.complete();
+            userCount.set(emitters.size());
+            sendData("count", userCount);
         });
 
-        int userCount = emitters.size();
+        userCount.set(emitters.size());
         sendData("count", userCount);
 
         return emitter;
