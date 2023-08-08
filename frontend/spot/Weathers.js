@@ -53,7 +53,6 @@ export default function HourlyWeather({latitude, longitude}) {
     return (
       <View style={[styles.weatherbox]}>
         <ScrollView
-          style={styles.weatherS}
           horizontal
           pagingEnabled
           showsHorizontalScrollIndicator={false}
@@ -69,7 +68,7 @@ export default function HourlyWeather({latitude, longitude}) {
             const icon = weather.weather[0].main;
 
             return (
-              <View key={index} style={[styles.hourlyItem, { marginLeft: 20 }]}>
+              <View key={index} style={[styles.hourlyItem, { marginLeft: 10 }]}>
                 <Text style={styles.time}>{Date}</Text>
                 <Text style={styles.time}>{time}시</Text>
                 <Fontisto name={icons[icon]} size={20} padding={5} />
@@ -82,7 +81,7 @@ export default function HourlyWeather({latitude, longitude}) {
     );
   };
 
-  return <View style={styles.container}>{renderHourlyWeather()}</View>;
+  return renderHourlyWeather()
 }
 
 const styles = StyleSheet.create({
@@ -106,9 +105,6 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 12,
   },
-  weatherS: {
-    marginTop: 5,
-  },
   tinytext: {
     fontSize: 8,
   },
@@ -117,9 +113,9 @@ const styles = StyleSheet.create({
   },
   weatherbox: {
     flex: 1,
-    height: "40%",
+    height: "30%",
     borderRadius: 20,
     backgroundColor: "#fff",
-    overflow: "hidden",
+    // overflow: "hidden",
   },
 });
