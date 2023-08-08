@@ -23,5 +23,4 @@ public class SseController {
         header.add("X-Accel-Buffering", "no");
         return ResponseEntity.ok().headers(header).body(sseService.add());
     }
-
 }
