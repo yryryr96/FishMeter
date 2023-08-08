@@ -1,5 +1,5 @@
 import React, { useState,useEffect, useRef } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Modal, Alert, Image } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Modal, Alert, Image, ScrollView } from 'react-native';
 import { Marker } from "react-native-maps";
 import MapView from "react-native-map-clustering";
 
@@ -13,6 +13,7 @@ import { SafeAreaProvider,SafeAreaView } from 'react-native-safe-area-context';
 import { testDefaultGps } from '../component/recoil/selectors/testSelector';
 
 import { MaterialIcons } from '@expo/vector-icons';
+import HourlyWeather from './Weathers';
 
 export default function Gps({navigation}) {
 
@@ -87,6 +88,7 @@ export default function Gps({navigation}) {
     return temp
 }
   const testCoordinates = useRecoilValue(testDefaultGps)
+  
   return (
     <SafeAreaProvider style={styles.container}>
       
@@ -121,6 +123,11 @@ export default function Gps({navigation}) {
             )}
         </MapView>
         </SafeAreaView>
+        
+        <ScrollView style={{position:'absolute', zIndex:0 ,width:"90%",top:120, marginLeft : 20}}>
+          <HourlyWeather latitude={lat} longitude={lon}/>
+        </ScrollView>
+
         {/* 버튼  */}
         <View style={styles.ButtonContainer}>
           <View style={styles.categoryBox}>
@@ -128,7 +135,7 @@ export default function Gps({navigation}) {
               style={styles.categoryButton}
               onPress={openCalendarModal}
               >
-              <Image source={require("../assets/calendar.png")} style={{width:25, height:25, marginRight : 10}}/>
+              <Image source={require("../assets/Gps/calendar.png")} style={{width:25, height:25, marginRight : 10}}/>
               <Text style={{fontSize : 15}}>달력</Text>
             </TouchableOpacity>
           </View>
@@ -139,7 +146,7 @@ export default function Gps({navigation}) {
               style={styles.categoryButton}
               onPress={openCategoryModal}
             >
-              <Image source={require("../assets/fishCategory.png")} style={{width:25, height:25, marginRight : 5}}/>
+              <Image source={require("../assets/Gps/fishCategory.png")} style={{width:25, height:25, marginRight : 5}}/>
               <Text style={{fontSize:15}}>어종</Text>
             </TouchableOpacity>
           </View>

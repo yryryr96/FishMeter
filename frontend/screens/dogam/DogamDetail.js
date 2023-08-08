@@ -116,10 +116,10 @@ const GoogleMap = ({ latitude, longitude, setAddress }) => {
         } = locate[0];
         const addressString = `${country}, ${region}, ${district} ${street}, ${streetNumber}`;
         setAddress(addressString);
-        console.log(locate);
-        console.log(addressString);
+        // console.log(locate);
+        // console.log(addressString);
       }
-      console.log(locate);
+      // console.log(locate);
     };
     fetchAddress();
 
