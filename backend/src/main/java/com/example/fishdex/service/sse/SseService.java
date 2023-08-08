@@ -38,7 +38,10 @@ public class SseService {
         });
         emitter.onTimeout(() -> {
             log.info("onTimeout callback");
+            emitters.remove(emitter);
             emitter.complete();
+            userCount.set(emitters.size());
+            sendData("count", userCount);
         });
 
         userCount.set(emitters.size());
