@@ -7,7 +7,6 @@ import {
   eachDayOfInterval,
   isSameMonth,
 } from "date-fns";
-import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const customDateArray = [
   "2023-07-05",
