@@ -28,7 +28,7 @@ const ImageUrl = [
 ]
 
 const fishes = ['광어','상어','고래','참돔','돌돔','망둥어']
-const socket = io('http://192.168.30.136:8082');
+const socket = io('http://192.168.123.101:8082');
 
 export default function Home() {
     const [totalMarker, setTotalMarker] = useRecoilState(testDefaultGps)
@@ -109,7 +109,7 @@ export default function Home() {
             // console.log('data=',data)
             setTotalMarker(data);
             setNewData((prev)=>[...prev,data[data.length - 1]])
-            const newM = [data[data.length - 1]['id'],data[data.length - 1]['title']]
+            const newM = [data[data.length - 1]['id'],data[data.length - 1]['title'],data[data.length - 1]['size']]
             setNewMessage((prev) => [...prev, newM].slice(-5))
             // console.log(newMessage)
 
@@ -137,7 +137,7 @@ export default function Home() {
         };
 
         // 서버로 POST 요청을 보냅니다.
-        axios.post("http://192.168.30.136:8082/update", newData)
+        axios.post("http://192.168.123.101:8082/update", newData)
             .then((response) => {
                 // console.log("서버 응답:", response.data);
             // console.log('res= ',response.data)
@@ -240,7 +240,7 @@ export default function Home() {
                 {newMessage.map((item,index) => (
                     <View key={index} style={{flexDirection:'row', margin:10}}>
                         <Text style={{color:'white' , fontWeight:'bold'}}>{item[0]}님이 </Text>
-                        <Text style={{color:'yellow', fontWeight:'bold'}}>{item[1]}을/를 </Text>
+                        <Text style={{color:'yellow', fontWeight:'bold'}}>{item[2]}cm {item[1]}을/를 </Text>
                         <Text style={{color:'white' , fontWeight:'bold'}}>잡았습니다.</Text>
                     </View>
                 ))}
@@ -308,11 +308,11 @@ const styles = StyleSheet.create({
     balloonContainer: {
         position: 'absolute',
         backgroundColor:'transparent',
-        right : 1,
+        right : 2,
         top : 75
     },
     balloon: {
-        width: 150,
+        width: 160,
         height: 40,
         backgroundColor: 'rgba(0,0,0,0.5)',
         color: 'white',

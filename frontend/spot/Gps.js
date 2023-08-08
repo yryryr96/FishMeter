@@ -124,9 +124,9 @@ export default function Gps({navigation}) {
         </MapView>
         </SafeAreaView>
         
-        <ScrollView style={{position:'absolute', zIndex:0 ,width:"90%",top:120, marginLeft : 20}}>
+        <View style={{position:'absolute' ,width:"90%",top:120, marginLeft : 20,opacity:0.8}}>
           <HourlyWeather latitude={lat} longitude={lon}/>
-        </ScrollView>
+        </View>
 
         {/* 버튼  */}
         <View style={styles.ButtonContainer}>

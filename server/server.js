@@ -36,7 +36,7 @@ async function getAddressFromCoordinates(longitude, latitude) {
         Authorization: `KakaoAK ${apiKey}`
       }
     });
-    // console.log(response.data.documents[0].address);
+    // console.log(response.data);
     return response.data.documents[0].address;
   }
   catch(error) {
