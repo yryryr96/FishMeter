@@ -2,6 +2,8 @@ package com.example.fishdex.util;
 
 import lombok.Data;
 
+import java.util.Arrays;
+
 @Data
 public class AddressInfo {
     private Document[] documents;
@@ -35,6 +37,13 @@ public class AddressInfo {
         private String mountain_yn;
         private String main_address_no;
         private String sub_address_no;
+    }
+
+    @Override
+    public String toString() {
+        return "AddressInfo{" +
+                "documents=" + Arrays.toString(documents) +
+                '}';
     }
 }
 
