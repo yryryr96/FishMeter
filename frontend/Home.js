@@ -98,7 +98,7 @@ export default function Home() {
         // // SSE 연결이 닫히면 다시 연결합니다.
         // es.addEventListener("close", (event) => {
         // console.log("SSE 연결이 종료되었습니다. 재연결 중...");
-        // es.reconnect(); // 서버로 재연결합니다.
+        // // es.reconnect(); // 서버로 재연결합니다.
         // });
 
         
@@ -118,6 +118,7 @@ export default function Home() {
         return () => {
         // 컴포넌트가 언마운트될 때 SSE 연결을 닫습니다.
             // es.removeAllEventListeners();
+            // es.close()
             socket.off('dataUpdate') // WebSocket 종료
 
         }
@@ -154,7 +155,15 @@ export default function Home() {
         
     };
     
+    const goSpot = () => {
+        setState(false)
+        setNewMessage([])
+    }
 
+    const goAlram = () => {
+        setNewDataModalVisible(true)
+        setNewMessage([])
+    }
     const [state, setState] = useState(true);
     const options = [
         { label : '실시간', value:"1"},
@@ -200,8 +209,8 @@ export default function Home() {
                 {newData.length !== 0 ?
                 <View>
                     <View style={{right : 10}}>
-                        <TouchableOpacity onPress={()=>setNewDataModalVisible(true)}>
-                        <Image style={{width:50, height:50}} source={require("./assets/idea.gif")}/>
+                        <TouchableOpacity onPress={goAlram}>
+                        <Image style={{top:-18, width:80, height:80}} source={require("./assets/Fishing-unscreen.gif")}/>
                         </TouchableOpacity>
                     </View>
                     
@@ -251,7 +260,8 @@ export default function Home() {
                     initial={0}
                     style={{position:'absolute', top:70, marginLeft : 20,width:170}}
                     onPress={(value) => value === '1' ? 
-                        setState(true) : setState(false)
+                        setState(true)
+                        :  goSpot()
                     }
                     options={options}
                     buttonColor={'#0b74f4'}
@@ -299,7 +309,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         backgroundColor:'transparent',
         right : 1,
-        top : 60
+        top : 75
     },
     balloon: {
         width: 150,
