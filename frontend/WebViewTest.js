@@ -19,7 +19,7 @@ export default function WebViewTest() {
           alignItems: "center",
         }}
       >
-        <Image source={require("./assets/Group.png")} style={{}} />
+        {/* <Image source={require("./assets/Group.png")} style={{}} /> */}
       </View>
 
       <TouchableOpacity

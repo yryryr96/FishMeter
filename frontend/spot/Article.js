@@ -1,13 +1,18 @@
 import { useNavigation } from '@react-navigation/native';
 import React, {useState} from 'react';
 import { Image, StyleSheet, Text, View,TouchableOpacity, Alert } from 'react-native';
+import HourlyWeather from './Weathers';
 
 export default function SpotArticle({item,ArticleModalVisible,setArticleModalVisible}) {
-
     const navigation = useNavigation();
+    const propItem = {
+        "itemName" : item.id,
+        "itemSize" : item.size,
+        "itemSrc" : item.src1,
+    }
     
     const handlePress = () => {
-        navigation.navigate('DogamDetail', item);
+        navigation.navigate('DogamDetail', propItem);
         setArticleModalVisible(false)
     };
 
@@ -19,9 +24,9 @@ export default function SpotArticle({item,ArticleModalVisible,setArticleModalVis
             </View>
             
             <View style={styles.infoContainer}>
-                <Text>날짜</Text>
-                <Text>어종</Text>
-                <Text>{item.latitude} {item.longitude}</Text>
+                <Text style={styles.articleText}>날짜</Text>
+                <Text style={styles.articleText}>{item.title}</Text>
+                <Text style={styles.articleText}>{item.address}</Text>
             </View>
             </TouchableOpacity>
         </View>
@@ -48,6 +53,10 @@ const styles = StyleSheet.create({
         marginBottom : "5%"
     },
     infoContainer : {
-    width:"70%"
+        width:"70%",
+    },
+    articleText : {
+        marginVertical : 5,
+        fontSize : 12
     }
 })

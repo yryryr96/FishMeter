@@ -103,20 +103,6 @@ const Tabs = () => {
         }}
       /> */}
       <Tab.Screen
-        name="Gps"
-        component={Gps}
-        options={{
-          tabBarLabel: "",
-          tabBarIcon: (props) =>
-            TabIcon({
-              ...props,
-              name: props.focused ? "map-marker" : "map-marker-outline",
-              size: 30,
-              color: "gray",
-            }),
-        }}
-      />
-      <Tab.Screen
         name="Profile"
         component={Profile}
         options={{

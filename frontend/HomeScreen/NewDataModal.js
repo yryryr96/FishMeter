@@ -25,7 +25,7 @@ export default function NewDataModal({newDataModalVisible, setNewDataModalVisibl
                     </View>
 
                     
-                    <View>
+                    <View style={{marginVertical : 3}}>
                         <Text style={{marginHorizontal : 30}}>{newData?.length}개의 알림</Text>
                     </View>
                     
