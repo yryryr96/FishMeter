@@ -1,32 +1,70 @@
 import React, { useState, useEffect } from "react";
 import CalendarPicker from "react-native-calendar-picker";
+import { StyleSheet, Text, View, Alert } from "react-native";
 import {
-  StyleSheet,
-  Text,
-  View,
-  Alert,
-  TouchableOpacity,
-  Modal,
-} from "react-native";
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  isSameMonth,
+} from "date-fns";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
-const Date = [
-  "2023-07-01",
+const customDateArray = [
   "2023-07-05",
   "2023-07-10",
-  "2023-08-20",
-  "2023-08-10",
+  "2023-07-11",
+  "2023-08-15",
   "2023-08-05",
-  "2023-08-01",
-];
+  "2023-08-10",
+  "2023-08-11",
+  "2023-08-15",
+  "2023-09-15",
+  "2023-09-05",
+  "2023-09-10",
+  "2023-09-11",
+  "2023-09-15",
+]; // Date 배열 대신 customDateArray로 이름 변경
+
+const customDatesStyles = (date) => {
+  const newDate = new Date(date);
+  //console.log("월 변경", newDate.toISOString());
+  const startOfMonthDate = startOfMonth(newDate);
+  const endOfMonthDate = endOfMonth(newDate);
+  const datesOfMonth = eachDayOfInterval({
+    start: startOfMonthDate,
+    end: endOfMonthDate,
+  });
+
+  const customDatesStyles = datesOfMonth.map((day) => {
+    const dateString = day.toISOString().slice(0, 10);
+    const isInCustomDateArray = customDateArray.includes(dateString);
+    const style = isInCustomDateArray
+      ? {
+          //backgroundColor: "#516DA4",
+          borderWidth: 2,
+          borderColor: "#6F94C2",
+        }
+      : {};
+
+    return {
+      date: day,
+      style,
+      textStyle: { color: "black" },
+      containerStyle: [],
+      allowDisabled: true,
+    };
+  });
+
+  return customDatesStyles;
+};
 
 function Calendarcheck({ navigation }) {
   const [selectedDate, setSelectedDate] = useState(null);
-  const [selectedStartDate, setSelectedStartDate] = useState(null); // 추가
+  const [selectedStartDate, setSelectedStartDate] = useState(null);
+  const [customDates, setCustomDates] = useState([]);
 
-  // 날짜 클릭하면 갤러리로 넘어가도록
   useEffect(() => {
     if (selectedStartDate) {
-      // 변경: selectedDate -> selectedStartDate
       const [year, month, day] = selectedStartDate.split("-");
       navigation.navigate("CalendarGallery", {
         year,
@@ -34,46 +72,62 @@ function Calendarcheck({ navigation }) {
         day,
       });
     }
-  }, [selectedStartDate, navigation]); // 변경: selectedDate -> selectedStartDate
+  }, [selectedStartDate, navigation]);
 
   const handleDatePress = (date) => {
-    if (Date.includes(date.format("YYYY-MM-DD").toString())) {
-      // 수정
-      setSelectedDate(date.format("YYYY-MM-DD").toString()); // 수정
-      setSelectedStartDate(date.format("YYYY-MM-DD").toString()); // 수정
-      console.log(date);
+    const dateString = date.toISOString().slice(0, 10);
+    if (customDateArray.includes(dateString)) {
+      setSelectedDate(dateString);
+      setSelectedStartDate(dateString);
     } else {
       setSelectedDate(null);
-      setSelectedStartDate(null); // 추가
-      Alert.alert("알림", "이날 등록된 사진이 없어요!");
+      setSelectedStartDate(null);
+      //Alert.alert("알림", "이날 등록된 사진이 없어요!");
     }
   };
 
-  const getCustomStyles = (date) => {
-    const dateString = date.format("YYYY-MM-DD").toString(); // 수정
-    const customStyle = Date.includes(dateString)
-      ? {
-          container: {
-            backgroundColor: "blue",
-          },
-          text: {
-            color: "white",
-          },
-        }
-      : {};
-    return customStyle;
+  //const customDates = customDatesStyles(new Date()); // customDatesStyles()를 호출하여 배열을 얻습니다.
+  const handleMonthChange = (date) => {
+    const dateString = date.toISOString();
+    console.log("월 변경", dateString);
+    const updatedCustomDates = customDatesStyles(dateString); // 배열 얻어오기
+    setCustomDates(updatedCustomDates); // 상태로 업데이트
   };
+
+  useEffect(() => {
+    // 초기에 한 번 실행
+    const initialCustomDates = customDatesStyles(new Date());
+    setCustomDates(initialCustomDates);
+  }, []);
 
   return (
     <>
       <CalendarPicker
         onDateChange={handleDatePress}
-        selectedStartDate={selectedStartDate} // 변경: selectedDate -> selectedStartDate
-        todayBackgroundColor="red"
+        selectedStartDate={selectedStartDate}
+        todayBackgroundColor="#3C4C6C"
+        onMonthChange={handleMonthChange}
         todayTextStyle={{ color: "#fff" }}
-        customDatesStyles={getCustomStyles}
+        customDatesStyles={customDates}
+        selectedDayColor="#6F94C2"
+        weekdays={["일", "월", "화", "수", "목", "금", "토"]}
+        months={[
+          "1월",
+          "2월",
+          "3월",
+          "4월",
+          "5월",
+          "6월",
+          "7월",
+          "8월",
+          "9월",
+          "10월",
+          "11월",
+          "12월",
+        ]}
+        previousTitle="이전"
+        nextTitle="다음"
       />
-      {selectedDate && <Text>선택한 날짜: {selectedDate}</Text>}
     </>
   );
 }

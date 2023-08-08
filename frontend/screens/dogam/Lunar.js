@@ -1,13 +1,29 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, Button } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, Text, TextInput, Button, StyleSheet } from "react-native";
+import useCustomFont from "../../font/useCustomFont";
 import holidayKr from "holiday-kr";
 
-const Lunar = () => {
+function FontText({ fontFileName, children }) {
+  const isFontLoaded = useCustomFont(fontFileName);
+
+  if (!isFontLoaded) {
+    return null;
+  }
+
+  return <Text style={styles.text}>{children}</Text>;
+}
+
+const Lunar = ({ solardate }) => {
   const [inputDate, setInputDate] = useState("");
   const [lunarDate, setLunarDate] = useState("");
   const [water, setWater] = useState("");
 
-  const handleConvertDate = () => {
+  useEffect(() => {
+    handleConvertDate(solardate);
+    console.log(solardate);
+  }, []);
+
+  const handleConvertDate = (inputDate) => {
     if (!inputDate) {
       console.error("양력 날짜를 입력해주세요.");
       return;
@@ -42,17 +58,47 @@ const Lunar = () => {
 
   return (
     <View>
-      <Text>양력 날짜를 음력 날짜로 변환</Text>
-      <TextInput
-        value={inputDate}
-        onChangeText={(text) => setInputDate(text)}
-        placeholder="양력 날짜 입력 (예: 2023-08-02)"
-      />
-      <Button title="변환하기" onPress={handleConvertDate} />
-      <Text>음력 날짜: {lunarDate}</Text>
-      <Text>물때 : {water}</Text>
+      <View style={{ flexDirection: "row" }}>
+        <View style={{ width: 80 }}>
+          <FontText
+            fontFileName={require("../../assets/fonts/Yeongdeok_Sea.ttf")}
+          >
+            <Text>음력 날짜: </Text>
+          </FontText>
+        </View>
+        <View>
+          <FontText
+            fontFileName={require("../../assets/fonts/Yeongdeok_Sea.ttf")}
+          >
+            <Text>{lunarDate}</Text>
+          </FontText>
+        </View>
+      </View>
+      <View style={{ flexDirection: "row" }}>
+        <View style={{ width: 80 }}>
+          <FontText
+            fontFileName={require("../../assets/fonts/Yeongdeok_Sea.ttf")}
+          >
+            <Text>물때 : </Text>
+          </FontText>
+        </View>
+        <View>
+          <FontText
+            fontFileName={require("../../assets/fonts/Yeongdeok_Sea.ttf")}
+          >
+            <Text>{water}물</Text>
+          </FontText>
+        </View>
+      </View>
     </View>
   );
 };
 
 export default Lunar;
+
+const styles = StyleSheet.create({
+  text: {
+    fontFamily: "customFont",
+    fontSize: 18,
+  },
+});

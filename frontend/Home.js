@@ -28,7 +28,7 @@ const ImageUrl = [
 ]
 
 const fishes = ['광어','상어','고래','참돔','돌돔','망둥어']
-const socket = io('http://192.168.123.100:8082');
+const socket = io('http://192.168.30.136:8082');
 
 export default function Home() {
     const [totalMarker, setTotalMarker] = useRecoilState(testDefaultGps)
@@ -136,7 +136,7 @@ export default function Home() {
         };
 
         // 서버로 POST 요청을 보냅니다.
-        axios.post("http://192.168.123.100:8082/update", newData)
+        axios.post("http://192.168.30.136:8082/update", newData)
             .then((response) => {
                 // console.log("서버 응답:", response.data);
             // console.log('res= ',response.data)
