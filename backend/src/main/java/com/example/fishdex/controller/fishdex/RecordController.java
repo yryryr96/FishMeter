@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.List;
 
 @RestController
@@ -47,6 +48,17 @@ public class RecordController {
         List<RecordResponseDto> list = recordService.findAllRecords();
         return list;
     }
+
+    @GetMapping("/image/{recordId}/{recordTime}")
+    public List<RecordResponseDto> findImages(@PathVariable("recordId") long recordId, @PathVariable("recordTime") Timestamp date){
+        //        , @AuthenticationPrincipal OAuth2User principal
+        //    long userId  = principal.getAttribute("id");
+        long userId = 1;
+        ImageRequestDto imageRequestDto = new ImageRequestDto(userId, recordId, date);
+        List<RecordResponseDto> list = recordService.findImages(imageRequestDto);
+        return list;
+    }
+
 
     @PostMapping(value = "/records", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public void regist(@RequestPart RecordRequestDto recordRequestDto, @RequestPart MultipartFile image) {
