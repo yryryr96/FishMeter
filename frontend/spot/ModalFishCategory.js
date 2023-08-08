@@ -19,7 +19,7 @@ export default function ModalFishCategory({CategoryModalVisible,setCategoryModal
     }
 
     const ClickSetting = () => {
-        console.log(selectedFishes)
+        // console.log(selectedFishes)
         setSelectedFishes([])
         setCategoryModalVisible(false)
     }
@@ -109,20 +109,20 @@ export default function ModalFishCategory({CategoryModalVisible,setCategoryModal
 
 const styles = StyleSheet.create({
     categoryContainer : {
-      backgroundColor : 'transparent',
-      alignItems : 'center',
-      justifyContent : 'center',
-      flex : 1,
-      width: '100%',
+        backgroundColor : 'rgba(0, 0, 0, 0.3)',
+        alignItems : 'center',
+        justifyContent : 'center',
+        flex : 1,
+        width: '100%',
     },
     modalButton1 : {
-      backgroundColor : 'white',
-      borderRadius : 20,
-      padding : 5,
-      paddingHorizontal:10,
-      borderWidth : 1,
-      alignItems : 'center',
-      justifyContent : 'center',
+        backgroundColor : 'white',
+        borderRadius : 20,
+        padding : 5,
+        paddingHorizontal:10,
+        borderWidth : 1,
+        alignItems : 'center',
+        justifyContent : 'center',
     },
 
     modalButton2 : {
@@ -135,12 +135,12 @@ const styles = StyleSheet.create({
         justifyContent : 'center',
         alignItems : 'center',
 
-      },
+        },
     modalButtonContainer : {
-      width:"100%",
-      alignItems:'center',
-      marginVertical : "5%",
-      paddingHorizontal : "7%"
+        width:"100%",
+        alignItems:'center',
+        marginVertical : "5%",
+        paddingHorizontal : "7%"
     },
     headerContainer : {
         flexDirection : 'row',

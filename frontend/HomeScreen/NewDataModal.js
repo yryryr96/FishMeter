@@ -1,10 +1,11 @@
 import {Alert, Modal, StyleSheet, Text, View,ScrollView, Image, TouchableWithoutFeedback} from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
-export default function NewDataModal({newDataModalVisible, setNewDataModalVisible, newData}) {
+export default function NewDataModal({newDataModalVisible, setNewDataModalVisible, newData, setNewData}) {
     // console.log(newData)
     const closeNewDataModal = () => {
         setNewDataModalVisible(false)
+        setNewData([])
     }
     
     const reversedNewData = newData.slice().reverse()
@@ -13,10 +14,8 @@ export default function NewDataModal({newDataModalVisible, setNewDataModalVisibl
             animationType="fade"
             transparent={true}
             visible={newDataModalVisible}
-            onRequestClose={() => {
-                setNewDataModalVisible(false);
-            }
-        }>  
+            onRequestClose={closeNewDataModal}
+        >  
             <View style={styles.ModalOuterContainer} onPress={closeNewDataModal}>
                 <View style={styles.modalInnerContainer}>
                     
@@ -40,7 +39,7 @@ export default function NewDataModal({newDataModalVisible, setNewDataModalVisibl
                                         <Image source={{uri : item.src1}} style={{width:120,height:120,borderRadius : 10}} />
                                     </View>
 
-                                    <View style={{marginHorizontal : 22, justifyContent : 'space-between'}}>
+                                    <View style={{marginHorizontal : 7, justifyContent : 'space-between'}}>
                                         <Text style={{fontSize : 13, marginBottom:5}}>{item.address}</Text>
                                         <Text style={{fontSize : 16, marginBottom:5}}>{item.id}</Text>
                                         <Text style={{fontSize : 16, marginBottom:5}}>{item.title}</Text>
@@ -60,20 +59,20 @@ export default function NewDataModal({newDataModalVisible, setNewDataModalVisibl
 
 const styles = StyleSheet.create({
     ModalOuterContainer : {
-        backgroundColor : 'transparent',
+        backgroundColor : 'rgba(0,0,0,0.5)',
         alignItems : 'center',
         justifyContent : 'center',
         flex : 1,
         width: '100%',
     },
     modalInnerContainer : {
-        backgroundColor : 'rgba(255, 255, 255, 1)', 
+        backgroundColor : 'white', 
         width : "90%", 
         paddingTop:20, 
         borderRadius : 30, 
-        borderWidth:3,
+        borderWidth: 2,
         maxHeight:"60%",
-        opacity:0.8
+        // opacity:0.8
     },
     
     headerContainer : {
