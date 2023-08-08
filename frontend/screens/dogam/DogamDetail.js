@@ -32,7 +32,6 @@ const DATA = [
     lat: 35.1566418,
     lon: 129.0560026,
     src1: "https://i.pinimg.com/564x/19/02/bf/1902bfda106132319c2d38f9341bcc8b.jpg",
-    src2: require("../../assets/dogam_number/Gamsoung.png"),
   },
 ];
 
@@ -165,6 +164,7 @@ function FontText({ fontFileName, children }) {
 
 const DogamDetail = ({ route, navigation }) => {
   const [address, setAddress] = useState(""); // Create a state to store address in DogamDetail
+  const solardate = "2023-08-07";
 
   const handleGoBack = () => {
     navigation.goBack();
@@ -263,37 +263,7 @@ const DogamDetail = ({ route, navigation }) => {
           options={{ fileName: "shared", format: "png", quality: 1 }}
         >
           <View style={{ backgroundColor: "#FCFCFC" }}>
-            <View style={{ width: "100%", height: 300 }}>
-              <Image
-                source={{
-                  uri: itemSrc,
-                }}
-                style={styles.dogamItem}
-                resizeMode="contain"
-              />
-            </View>
-            <View
-              style={{
-                padding: 20,
-                marginHorizontal: 20,
-                borderBottomColor: "gray",
-                borderBottomWidth: 1,
-              }}
-            >
-              <Text>{DATA[0].date}</Text>
-              <FontText
-                fontFileName={require("../../assets/fonts/Yeongdeok_Sea.ttf")}
-              >
-                날씨 <Icon size={20} name={weatherIcon[0].icon} />
-              </FontText>
-              <FontText
-                fontFileName={require("../../assets/fonts/Yeongdeok_Blueroad.ttf")}
-              >
-                {address}에서 {itemName} {itemSize}cm짜리를 잡았다.
-              </FontText>
-            </View>
-
-            <View style={{ padding: 20, marginHorizontal: 20 }}>
+            <View style={{ paddingHorizontal: 15, marginHorizontal: 20 }}>
               <FontText
                 fontFileName={require("../../assets/fonts/Yeongdeok_Blueroad.ttf")}
               >
@@ -309,6 +279,39 @@ const DogamDetail = ({ route, navigation }) => {
               </View>
             </View>
 
+            <View style={{ alignItems: "center" }}>
+              <View
+                style={{
+                  width: "90%",
+                  marginTop: 20,
+                  borderColor: "gray",
+                  borderBottomWidth: 1,
+                  marginBottom: 25,
+                }}
+              ></View>
+            </View>
+
+            <View style={{ width: "100%", height: 300 }}>
+              <Image
+                source={{
+                  uri: itemSrc,
+                }}
+                style={styles.dogamItem}
+                resizeMode="contain"
+              />
+            </View>
+
+            <View style={{ alignItems: "center" }}>
+              <View
+                style={{
+                  width: "90%",
+                  marginTop: 20,
+                  marginBottom: 20,
+                  borderColor: "gray",
+                  borderBottomWidth: 1,
+                }}
+              ></View>
+            </View>
             <View style={styles.detail}>
               <View style={{ marginBottom: 10 }}>
                 <FontText
@@ -368,7 +371,7 @@ const DogamDetail = ({ route, navigation }) => {
                 </View>
               </View>
 
-              <Lunar />
+              <Lunar solardate={solardate} />
 
               <View style={{ flexDirection: "row" }}>
                 <View style={{ width: 80 }}>
@@ -387,7 +390,7 @@ const DogamDetail = ({ route, navigation }) => {
                 </View>
               </View>
             </View>
-            <View style={{ flex: 1, marginTop: 20 }}>
+            <View style={{ flex: 1, marginTop: 25, marginBottom: 20 }}>
               <GoogleMap
                 latitude={DATA[0].lat}
                 longitude={DATA[0].lon}

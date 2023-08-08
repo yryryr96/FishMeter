@@ -26,11 +26,9 @@ const customDateArray = [
 
 const customDatesStyles = (date) => {
   const newDate = new Date(date);
-  console.log("월 변경", newDate.toISOString());
+  //console.log("월 변경", newDate.toISOString());
   const startOfMonthDate = startOfMonth(newDate);
-  console.log(startOfMonthDate);
   const endOfMonthDate = endOfMonth(newDate);
-  console.log(endOfMonthDate);
   const datesOfMonth = eachDayOfInterval({
     start: startOfMonthDate,
     end: endOfMonthDate,
@@ -38,13 +36,12 @@ const customDatesStyles = (date) => {
 
   const customDatesStyles = datesOfMonth.map((day) => {
     const dateString = day.toISOString().slice(0, 10);
-    console.log(dateString);
     const isInCustomDateArray = customDateArray.includes(dateString);
-    console.log(isInCustomDateArray);
     const style = isInCustomDateArray
       ? {
           //backgroundColor: "#516DA4",
-          borderBottomWidth: 1,
+          borderWidth: 2,
+          borderColor: "#6F94C2",
         }
       : {};
 
@@ -84,7 +81,7 @@ function Calendarcheck({ navigation }) {
     } else {
       setSelectedDate(null);
       setSelectedStartDate(null);
-      Alert.alert("알림", "이날 등록된 사진이 없어요!");
+      //Alert.alert("알림", "이날 등록된 사진이 없어요!");
     }
   };
 
@@ -107,10 +104,28 @@ function Calendarcheck({ navigation }) {
       <CalendarPicker
         onDateChange={handleDatePress}
         selectedStartDate={selectedStartDate}
-        todayBackgroundColor="red"
+        todayBackgroundColor="#3C4C6C"
         onMonthChange={handleMonthChange}
         todayTextStyle={{ color: "#fff" }}
         customDatesStyles={customDates}
+        selectedDayColor="#6F94C2"
+        weekdays={["일", "월", "화", "수", "목", "금", "토"]}
+        months={[
+          "1월",
+          "2월",
+          "3월",
+          "4월",
+          "5월",
+          "6월",
+          "7월",
+          "8월",
+          "9월",
+          "10월",
+          "11월",
+          "12월",
+        ]}
+        previousTitle="이전"
+        nextTitle="다음"
       />
     </>
   );
