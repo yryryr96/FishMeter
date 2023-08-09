@@ -30,6 +30,7 @@ public class Record {
     private int windDirection;
     private double windSpeed;
     private boolean favorite;
+    private String address;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "day_id")
     private Day day;
@@ -52,6 +53,7 @@ public class Record {
                 .windDirection(this.windDirection)
                 .windSpeed(this.windSpeed)
                 .favorite(this.favorite)
+                .address(this.address)
                 .day(this.day.toDto())
                 .user(this.user.toDto())
                 .fish(this.fish.toDto())
