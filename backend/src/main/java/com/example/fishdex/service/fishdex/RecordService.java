@@ -9,8 +9,10 @@ import com.example.fishdex.repository.fishdex.DayRepository;
 import com.example.fishdex.repository.fishdex.FishRepository;
 import com.example.fishdex.repository.fishdex.RecordRepository;
 import com.example.fishdex.repository.user.UserRepository;
+import com.example.fishdex.util.KakaoApiReader;
 import com.example.fishdex.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,6 +30,7 @@ public class RecordService {
     private final DayRepository dayRepository;
     private final UserRepository userRepository;
     private final S3Uploader s3Uploader;
+    private final KakaoApiReader kakaoApiReader;
 
     public List<FishResponseDto> findAll(Long userId) {
         List<Fish> fishEntity = recordRepository.findFishByUserId(userId);
@@ -42,8 +45,11 @@ public class RecordService {
         return dayRepository.save(day);
     }
 
-    public void save(RecordRequestDto recordRequestDto) {
-
+    public void save(RecordRequestDto recordRequestDto) throws Exception {
+        kakaoApiReader.setLatitude(recordRequestDto.getLatitude());
+        kakaoApiReader.setLongitude(recordRequestDto.getLongitude());
+        String address = kakaoApiReader.getAddressName();
+        recordRequestDto.setAddress(address);
         DayRequestDto dayRequestDto = new DayRequestDto();
         long currentTimeMillis = System.currentTimeMillis();
         java.util.Date currentDate = new java.util.Date(currentTimeMillis);
@@ -131,3 +137,4 @@ public class RecordService {
         return recordResponseDtos;
     }
 }
+

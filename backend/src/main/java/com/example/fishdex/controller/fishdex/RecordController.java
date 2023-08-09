@@ -61,7 +61,7 @@ public class RecordController {
 
 
     @PostMapping(value = "/records", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public void regist(@RequestPart RecordRequestDto recordRequestDto, @RequestPart MultipartFile image) {
+    public void regist(@RequestPart RecordRequestDto recordRequestDto, @RequestPart MultipartFile image) throws Exception {
 //        , @AuthenticationPrincipal OAuth2User principal
 //        long userId  = principal.getAttribute("id");
         long userId = 1;

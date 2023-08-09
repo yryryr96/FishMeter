@@ -27,6 +27,7 @@ public class RecordRequestDto {
     private int windDirection;
     private double windSpeed;
     private boolean favorite;
+    private String address;
     private String species;
     private Day day;
     private User user;
