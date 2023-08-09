@@ -28,7 +28,7 @@ const ImageUrl = [
 ]
 
 const fishes = ['광어','상어','고래','참돔','돌돔','망둥어']
-const socket = io('http://192.168.123.101:8082');
+const socket = io('http://192.168.30.136:8082');
 
 export default function Home() {
     const [totalMarker, setTotalMarker] = useRecoilState(testDefaultGps)
@@ -87,19 +87,19 @@ export default function Home() {
         
         
         // SSE
-        // const es = new RNEventSource("http://54.206.147.12/sse/connect");
+        const es = new RNEventSource("http://54.206.147.12/sse/connect");
 
-        // es.addEventListener("count", (event) => {
-        // console.log('connect')
-        // const eventData = JSON.parse(event.data);
-        // console.log("새로운 메시지 이벤트:", eventData);
-        // });
+        es.addEventListener("count", (event) => {
+        console.log('connect')
+        const eventData = JSON.parse(event.data);
+        console.log("새로운 메시지 이벤트:", eventData);
+        });
 
-        // // SSE 연결이 닫히면 다시 연결합니다.
-        // es.addEventListener("close", (event) => {
-        // console.log("SSE 연결이 종료되었습니다. 재연결 중...");
-        // // es.reconnect(); // 서버로 재연결합니다.
-        // });
+        // SSE 연결이 닫히면 다시 연결합니다.
+        es.addEventListener("close", (event) => {
+        console.log("SSE 연결이 종료되었습니다. 재연결 중...");
+        // es.reconnect(); // 서버로 재연결합니다.
+        });
 
         
         // WebSocket
@@ -118,7 +118,8 @@ export default function Home() {
         return () => {
         // 컴포넌트가 언마운트될 때 SSE 연결을 닫습니다.
             // es.removeAllEventListeners();
-            // es.close()
+            console.log('종료')
+            es.close()
             socket.off('dataUpdate') // WebSocket 종료
 
         }
@@ -137,7 +138,7 @@ export default function Home() {
         };
 
         // 서버로 POST 요청을 보냅니다.
-        axios.post("http://192.168.123.101:8082/update", newData)
+        axios.post("http://192.168.30.136:8082/update", newData)
             .then((response) => {
                 // console.log("서버 응답:", response.data);
             // console.log('res= ',response.data)
@@ -171,7 +172,7 @@ export default function Home() {
     ]
     return (
         <SafeAreaProvider style={styles.container}>
-        
+            
         {state ?
             <View>
                 <SafeAreaView>
@@ -229,6 +230,12 @@ export default function Home() {
                 }
             </View>
 
+            <View style={{top:"12%", left:"5%", position:'absolute'}}>
+                <TouchableOpacity>
+                    <Image source={{uri : 'https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2NrNWF4eml1cG1zaWhpamR3N3p4NW9hNWFnMGVzM3M5dHVkZ3J2ZiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/P7k6tr6Gmek344gqPY/giphy.gif'}} style={{width:70, height:30}} />
+                </TouchableOpacity>
+            </View>
+
             <View style={{position:'absolute', bottom:120, marginHorizontal:30}}>
                 <TouchableOpacity onPress={handleUpdate}>
                     <Entypo name="camera" size={50} color="black" />
@@ -236,9 +243,12 @@ export default function Home() {
             </View>
             
              {/* 실시간 알림 */}
-            <View style={{backgroundColor: 'rgba(0, 0, 0, 0.3)',borderRadius : 10, position:'absolute', bottom : 100, left:100}}>
+            <View style={{backgroundColor: 'rgba(0,0,0,0.3)', position:'absolute', bottom : 100,width:"100%"}}>
+                {/* <View>
+                    <Image source={require('./assets/live.gif')} style={{width:100,height:30,margin :5}} />
+                </View> */}
                 {newMessage.map((item,index) => (
-                    <View key={index} style={{flexDirection:'row', margin:10}}>
+                    <View key={index} style={{flexDirection:'row', margin:10, justifyContent:'center'}}>
                         <Text style={{color:'white' , fontWeight:'bold'}}>{item[0]}님이 </Text>
                         <Text style={{color:'yellow', fontWeight:'bold'}}>{item[2]}cm {item[1]}을/를 </Text>
                         <Text style={{color:'white' , fontWeight:'bold'}}>잡았습니다.</Text>
@@ -258,7 +268,7 @@ export default function Home() {
                 {/* <Text style={{fontSize:50}}>어디</Text> */}
                 <SwitchSelector
                     initial={0}
-                    style={{position:'absolute', top:70, marginLeft : 20,width:170}}
+                    style={{top:"30%", marginLeft : 20, width:170}}
                     onPress={(value) => value === '1' ? 
                         setState(true)
                         :  goSpot()
@@ -270,15 +280,14 @@ export default function Home() {
                     
                 >
                 </SwitchSelector>
-                
             </View>
             { state ? 
-                <View style={{position:'absolute', right :20, bottom:110}}>
+                <View style={{position:'absolute', right :10, bottom:110}}>
                     <TouchableOpacity 
                     // style={styles.categoryButton}
                     onPress={() => getLocation()}
                     >
-                        <View style={{backgroundColor:'white', borderRadius : 30, width:40, height:40, justifyContent:'center', alignItems:'center'}}>
+                        <View style={styles.homeGpsIcon}>
                         <Image source={require("./assets/gps.png")} style={{width:25, height:25}}/>
                         </View>
                     
@@ -299,7 +308,7 @@ const styles = StyleSheet.create({
     },
     map:{
         width: "100%",
-        height : "100%"
+        height : "100%",
     },
     newModal : {
         position:'absolute', 
@@ -341,5 +350,13 @@ const styles = StyleSheet.create({
         fontWeight:"bold",
         position:'absolute',
         color : 'white'
+    },
+    homeGpsIcon : {
+        backgroundColor:'white', 
+        borderRadius : 30, 
+        width:40, 
+        height:40, 
+        justifyContent:'center', 
+        alignItems:'center'
     }
 })
