@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -17,7 +19,8 @@ public class SseController {
     private final SseService sseService;
 
     @GetMapping(value = "/sse/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public ResponseEntity<SseEmitter> connect() {
+    public ResponseEntity<SseEmitter> connect(HttpServletRequest request) {
+        System.out.println(request.getRemoteAddr());
         HttpHeaders header = new HttpHeaders();
         header.add("X-Accel-Buffering", "no");
         return ResponseEntity.ok().headers(header).body(sseService.add());
