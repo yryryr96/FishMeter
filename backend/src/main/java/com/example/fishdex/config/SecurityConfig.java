@@ -20,6 +20,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests(a -> a
                         .antMatchers("/", "/error", "/webjars/**").permitAll()
+                        .antMatchers("/actuator/**").permitAll() // Actuator 엔드포인트 노출 설정
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(e -> e
