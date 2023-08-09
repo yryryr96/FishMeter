@@ -26,6 +26,7 @@ public class RecordResponseDto {
     private int windDirection;
     private double windSpeed;
     private boolean favorite;
+    private String address;
     private DayDto day;
     private UserDto user;
     private FishDto fish;
