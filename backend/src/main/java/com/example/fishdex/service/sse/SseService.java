@@ -30,6 +30,7 @@ public class SseService {
         log.info("emitter list: {}", emitters);
         emitter.onCompletion(() -> {
             log.info("onCompletion callback");
+            emitters.remove(emitter);
         });
         emitter.onTimeout(() -> {
             log.info("onTimeout callback");
