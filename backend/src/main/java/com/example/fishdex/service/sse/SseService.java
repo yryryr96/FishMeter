@@ -57,26 +57,26 @@ public class SseService {
         }
     }
 
-    @Scheduled(fixedDelay = 5*1000) //5초
-    public void ping(){
-        List<SseEmitter> errorList = new ArrayList<>();
-
-        for(SseEmitter emitter : emitters){
-            try{
-                emitter.send(SseEmitter.event()
-                        .name("ping")
-                        .data(0));
-            }catch(IOException e){
-                errorList.add(emitter);
-            }
-        }
-        for(SseEmitter emitter : errorList){
-            emitters.remove(emitter);
-        }
-
-        if(!errorList.isEmpty()){
-            sendCount();
-        }
-    }
+//    @Scheduled(fixedDelay = 5*1000) //5초
+//    public void ping(){
+//        List<SseEmitter> errorList = new ArrayList<>();
+//
+//        for(SseEmitter emitter : emitters){
+//            try{
+//                emitter.send(SseEmitter.event()
+//                        .name("ping")
+//                        .data(0));
+//            }catch(IOException e){
+//                errorList.add(emitter);
+//            }
+//        }
+//        for(SseEmitter emitter : errorList){
+//            emitters.remove(emitter);
+//        }
+//
+//        if(!errorList.isEmpty()){
+//            sendCount();
+//        }
+//    }
 }
 
