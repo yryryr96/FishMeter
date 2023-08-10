@@ -15,25 +15,13 @@ import { TextInput } from "react-native-paper";
 const Profile = () => {
   const [myinfo, setInfo] = useState(true);
   const dummy = {
-    name: "김싸피",
-    email: "kim@ssafy.com",
     nickname: "망나니",
   };
-  const password = () => setInfo(false);
+
   const info = () => setInfo(true);
-  const [username, setUsername] = useState(dummy["name"]);
-  const [email, setEmail] = useState(dummy["email"]);
+  
   const [nickname, setNickname] = useState(dummy["nickname"]);
-  // 새로운 비밀번호 보이게
-  const [showPassword, setShowPassword] = useState(false);
-  const handleTogglePasswordVisibility = () => {
-    setShowPassword((prevShowPassword) => !prevShowPassword);
-  };
-  //새로운 비밀번호 확인
-  const [showChangePassword, setshowChangePassword] = useState(false);
-  const handleToggleChangePasswordVisibility = () => {
-    setshowChangePassword((prevShowPassword) => !prevShowPassword);
-  };
+  
   //프로필 이미지 선택 및 수정
   const [image, setImage] = useState(null);
   const pickImage = async () => {
@@ -52,16 +40,13 @@ const Profile = () => {
     }
   };
   const handleSaveProfile = () => {
-    // 프로필 데이터를 서버에 저장하거나 API 호출을 수행할 수 있습니다.
+    
     console.log("프로필이 업데이트되었습니다!");
-    console.log("새로운 사용자 이름:", username);
-    console.log("새로운 이메일:", email);
     console.log("새로운 닉네임:", nickname);
   };
 
   return (
     <View style={styles.container}>
-      <ScrollView>
         <View style={styles.imageContainer}>
           <TouchableOpacity onPress={pickImage}>
             {image ? ( // image 값이 존재하는 경우 이미지를 표시
@@ -75,6 +60,7 @@ const Profile = () => {
               />
             )}
           </TouchableOpacity>
+          
           <TouchableOpacity onPress={pickImage}>
             <Text
               style={{
@@ -86,160 +72,64 @@ const Profile = () => {
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.Hcontainer}>
-          <TouchableOpacity style={styles.headbutton} onPress={info}>
-            <Text
-              style={{
-                ...styles.headbuttonText,
-                color: myinfo ? "white" : "black",
-              }}
-            >
-              회원정보
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.headbutton} onPress={password}>
-            <Text
-              style={{
-                ...styles.headbuttonText,
-                color: !myinfo ? "white" : "black",
-              }}
-            >
-              비밀번호 변경
-            </Text>
-          </TouchableOpacity>
-        </View>
-        {/* 회원정보 변경 */}
+        
         {myinfo ? (
           <View style={styles.infocontainer}>
-            <Text style={styles.label}>이름</Text>
-            <TextInput
-              style={{
-                color: "black",
-                backgroundColor: "#D9D9D9",
-              }}
-              value={username}
-              editable={false}
-              selectTextOnFocus={false}
-              onChangeText={(text) => setUsername(text)}
-            />
-
-            <Text style={styles.label}>이메일</Text>
-            <TextInput
-              style={{ backgroundColor: "white" }}
-              mode="outlined"
-              value={email}
-              onChangeText={(text) => setEmail(text)}
-            />
             <Text style={styles.label}>닉네임</Text>
-            <TextInput
-              style={{ backgroundColor: "white" }}
-              mode="outlined"
-              value={email}
-              onChangeText={(text) => setNickname(text)}
-            />
+            <View style={{flexDirection : 'row', alignItems:'center', justifyContent:"space-between"}}>
+              
+              <View style={{width:"70%",justifyContent:'center'}}>
+                <TextInput
+                  style={{ backgroundColor: "white"}}
+                  mode="outlined"
+                  value={nickname}
+                  onChangeText={(text) => setNickname(text)}
+                />
+              </View>
+              
+              <View style={{width:"25%"}}>
+                <TouchableOpacity style={styles.button} onPress={handleSaveProfile}>
+                  <Text style={styles.buttonText}>저장</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+            
           </View>
         ) : null}
-        {!myinfo ? (
-          <View style={styles.infocontainer}>
-            <Text style={styles.label}>새로운 비밀번호</Text>
-            <TextInput
-              style={styles.input}
-              mode="outlined"
-              value={email}
-              secureTextEntry={!showPassword}
-              onChangeText={(text) => setEmail(text)}
-              right={
-                <TextInput.Icon
-                  icon={showPassword ? "eye-off" : "eye"}
-                  onPress={handleTogglePasswordVisibility}
-                />
-              }
-            />
-
-            <Text style={styles.label}>비밀번호 확인</Text>
-            <TextInput
-              style={styles.input}
-              mode="outlined"
-              value={email}
-              secureTextEntry={!showChangePassword}
-              onChangeText={(text) => setEmail(text)}
-              right={
-                <TextInput.Icon
-                  icon={showChangePassword ? "eye-off" : "eye"}
-                  onPress={handleToggleChangePasswordVisibility}
-                />
-              }
-            />
-          </View>
-        ) : null}
-        <View style={styles.Btncontainer}>
-          <TouchableOpacity style={styles.button} onPress={handleSaveProfile}>
-            <Text style={styles.buttonText}>저장</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={handleSaveProfile}>
-            <Text style={styles.buttonText}>취소</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
+        
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 5,
+    flex: 1,
     padding: 16,
-    backgroundColor: "#B6CEE2",
+    backgroundColor: "#fff",
+    justifyContent:'center'
+    
   },
   label: {
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 4,
   },
-  input: {
-    width: "80%",
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 15,
-    padding: 8,
-    marginBottom: 16,
-    backgroundColor: "white",
-    elevation: 4,
-    width: "100%",
-  },
   button: {
+    borderWidth:1,
     backgroundColor: "white",
-    padding: 12,
     borderRadius: 8,
     alignItems: "center",
     justifyContent: "center",
-    width: "30%", // 버튼 크기 조정
-    height: undefined, // height를 undefined로 설정하여 가로세로 비율을 유지하도록 함
-    aspectRatio: 2, // 가로:세로 비율을 2:1로 설정 (width:height = 2:1)
-    resizeMode: "contain",
+    height:48,
+    marginTop:6
   },
   buttonText: {
     color: "black",
     fontSize: 18,
     fontWeight: "bold",
   },
-  headbutton: {
-    backgroundColor: "#89C4F6",
-    padding: 12,
-    borderRadius: 8,
-    alignItems: "center",
-    justifyContent: "center",
-    flexBasis: 100,
-    flexGrow: 1,
-    width: "100%",
-    height: "100%",
-  },
-  headbuttonText: {
-    color: "black",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
   profileImage: {
+    borderWidth:1,
     width: "40%",
     height: undefined, // height를 undefined로 설정하여 가로세로 비율을 유지하도록 함
     aspectRatio: 1,
@@ -252,23 +142,17 @@ const styles = StyleSheet.create({
   imageContainer: {
     alignItems: "center",
     justifyContent: "center",
-    flex: 2,
     marginVertical: 10,
   },
   Btncontainer: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    flex: 0.5,
     marginVertical: 10,
+    backgroundColor:'red'
   },
-  Hcontainer: {
-    flex: 0.5,
-    flexDirection: "row",
-    marginVertical: 10,
-  },
+  
   infocontainer: {
-    flex: 3,
     marginVertical: 10,
   },
 });

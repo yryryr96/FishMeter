@@ -75,7 +75,8 @@ export default function ModalFishCategory({CategoryModalVisible,setCategoryModal
         }>  
             <TouchableWithoutFeedback onPress={closeCategoryModal}>
             <View style={styles.categoryContainer} onPress={closeCategoryModal}>
-                <View style={{backgroundColor : 'white', width : "90%", paddingTop:20, borderRadius : 30, borderWidth:3}}>
+                <TouchableWithoutFeedback onPress={()=>{}}>
+                <View>
                     <View style={styles.headerContainer}>
                         <Text style={{fontSize : 30, fontWeight : "600"}}>어종</Text>
                         <MaterialIcons name="close" size={40} color="black" onPress={closeCategoryModal} />
@@ -101,6 +102,7 @@ export default function ModalFishCategory({CategoryModalVisible,setCategoryModal
                     </View>
                 
                 </View>
+                </TouchableWithoutFeedback>
             </View>
             </TouchableWithoutFeedback>
         </Modal>
@@ -114,6 +116,13 @@ const styles = StyleSheet.create({
         justifyContent : 'center',
         flex : 1,
         width: '100%',
+    },
+    categoryInnerContainer : {
+        backgroundColor : 'white', 
+        width : "90%", 
+        paddingTop:20, 
+        borderRadius : 30, 
+        borderWidth:3
     },
     modalButton1 : {
         backgroundColor : 'white',

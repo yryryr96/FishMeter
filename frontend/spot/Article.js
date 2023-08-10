@@ -18,17 +18,19 @@ export default function SpotArticle({item,ArticleModalVisible,setArticleModalVis
 
     return(
         <View style={styles.articleContainer}>
-            <TouchableOpacity style={{flexDirection:'row'}} onPress={handlePress}>
-            <View style={styles.imgContainer}>
-                <Image source={{ uri : item.src1}} style={{height:110}}/>
+            <View style={{marginVertical : 5}}>
+                <TouchableOpacity style={{flexDirection:'row'}} onPress={handlePress}>
+                    <View style={styles.imgContainer}>
+                        <Image source={{ uri : item.src1}} style={{height:110, borderRadius:5}}/>
+                    </View>
+                    
+                    <View style={styles.infoContainer}>
+                        <Text style={styles.articleText}>날짜</Text>
+                        <Text style={styles.articleText}>{item.title}</Text>
+                        <Text style={styles.articleText}>{item.address}</Text>
+                    </View>
+                </TouchableOpacity>
             </View>
-            
-            <View style={styles.infoContainer}>
-                <Text style={styles.articleText}>날짜</Text>
-                <Text style={styles.articleText}>{item.title}</Text>
-                <Text style={styles.articleText}>{item.address}</Text>
-            </View>
-            </TouchableOpacity>
         </View>
     )
 }
@@ -37,26 +39,24 @@ const styles = StyleSheet.create({
     articleContainer : {
         flexDirection : 'row',
         backgroundColor : 'transparent' ,
-        // justifyContent : 'center',
-        // alignItems : 'center',
-        marginTop : 15,
         borderColor : 'transparent',
-        borderBottomColor : 'grey',
+        borderTopColor : 'grey',
         borderWidth : 1,
-        paddingHorizontal:"6%"
     },
     imgContainer : {
-        width:"30%",
+        width:"50%",
         alignContent:'center',
         justifyContent:'center',
-        marginRight : "6%",
-        marginBottom : "5%"
+        // marginRight : "6%",
+        padding : 10,
     },
     infoContainer : {
-        width:"70%",
+        width:"50%",
+        backgroundColor:'transparent',
+        paddingTop : 5
     },
     articleText : {
         marginVertical : 5,
-        fontSize : 12
+        fontSize : 15
     }
 })

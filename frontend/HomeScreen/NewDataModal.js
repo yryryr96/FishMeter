@@ -10,13 +10,16 @@ export default function NewDataModal({newDataModalVisible, setNewDataModalVisibl
     
     const reversedNewData = newData.slice().reverse()
     return (
+        
         <Modal
             animationType="fade"
             transparent={true}
             visible={newDataModalVisible}
             onRequestClose={closeNewDataModal}
-        >  
+            >  
+            <TouchableWithoutFeedback onPress={closeNewDataModal}>
             <View style={styles.ModalOuterContainer} onPress={closeNewDataModal}>
+                <TouchableWithoutFeedback onPress={()=>{}}>
                 <View style={styles.modalInnerContainer}>
                     
                     <View style={styles.headerContainer}>
@@ -52,7 +55,9 @@ export default function NewDataModal({newDataModalVisible, setNewDataModalVisibl
                     </View>
                     </ScrollView>
                 </View>
+                </TouchableWithoutFeedback> 
             </View>
+        </TouchableWithoutFeedback>
         </Modal>
     )
 }

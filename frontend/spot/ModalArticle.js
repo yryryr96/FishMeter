@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Alert, Modal, StyleSheet, Text, View,ScrollView} from 'react-native';
+import {Alert, Modal, StyleSheet, Text, View,ScrollView, TouchableWithoutFeedback} from 'react-native';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { testGpsList } from '../component/recoil/atoms/test';
 import SpotArticle from './Article';
@@ -21,7 +21,9 @@ export default function ModalArticle({ArticleModalVisible,setArticleModalVisible
             setArticleModalVisible(!ArticleModalVisible);
         }
     }>  
+      <TouchableWithoutFeedback onPress={closeArticleModal}> 
         <View style={styles.articleModalContainer} onPress={closeArticleModal}>
+          <TouchableWithoutFeedback onPress={()=>{}}>
             <View style={styles.modalInnerContainer}>
                 
                 <View style={styles.headerContainer}>
@@ -41,8 +43,10 @@ export default function ModalArticle({ArticleModalVisible,setArticleModalVisible
                     ))}
                   </View>
                 </ScrollView>
-            </View>
+              </View>
+            </TouchableWithoutFeedback>
         </View>
+        </TouchableWithoutFeedback>
     </Modal>
 
     )
@@ -50,7 +54,7 @@ export default function ModalArticle({ArticleModalVisible,setArticleModalVisible
 
 const styles = StyleSheet.create({
   articleModalContainer : {
-      backgroundColor : 'transparent',
+      backgroundColor : 'rgba(0,0,0,0.3)',
       alignItems : 'center',
       justifyContent : 'center',
       flex : 1,
@@ -59,38 +63,13 @@ const styles = StyleSheet.create({
     modalInnerContainer : {
       backgroundColor : 'white', 
       width : "90%", 
-      paddingTop:20, 
+      paddingTop:20,
+      padding :5, 
       borderRadius : 30, 
-      borderWidth:3,
+      // borderWidth:1,
       maxHeight:"60%"
     },
-    modalButton1 : {
-      backgroundColor : 'white',
-      borderRadius : 20,
-      padding : 5,
-      paddingHorizontal:10,
-      borderWidth : 1,
-      alignItems : 'center',
-      justifyContent : 'center',
-    },
-
-    modalButton2 : {
-        width : "100%",
-        backgroundColor : '#5c7db4',
-        borderRadius : 10,
-        padding : 5,
-        paddingHorizontal:10,
-        borderWidth : 1,
-        justifyContent : 'center',
-        alignItems : 'center',
-
-      },
-    modalButtonContainer : {
-      width:"100%",
-      alignItems:'center',
-      marginVertical : "5%",
-      paddingHorizontal : "7%"
-    },
+    
     headerContainer : {
         flexDirection : 'row',
         justifyContent : 'space-between',
@@ -116,7 +95,7 @@ const styles = StyleSheet.create({
       articleCountText : {
         fontSize : 15,
         paddingHorizontal : 30,
-        marginBottom : 30
+        marginBottom : 10
       }
   });
   

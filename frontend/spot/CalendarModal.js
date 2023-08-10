@@ -36,6 +36,7 @@ export default function CalendarModal({calendarModalVisible,setCalendarModalVisi
         
         <TouchableWithoutFeedback onPress={closeCalendarModal}>
           <View style={styles.calendarContainer}>
+          <TouchableWithoutFeedback onPress={()=>{}}>
             <View style={{backgroundColor : 'white', width : "90%", paddingTop:20, borderRadius : 30, borderWidth:3}}>
               <CalendarPicker
                 startFromMonday={false}
@@ -89,6 +90,7 @@ export default function CalendarModal({calendarModalVisible,setCalendarModalVisi
                 </TouchableOpacity>
               </View>
             </View>
+            </TouchableWithoutFeedback>
           </View>
         </TouchableWithoutFeedback>
       </Modal>
