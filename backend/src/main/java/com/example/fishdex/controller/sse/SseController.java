@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,11 +19,13 @@ public class SseController {
 
     private final SseService sseService;
 
-    @GetMapping(value = "/sse/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public ResponseEntity<SseEmitter> connect() {
-        HttpHeaders header = new HttpHeaders();
-        header.add("X-Accel-Buffering", "no");
-        return ResponseEntity.ok().headers(header).body(sseService.add());
-    }
+    private static final long TIMEOUT = 3*60*1000L;
 
+    @GetMapping(value = "/sse/connect/{id}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter connect(HttpServletResponse response, @PathVariable String id) {
+        response.addHeader("X-Accel-Buffering", "no");
+        SseEmitter sseEmitter = new SseEmitter(TIMEOUT);
+        sseEmitter = sseService.subscribe(id, sseEmitter);
+        return sseEmitter;
+    }
 }
