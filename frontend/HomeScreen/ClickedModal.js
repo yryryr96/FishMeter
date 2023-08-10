@@ -17,9 +17,8 @@ export default function ClickedMarkerModal({ClickedModalVisible, setClickedModal
                 setClickedModalVisible(false);
             }
         }>  
-            <View style={styles.modalOuterContainer} onPress={closeClickedModalVisible}>
+            <View style={styles.modalOuterContainer} onPress={closeClickedModalVisible}>                
                 <ScrollView style={styles.modalInnerContainer}>
-                    
                     <View style={styles.headerContainer}>
                         <Text style={{fontSize : 30, fontWeight : "600"}}>상세 정보</Text>
                         <MaterialIcons name="close" size={40} color="black" onPress={closeClickedModalVisible} />
@@ -38,7 +37,7 @@ export default function ClickedMarkerModal({ClickedModalVisible, setClickedModal
                             <View style={{justifyContent:'space-between',marginTop:20, marginLeft : 15 }}>
                                 <Text style={{fontSize : 16, marginBottom:5}}>주소 : {item.address}</Text>
                                 <Text style={{fontSize : 16, marginBottom:5}}>닉네임 : {item.id}</Text>
-                                <Text style={{fontSize : 16, marginBottom:5}}>어종 :{item.title}</Text>
+                                <Text style={{fontSize : 16, marginBottom:5}}>어종 : {item.title}</Text>
                                 <Text style={{fontSize : 16, marginBottom:5}}>크기 : {item.size}cm</Text>
                             </View>
                         </View>
@@ -51,7 +50,7 @@ export default function ClickedMarkerModal({ClickedModalVisible, setClickedModal
 
 const styles = StyleSheet.create({
     modalOuterContainer :{
-        backgroundColor : 'transparent',
+        backgroundColor : 'rgba(0,0,0,0.3)',
         alignItems : 'center',
         justifyContent : 'center',
         flex : 2,
@@ -62,9 +61,8 @@ const styles = StyleSheet.create({
         width : "90%", 
         paddingTop:20, 
         borderRadius : 30, 
-        borderWidth:2,
+        borderWidth:1,
         maxHeight : "73%"
-        // opacity:0.8
     },
     headerContainer : {
         flexDirection : 'row',
