@@ -1,4 +1,4 @@
-import { View, StyleSheet, TouchableOpacity,Text,Image, Touchable } from 'react-native';
+import { View, StyleSheet, TouchableOpacity,Text,Image, Touchable,NativeModules, NativeEventEmitter,Modal  } from 'react-native';
 import {Marker} from 'react-native-maps';
 import MapView from 'react-native-maps';
 import { testDefaultGps } from './component/recoil/selectors/testSelector';
@@ -39,7 +39,30 @@ export default function Home() {
     const [title,setTitle] = useState('배스');
     const [newData, setNewData] = useState([]);
     const [newMessage, setNewMessage] = useState([]);
-    
+    // 카메라실행+카메라로부터 데이터 받은거 모달로 띄우기
+    const [fishModalVisible,setfishModalVisible]=useState(false);
+    const handleButtonPress = () => {
+        NativeModules.MyArCoreModule.launchARCoreMeasurement();
+      };
+      const [receivedData, setReceivedData] = useState({ category: null, length: null, imageBytes: null });
+    const [receivedImage, setReceivedImage] = useState(null);
+    const closefishModalVisible = () => {
+        setfishModalVisible(false)
+    }
+  useEffect(() => {
+    const eventEmitter = new NativeEventEmitter();
+
+    const subscription = eventEmitter.addListener("ACTION_DATA_RECEIVED", data => {
+      setReceivedData(data);
+      if (data.imageBytes) {
+        setReceivedImage(data.imageBytes);
+      }
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
     // 모달
     const [newDataModalVisible, setNewDataModalVisible] = useState(false);
     const [ClickedMarkerModalVisible, setClickedMarkerModalVisible] = useState(false);
@@ -229,19 +252,35 @@ export default function Home() {
                     <></>
                 }
             </View>
-
             <View style={{top:"12%", left:"5%", position:'absolute'}}>
                 <TouchableOpacity>
                     <Image source={{uri : 'https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2NrNWF4eml1cG1zaWhpamR3N3p4NW9hNWFnMGVzM3M5dHVkZ3J2ZiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/P7k6tr6Gmek344gqPY/giphy.gif'}} style={{width:70, height:30}} />
                 </TouchableOpacity>
             </View>
-
+            {/* 카메라 */}
             <View style={{position:'absolute', bottom:120, marginHorizontal:30}}>
-                <TouchableOpacity onPress={handleUpdate}>
+                <TouchableOpacity onPress={handleButtonPress}>
                     <Entypo name="camera" size={50} color="black" />
                 </TouchableOpacity>
             </View>
-            
+            {/* 받은데이터 */}
+            <Modal
+            animationType="fade"
+            transparent={true}
+            visible={fishModalVisible}
+            onRequestClose={() => {
+                setfishModalVisible(true);
+            }
+        }>  
+            <View onPress={closefishModalVisible}>                
+            <Text>Received Data:</Text>
+        <Text>Category: {receivedData.category}</Text>
+        <Text>Length: {receivedData.length}</Text>
+        {receivedImage && <Image source={{ uri: `data:image/jpeg;base64,${receivedImage}` }} style={{ width: 200, height: 200 }} />}
+            </View>
+        </Modal>
+
+
              {/* 실시간 알림 */}
             <View style={{backgroundColor: 'rgba(0,0,0,0.3)', position:'absolute', bottom : 100,width:"100%"}}>
                 {/* <View>
