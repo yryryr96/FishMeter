@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -25,7 +26,13 @@ public class UserController {
     }
     @GetMapping("/user")
     public Map<String, Object> user(@AuthenticationPrincipal OAuth2User principal) {
-        System.out.println("principal.getAttributes() = " + principal.getAttributes());
-        return Collections.singletonMap("id", principal.getAttribute("id"));
+        Map<String, Object> attributes = principal.getAttributes();
+        System.out.println("principal.getAttributes() = " + attributes);
+        Map<String, Object> response = new HashMap<>();
+        response.put("id", attributes.get("id"));
+        Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
+        response.put("nickname", properties.get("nickname"));
+        response.put("profileImage", properties.get("profile_image"));
+        return response;
     }
 }

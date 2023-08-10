@@ -18,6 +18,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .cors() // Enable CORS configuration
+                .and()
                 .authorizeRequests(a -> a
                         .antMatchers("/", "/error", "/webjars/**").permitAll()
                         .antMatchers("/actuator/**").permitAll() // Actuator 엔드포인트 노출 설정
@@ -35,7 +37,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService)
-                        ).defaultSuccessUrl("http://localhost:8080/")
+                        ).defaultSuccessUrl("/")
                 );
     }
 }
