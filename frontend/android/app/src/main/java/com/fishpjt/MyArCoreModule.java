@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -16,6 +17,8 @@ import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.WritableArray;
 
 import com.fishpjt.ar.MainActivity;
+
+import java.util.Arrays;
 
 public class MyArCoreModule extends ReactContextBaseJavaModule {
     private final ReactApplicationContext reactContext;
@@ -55,13 +58,13 @@ public class MyArCoreModule extends ReactContextBaseJavaModule {
             public void onReceive(Context context, Intent intent) {
                 Bundle dataBundle = intent.getBundleExtra("dataBundle");
                 if (dataBundle != null) {
-                    String category = dataBundle.getString("fishCategory");
-                    String length = dataBundle.getString("fishLength");
+                    String category = dataBundle.getString("category");
+                    String length = dataBundle.getString("length");
                     byte[] imageBytes = dataBundle.getByteArray("image");
 
                     Log.d("Received Data", "Category: " + category);
                     Log.d("Received Data", "Length: " + length);
-                    Log.d("Received Data", "ImageBytes: " + (imageBytes != null ? imageBytes.length : 0) + " bytes");
+                    Log.d("Received Data", "ImageBytes: " + (imageBytes != null ? imageBytes : 0) + " bytes");
 
                     // 데이터를 React Native로 전달
                     sendDataToReact(category, length, imageBytes);
@@ -70,6 +73,7 @@ public class MyArCoreModule extends ReactContextBaseJavaModule {
         }, filter);
     }
 
+
     @ReactMethod
     public void sendDataToReact(String category, String length, byte[] imageBytes) {
         WritableMap params = Arguments.createMap();
@@ -77,17 +81,17 @@ public class MyArCoreModule extends ReactContextBaseJavaModule {
         params.putString("length", length);
 
         if (imageBytes != null) {
-            WritableArray imageArray = Arguments.createArray();
-            for (byte b : imageBytes) {
-                imageArray.pushInt(b);
-            }
-            params.putArray("image_bytes", imageArray);
+            String base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+            params.putString("imageArray", base64Image);
+            Log.d("ImageBytes", "Image data sent successfully.");
         } else {
-            params.putNull("image_bytes");
+            params.putNull("imageArray");
+            Log.d("ImageBytes", "No image data.");
         }
 
         sendEvent("ACTION_DATA_RECEIVED", params);
     }
+
 
     private void sendEvent(String eventName, WritableMap params) {
         reactContext

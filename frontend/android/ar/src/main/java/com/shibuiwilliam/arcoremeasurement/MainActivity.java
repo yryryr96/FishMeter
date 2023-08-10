@@ -112,8 +112,10 @@ public class MainActivity extends AppCompatActivity {
             finish();
         });
         reactButton.setOnClickListener(v -> {
-            String fishCategory = fishTextView.getText().toString();
-            String fishLength = lengthTextView.getText().toString();
+//            String fishCategory = fishTextView.getText().toString();
+//            String fishLength = lengthTextView.getText().toString();
+            String fishCategory = "참돔";
+            String fishLength = "45cm";
             Bitmap imageBitmap = null;  // 이미지 비트맵 변수 초기화
 
             // 이미지를 가져오는 코드

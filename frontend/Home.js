@@ -44,7 +44,7 @@ export default function Home() {
     const handleButtonPress = () => {
         NativeModules.MyArCoreModule.launchARCoreMeasurement();
       };
-      const [receivedData, setReceivedData] = useState({ category: null, length: null, imageBytes: null });
+      const [receivedData, setReceivedData] = useState({ category: null, length: null, imageArray: null });
     const [receivedImage, setReceivedImage] = useState(null);
     const closefishModalVisible = () => {
         setfishModalVisible(false)
@@ -53,9 +53,10 @@ export default function Home() {
     const eventEmitter = new NativeEventEmitter();
 
     const subscription = eventEmitter.addListener("ACTION_DATA_RECEIVED", data => {
-      setReceivedData(data);
-      if (data.imageBytes) {
-        setReceivedImage(data.imageBytes);
+        setReceivedData(data);
+        setfishModalVisible(true);
+      if (data.imageArray) {
+        setReceivedImage(data.imageArray);
       }
     });
 
@@ -265,20 +266,27 @@ export default function Home() {
             </View>
             {/* 받은데이터 */}
             <Modal
-            animationType="fade"
-            transparent={true}
-            visible={fishModalVisible}
-            onRequestClose={() => {
-                setfishModalVisible(true);
-            }
-        }>  
-            <View onPress={closefishModalVisible}>                
-            <Text>Received Data:</Text>
+    animationType="fade"
+    transparent={true}
+    visible={fishModalVisible}
+    onRequestClose={() => {
+        setfishModalVisible(false);
+    }}
+>  
+    <View onPress={closefishModalVisible}>                
+        <Text>Received Data:</Text>
         <Text>Category: {receivedData.category}</Text>
         <Text>Length: {receivedData.length}</Text>
-        {receivedImage && <Image source={{ uri: `data:image/jpeg;base64,${receivedImage}` }} style={{ width: 200, height: 200 }} />}
-            </View>
-        </Modal>
+        {/* <Text>vbxzvcbzcxv{receivedImage}</Text> */}
+        {receivedImage && (
+            <Image
+                source={{ uri: `data:image/jpeg;base64,${receivedImage}` }}
+                style={{ width: 200, height: 200 }}
+            />
+        )}
+    </View>
+</Modal>
+
 
 
              {/* 실시간 알림 */}
