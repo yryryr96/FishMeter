@@ -1,6 +1,8 @@
 package com.example.fishdex.service.sse;
 
+import com.example.fishdex.repository.sse.EmitterRepository;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,69 +16,35 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
-@NoArgsConstructor
+@RequiredArgsConstructor
 @Slf4j
 public class SseService {
 
-    private final List<SseEmitter> emitters = new CopyOnWriteArrayList<>();
+    private final EmitterRepository emitterRepository;
 
-    @Async
-    public SseEmitter add(){
-        SseEmitter emitter = new SseEmitter(3*60*1000L); // 1분 설정
-
-        emitters.add(emitter);
-        log.info("new emitter added: {}", emitter);
-        log.info("emitter list size: {}", emitters.size());
-        log.info("emitter list: {}", emitters);
-        emitter.onCompletion(() -> {
-            log.info("onCompletion callback");
-            emitters.remove(emitter);
-        });
-        emitter.onTimeout(() -> {
-            log.info("onTimeout callback");
-            emitters.remove(emitter);
-        });
+    public SseEmitter subscribe(String id, SseEmitter sseEmitter){
+        sseEmitter = emitterRepository.save(id, sseEmitter);
 
         sendCount();
 
-        return emitter;
+        sseEmitter.onCompletion(()-> {
+            emitterRepository.deleteById(id);
+            sendCount();
+        });
+        sseEmitter.onTimeout(sseEmitter::complete);
+        return sseEmitter;
     }
 
     private void sendCount(){
-
-        AtomicInteger count = new AtomicInteger();
-        count.set(emitters.size());
-        for(SseEmitter emitter : emitters){
-            try{
+        emitterRepository.getSseEmitterMap().forEach((key, emitter)->{
+            try {
                 emitter.send(SseEmitter.event()
                         .name("count")
-                        .data(count));
-            }catch(IOException e){
-                log.info("message sending error");
+                        .data(emitterRepository.getSseEmitterMapCount()));
+            } catch (IOException e) {
+                emitterRepository.deleteById(key);
             }
-        }
+        });
     }
-
-//    @Scheduled(fixedDelay = 5*1000) //5초
-//    public void ping(){
-//        List<SseEmitter> errorList = new ArrayList<>();
-//
-//        for(SseEmitter emitter : emitters){
-//            try{
-//                emitter.send(SseEmitter.event()
-//                        .name("ping")
-//                        .data(0));
-//            }catch(IOException e){
-//                errorList.add(emitter);
-//            }
-//        }
-//        for(SseEmitter emitter : errorList){
-//            emitters.remove(emitter);
-//        }
-//
-//        if(!errorList.isEmpty()){
-//            sendCount();
-//        }
-//    }
 }
 
