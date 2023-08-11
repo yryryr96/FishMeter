@@ -24,20 +24,15 @@ public class RecordController {
     private final UserService userService;
 
     @GetMapping("/fishes")
-    public List<FishResponseDto> findAll(@RequestHeader("Authorization") String authorization) throws Exception {
-        String accessToken = authorization.replace("Bearer ", "");
-        Map<String, String> map = userService.getUserInfo(accessToken);
-        long userId  = Long.parseLong(map.get("id"));
-        return recordService.findAll(userId);
+    public List<FishResponseDto> findAll(@RequestHeader("userId") String userId) {
+        long id  = Long.parseLong(userId);
+        return recordService.findAll(id);
     }
 
     @GetMapping("/fishes/{fishId}")
-    public List<RecordDto> findRecordsByFishId(@PathVariable("fishId") long fishId , @RequestHeader("Authorization") String authorization) throws Exception {
-
-        String accessToken = authorization.replace("Bearer ", "");
-        Map<String, String> map = userService.getUserInfo(accessToken);
-        long userId  = Long.parseLong(map.get("id"));
-        List<RecordDto> list = recordService.findRecordsByFishId(userId, fishId);
+    public List<RecordDto> findRecordsByFishId(@PathVariable("fishId") long fishId , @RequestHeader("userId") String userId) {
+        long id  = Long.parseLong(userId);
+        List<RecordDto> list = recordService.findRecordsByFishId(id, fishId);
         return list;
     }
 
@@ -48,22 +43,18 @@ public class RecordController {
     }
 
     @GetMapping("/image/{recordId}/{recordTime}")
-    public List<RecordDto> findImages(@PathVariable("recordId") long recordId, @PathVariable("recordTime") Timestamp date, @RequestHeader("Authorization") String authorization) throws Exception {
-        String accessToken = authorization.replace("Bearer ", "");
-        Map<String, String> map = userService.getUserInfo(accessToken);
-        long userId  = Long.parseLong(map.get("id"));
-        ImageRequestDto imageRequestDto = new ImageRequestDto(userId, recordId, date);
+    public List<RecordDto> findImages(@PathVariable("recordId") long recordId, @PathVariable("recordTime") Timestamp date, @RequestHeader("userId") String userId) throws Exception {
+        long id  = Long.parseLong(userId);
+        ImageRequestDto imageRequestDto = new ImageRequestDto(id, recordId, date);
         List<RecordDto> list = recordService.findImages(imageRequestDto);
         return list;
     }
 
 
     @PostMapping(value = "/records", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public void regist(@RequestPart RecordRequestDto recordRequestDto, @RequestPart MultipartFile image, @RequestHeader("Authorization") String authorization) throws Exception {
-        String accessToken = authorization.replace("Bearer ", "");
-        Map<String, String> map = userService.getUserInfo(accessToken);
-        long userId  = Long.parseLong(map.get("id"));
-        recordRequestDto.setUserId(userId);
+    public void regist(@RequestPart RecordRequestDto recordRequestDto, @RequestPart MultipartFile image, @RequestHeader("userId") String userId) throws Exception {
+        long id  = Long.parseLong(userId);
+        recordRequestDto.setUserId(id);
         recordRequestDto.setImage(image);
 
         recordService.save(recordRequestDto);
@@ -71,8 +62,7 @@ public class RecordController {
 
     @PutMapping("/records")
     public RecordDto updateRecord(@RequestBody RecordUpdateDto recordUpdateDto) {
-        RecordDto recordResponseDto = recordService.update(recordUpdateDto);
-        return recordResponseDto;
+        return recordService.update(recordUpdateDto);
     }
 
     @DeleteMapping("/records/{recordId}")

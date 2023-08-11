@@ -12,7 +12,6 @@ public class Fish {
 
     @Id
     @Column(name="fish_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String species;
 
