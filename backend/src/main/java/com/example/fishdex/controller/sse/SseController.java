@@ -6,6 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
@@ -25,7 +27,7 @@ public class SseController {
     public SseEmitter connect(@AuthenticationPrincipal OAuth2User principal, HttpServletResponse response) {
         response.addHeader("X-Accel-Buffering", "no");
         SseEmitter sseEmitter = new SseEmitter(TIMEOUT);
-        sseEmitter = sseService.subscribe(id, sseEmitter);
+        sseEmitter = sseService.subscribe(principal.getAttribute("id"), sseEmitter);
         return sseEmitter;
     }
 }
