@@ -10,18 +10,18 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Repository
 public class EmitterRepository {
-    public final Map<String, SseEmitter> sseEmitterMap = new ConcurrentHashMap<>();
+    public final Map<Long, SseEmitter> sseEmitterMap = new ConcurrentHashMap<>();
 
-    public SseEmitter save(String id, SseEmitter sseEmitter){
+    public SseEmitter save(Long id, SseEmitter sseEmitter){
         sseEmitterMap.put(id, sseEmitter);
         return sseEmitter;
     }
 
-    public void deleteById(String id){
+    public void deleteById(Long id){
         sseEmitterMap.remove(id);
     }
 
-    public Map<String, SseEmitter> getSseEmitterMap(){
+    public Map<Long, SseEmitter> getSseEmitterMap(){
         return sseEmitterMap;
     }
 

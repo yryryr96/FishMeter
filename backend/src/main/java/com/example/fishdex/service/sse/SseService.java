@@ -22,10 +22,18 @@ public class SseService {
 
     private final EmitterRepository emitterRepository;
 
-    public SseEmitter subscribe(String id, SseEmitter sseEmitter){
+    public SseEmitter subscribe(long id, SseEmitter sseEmitter){
         sseEmitter = emitterRepository.save(id, sseEmitter);
 
         sendCount();
+
+        try {
+            sseEmitter.send(SseEmitter.event()
+                    .name("recentRecord")
+                    .data("dummy"));
+        } catch (IOException e) {
+            emitterRepository.deleteById(id);
+        }
 
         sseEmitter.onCompletion(()-> {
             emitterRepository.deleteById(id);
@@ -41,6 +49,18 @@ public class SseService {
                 emitter.send(SseEmitter.event()
                         .name("count")
                         .data(emitterRepository.getSseEmitterMapCount()));
+            } catch (IOException e) {
+                emitterRepository.deleteById(key);
+            }
+        });
+    }
+
+    public void sendDataToAll(String name, Object o){
+        emitterRepository.getSseEmitterMap().forEach((key, emitter)->{
+            try {
+                emitter.send(SseEmitter.event()
+                        .name(name)
+                        .data(o));
             } catch (IOException e) {
                 emitterRepository.deleteById(key);
             }
