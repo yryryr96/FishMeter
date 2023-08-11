@@ -26,14 +26,19 @@ public class SseController {
 
     private static final long TIMEOUT = 3*60*1000L;
 
-    @GetMapping(value = "/sse/connect/", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter connect(@RequestHeader("userId") Long userId, HttpServletResponse response) throws Exception {
+    @GetMapping(value = "/sse/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter connect(@RequestHeader("userId") String userId, HttpServletResponse response) throws Exception {
 //        @RequestHeader("Authorization") String authorization
 //        @AuthenticationPrincipal OAuth2User principal
         response.addHeader("X-Accel-Buffering", "no");
         SseEmitter sseEmitter = new SseEmitter(TIMEOUT);
 
-        sseEmitter = sseService.subscribe(userId, sseEmitter);
+        sseEmitter = sseService.subscribe(Long.parseLong(userId), sseEmitter);
         return sseEmitter;
+    }
+
+    @GetMapping(value = "/sse/disconnect")
+    public void disconnect(@RequestHeader("userId") Long userId){
+
     }
 }
