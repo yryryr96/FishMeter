@@ -1,6 +1,5 @@
 package com.example.fishdex.dto.fishdex;
 
-import com.example.fishdex.entity.fishdex.Day;
 import com.example.fishdex.entity.fishdex.Fish;
 import com.example.fishdex.entity.user.User;
 import lombok.*;
@@ -17,48 +16,25 @@ import java.sql.Timestamp;
 @Builder
 public class RecordRequestDto {
 
-    private String imageUrl;
     private double length;
     private double latitude;
     private double longitude;
-    private double temperature;
-    private String weather;
-    private double precipitation;
-    private int windDirection;
-    private double windSpeed;
-    private boolean favorite;
-    private String address;
-    private String species;
-    private Day day;
-    private User user;
-    private Fish fish;
     private long userId;
     private long fishId;
-    private long dayId;
-    private DayRequestDto dayRequestDto;
     MultipartFile image;
 
-    public RecordRequestDto(double length, double latitude, double longitude, String species) {
+    public RecordRequestDto(double length, double latitude, double longitude, long fishId) {
         this.length = length;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.species = species;
+        this.fishId = fishId;
     }
 
-    public Record toEntity(){
-        return Record.builder()
-                .imageUrl(this.imageUrl)
+    public RecordDto toRecordDto(){
+        return RecordDto.builder()
                 .length(this.length)
                 .longitude(this.longitude)
-                .temperature(this.temperature)
-                .weather(this.weather)
-                .precipitation(this.precipitation)
-                .windDirection(this.windDirection)
-                .windSpeed(this.windSpeed)
-                .favorite(this.favorite)
-                .day(this.day)
-                .user(this.user)
-                .fish(this.fish)
+                .latitude(this.latitude)
                 .build();
     }
 }

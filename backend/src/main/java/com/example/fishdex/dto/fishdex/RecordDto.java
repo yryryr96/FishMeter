@@ -1,23 +1,18 @@
-package com.example.fishdex.entity.fishdex;
+package com.example.fishdex.dto.fishdex;
 
-import com.example.fishdex.dto.fishdex.RecordDto;
+import com.example.fishdex.entity.fishdex.Fish;
+import com.example.fishdex.entity.fishdex.Record;
 import com.example.fishdex.entity.user.User;
 import lombok.*;
 
-import javax.persistence.*;
 import java.sql.Timestamp;
 
-
-@Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 @Setter
 @Getter
-public class Record {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class RecordDto {
     private Long id;
     private String imageUrl;
     private double length;
@@ -25,23 +20,18 @@ public class Record {
     private double longitude;
     private String address;
     private Timestamp createdAt;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "fish_id")
-    private Fish fish;
+    private String nickname;
+    private String species;
 
-    public RecordDto toResponseDto(){
-        return RecordDto.builder()
+    public Record toEntity(User user, Fish fish){
+        return Record.builder()
                 .id(this.id)
                 .imageUrl(this.imageUrl)
                 .length(this.length)
+                .latitude(this.latitude)
                 .longitude(this.longitude)
                 .address(this.address)
                 .createdAt(this.createdAt)
-                .nickname(this.user.getNickname())
-                .species(this.fish.getSpecies())
                 .build();
     }
 }

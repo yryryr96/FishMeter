@@ -20,7 +20,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final OAuth2UserService oauth2UserService;
     private final UserService userService;
 
     @GetMapping("/user")

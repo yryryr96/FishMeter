@@ -26,24 +26,24 @@ public class RecordController {
     }
 
     @GetMapping("/fishes/{fishId}")
-    public List<RecordResponseDto> findRecordsByFishId(@PathVariable("fishId") long fishId , @AuthenticationPrincipal OAuth2User principal) {
+    public List<RecordDto> findRecordsByFishId(@PathVariable("fishId") long fishId , @AuthenticationPrincipal OAuth2User principal) {
 
         long userId  = principal.getAttribute("id");
-        List<RecordResponseDto> list = recordService.findRecordsByFishId(userId, fishId);
+        List<RecordDto> list = recordService.findRecordsByFishId(userId, fishId);
         return list;
     }
 
     @GetMapping("/records")
-    public List<RecordResponseDto> findAllRecords() {
-        List<RecordResponseDto> list = recordService.findAllRecords();
+    public List<RecordDto> findAllRecords() {
+        List<RecordDto> list = recordService.findAllRecords();
         return list;
     }
 
     @GetMapping("/image/{recordId}/{recordTime}")
-    public List<RecordResponseDto> findImages(@PathVariable("recordId") long recordId, @PathVariable("recordTime") Timestamp date, @AuthenticationPrincipal OAuth2User principal){
+    public List<RecordDto> findImages(@PathVariable("recordId") long recordId, @PathVariable("recordTime") Timestamp date, @AuthenticationPrincipal OAuth2User principal){
         long userId  = principal.getAttribute("id");
         ImageRequestDto imageRequestDto = new ImageRequestDto(userId, recordId, date);
-        List<RecordResponseDto> list = recordService.findImages(imageRequestDto);
+        List<RecordDto> list = recordService.findImages(imageRequestDto);
         return list;
     }
 
@@ -58,8 +58,8 @@ public class RecordController {
     }
 
     @PutMapping("/records")
-    public RecordResponseDto updateRecord(@RequestBody RecordUpdateDto recordUpdateDto) {
-        RecordResponseDto recordResponseDto = recordService.update(recordUpdateDto);
+    public RecordDto updateRecord(@RequestBody RecordUpdateDto recordUpdateDto) {
+        RecordDto recordResponseDto = recordService.update(recordUpdateDto);
         return recordResponseDto;
     }
 
