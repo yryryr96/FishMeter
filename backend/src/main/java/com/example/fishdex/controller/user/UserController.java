@@ -23,7 +23,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/")
-    @ResponseStatus(code = HttpStatus.OK, reason = "OK")
+//    @ResponseStatus(code = HttpStatus.OK, reason = "OK")
     public void isOk() {
     }
 
