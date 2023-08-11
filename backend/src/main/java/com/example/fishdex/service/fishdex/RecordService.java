@@ -1,6 +1,7 @@
 package com.example.fishdex.service.fishdex;
 
 import com.example.fishdex.dto.fishdex.*;
+import com.example.fishdex.dto.sse.RecentRecord;
 import com.example.fishdex.entity.fishdex.Day;
 import com.example.fishdex.entity.fishdex.Fish;
 import com.example.fishdex.entity.fishdex.Record;
@@ -9,6 +10,7 @@ import com.example.fishdex.repository.fishdex.DayRepository;
 import com.example.fishdex.repository.fishdex.FishRepository;
 import com.example.fishdex.repository.fishdex.RecordRepository;
 import com.example.fishdex.repository.user.UserRepository;
+import com.example.fishdex.service.sse.SseService;
 import com.example.fishdex.util.KakaoApiReader;
 import com.example.fishdex.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +33,8 @@ public class RecordService {
     private final UserRepository userRepository;
     private final S3Uploader s3Uploader;
     private final KakaoApiReader kakaoApiReader;
+
+    private final SseService sseService;
 
     public List<FishResponseDto> findAll(Long userId) {
         List<Fish> fishEntity = recordRepository.findFishByUserId(userId);
@@ -75,6 +79,12 @@ public class RecordService {
         recordRequestDto.setImageUrl(imageUrl);
 
         Record record = recordRequestDto.toEntity();
+
+        // sse
+//        RecentRecord recentRecord = RecentRecord.builder()
+//                        .imageUrl()
+
+
         recordRepository.save(record);
     }
 
