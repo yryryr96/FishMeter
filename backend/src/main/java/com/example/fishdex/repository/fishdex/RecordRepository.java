@@ -1,6 +1,5 @@
 package com.example.fishdex.repository.fishdex;
 
-import com.example.fishdex.dto.fishdex.RecordResponseDto;
 import com.example.fishdex.entity.fishdex.Fish;
 import com.example.fishdex.entity.fishdex.Record;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,6 +16,6 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
     @Query("SELECT r from Record r WHERE r.user.id = :userId and r.fish.id = :fishId")
     List<Record> findRecordsByFishId(@Param("userId") long userId, @Param("fishId") long fishId);
 
-    @Query("SELECT r from Record r WHERE r.user.id = :userId and DATE(r.day.createdAt) = :date and r.id <> :recordId")
+    @Query("SELECT r from Record r WHERE r.user.id = :userId and DATE(r.createdAt) = :date and r.id <> :recordId")
     List<Record> findImages(@Param("userId") long userId, @Param("recordId") long recordId, @Param("date")Timestamp date);
 }

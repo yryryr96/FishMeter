@@ -2,11 +2,9 @@ package com.example.fishdex.service.fishdex;
 
 import com.example.fishdex.dto.fishdex.*;
 import com.example.fishdex.dto.sse.RecentRecord;
-import com.example.fishdex.entity.fishdex.Day;
 import com.example.fishdex.entity.fishdex.Fish;
 import com.example.fishdex.entity.fishdex.Record;
 import com.example.fishdex.entity.user.User;
-import com.example.fishdex.repository.fishdex.DayRepository;
 import com.example.fishdex.repository.fishdex.FishRepository;
 import com.example.fishdex.repository.fishdex.RecordRepository;
 import com.example.fishdex.repository.user.UserRepository;
@@ -14,7 +12,6 @@ import com.example.fishdex.service.sse.SseService;
 import com.example.fishdex.util.KakaoApiReader;
 import com.example.fishdex.util.S3Uploader;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,7 +26,6 @@ import java.util.stream.Collectors;
 public class RecordService {
     private final RecordRepository recordRepository;
     private final FishRepository fishRepository;
-    private final DayRepository dayRepository;
     private final UserRepository userRepository;
     private final S3Uploader s3Uploader;
     private final KakaoApiReader kakaoApiReader;
@@ -44,31 +40,21 @@ public class RecordService {
         return fishResponseDto;
     }
 
-    public Day getDay(DayRequestDto dto) {
-        Day day = new Day(dto.getDay());
-        return dayRepository.save(day);
-    }
-
     public void save(RecordRequestDto recordRequestDto) throws Exception {
         kakaoApiReader.setLatitude(recordRequestDto.getLatitude());
         kakaoApiReader.setLongitude(recordRequestDto.getLongitude());
         String address = kakaoApiReader.getAddressName();
-        recordRequestDto.setAddress(address);
 
-        DayRequestDto dayRequestDto = new DayRequestDto();
+
         long currentTimeMillis = System.currentTimeMillis();
         java.util.Date currentDate = new java.util.Date(currentTimeMillis);
         Timestamp currentTimestamp = new Timestamp(currentDate.getTime());
-
-        dayRequestDto.setDay(currentTimestamp);
-        recordRequestDto.setDayRequestDto(dayRequestDto);
-        Day day = getDay(dayRequestDto);
         User user = getUser(recordRequestDto.getUserId());
-        Fish fish = getFish(recordRequestDto.getSpecies());
+        Fish fish = getFish(recordRequestDto.getFishId());
 
-        recordRequestDto.setDay(day);
-        recordRequestDto.setUser(user);
-        recordRequestDto.setFish(fish);
+        RecordDto recordDto = recordRequestDto.toRecordDto();
+        recordDto.setAddress(address);
+        recordDto.setCreatedAt(currentTimestamp);
 
         MultipartFile image = recordRequestDto.getImage();
         String imageUrl = null;
@@ -77,9 +63,9 @@ public class RecordService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        recordRequestDto.setImageUrl(imageUrl);
+        recordDto.setImageUrl(imageUrl);
 
-        Record record = recordRequestDto.toEntity();
+        Record record = recordDto.toEntity(user, fish);
         recordRepository.save(record);
 
         // sse
@@ -96,8 +82,9 @@ public class RecordService {
         sseService.sendDataToAll("update",recentRecord);
     }
 
-    public Fish getFish(String species) {
-        return fishRepository.findBySpecies(species);
+    public Fish getFish(long fishId) {
+        Optional<Fish> optionalFish = fishRepository.findById(fishId);
+        return optionalFish.orElse(null);
     }
 
     public User getUser(long userId) {
@@ -105,23 +92,23 @@ public class RecordService {
         return optionalUser.orElse(null);
     }
 
-    public List<RecordResponseDto> findRecordsByFishId(long userId, long fishId) {
+    public List<RecordDto> findRecordsByFishId(long userId, long fishId) {
         List<Record> recordEntity = recordRepository.findRecordsByFishId(userId, fishId);
-        List<RecordResponseDto> recordResponseDtos = recordEntity.stream()
+        List<RecordDto> recordResponseDtos = recordEntity.stream()
                 .map(record -> record.toResponseDto())
                 .collect(Collectors.toList());
         return recordResponseDtos;
     }
 
-    public List<RecordResponseDto> findAllRecords() {
+    public List<RecordDto> findAllRecords() {
         List<Record> recordEntity = recordRepository.findAll();
-        List<RecordResponseDto> recordResponseDtos = recordEntity.stream()
+        List<RecordDto> recordResponseDtos = recordEntity.stream()
                 .map(record -> record.toResponseDto())
                 .collect(Collectors.toList());
         return recordResponseDtos;
     }
 
-    public RecordResponseDto update(RecordUpdateDto recordUpdateDto) {
+    public RecordDto update(RecordUpdateDto recordUpdateDto) {
         long recordId = recordUpdateDto.getId();
         Optional<Record> optionalRecord = recordRepository.findById(recordId);
         if (optionalRecord.isPresent()) {
@@ -144,12 +131,12 @@ public class RecordService {
         }
     }
 
-    public List<RecordResponseDto> findImages(ImageRequestDto imageRequestDto) {
+    public List<RecordDto> findImages(ImageRequestDto imageRequestDto) {
         long userId = imageRequestDto.getUserId();
         long recordId = imageRequestDto.getRecordid();
         Timestamp date = imageRequestDto.getCreatedAt();
         List<Record> recordEntity = recordRepository.findImages(userId, recordId, date);
-        List<RecordResponseDto> recordResponseDtos = recordEntity.stream()
+        List<RecordDto> recordResponseDtos = recordEntity.stream()
                 .map(record -> record.toResponseDto())
                 .collect(Collectors.toList());
         return recordResponseDtos;

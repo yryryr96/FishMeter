@@ -20,8 +20,12 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class UserController {
 
-    private final OAuth2UserService oauth2UserService;
     private final UserService userService;
+
+    @GetMapping("/")
+    @ResponseStatus(code = HttpStatus.OK, reason = "OK")
+    public void isOk() {
+    }
 
     @GetMapping("/user")
     public Map<String, String> getUserInfo(@RequestHeader("Authorization") String authorization) throws Exception {

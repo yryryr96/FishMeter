@@ -1,9 +1,5 @@
 package com.example.fishdex.dto.sse;
 
-import com.example.fishdex.dto.fishdex.DayDto;
-import com.example.fishdex.dto.fishdex.FishDto;
-import com.example.fishdex.dto.fishdex.UserDto;
-import com.example.fishdex.entity.fishdex.Day;
 import lombok.*;
 
 @Builder
