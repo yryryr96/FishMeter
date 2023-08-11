@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private ApiInterface api;
 
     // AI 서버 baseUrl
-    private final String baseUrl = "http://192.168.31.141:8000/";
+    private final String baseUrl = "http://192.168.140.141:8000/";
 
     // API 호출 결과 0 = 쥐노래미, 1 = 감성돔, 2 = 말쥐치, 3 = 돌돔 ...
     private final String[] fish = {"쥐노래미", "감성돔", "말쥐치", "돌돔", "쏘가리", "참돔", "옥돔", "송어"};
@@ -112,10 +112,10 @@ public class MainActivity extends AppCompatActivity {
             finish();
         });
         reactButton.setOnClickListener(v -> {
-//            String fishCategory = fishTextView.getText().toString();
-//            String fishLength = lengthTextView.getText().toString();
-            String fishCategory = "참돔";
-            String fishLength = "45cm";
+            String fishCategory = fishTextView.getText().toString();
+            String fishLength = lengthTextView.getText().toString();
+//            String fishCategory = "참돔";
+//            String fishLength = "45";
             Bitmap imageBitmap = null;  // 이미지 비트맵 변수 초기화
 
             // 이미지를 가져오는 코드
@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            if ("어종".equals(fishCategory) || "체장: ??? cm".equals(fishLength)) {
+            if ("어종".equals(fishCategory) || "???".equals(fishLength)) {
                 // 이미지, 어종, 체장 데이터 중 하나라도 없는 경우 예외 처리
                 Toast.makeText(getApplicationContext(), "이미지, 어종, 체장 데이터가 모두 있어야 합니다.", Toast.LENGTH_SHORT).show();
                 return;
@@ -222,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() { // runOnUiThread 내부에 Runnable을 전달
                 @Override
                 public void run() {
-                    Toast.makeText(getApplicationContext(), "NotYetAvailableException", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getApplicationContext(), "NotYetAvailableException", Toast.LENGTH_SHORT).show();
                 }
             });
             return;
@@ -288,7 +288,7 @@ public class MainActivity extends AppCompatActivity {
              */
             @Override
             public void onFailure(Call<List<List<Float>>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Fail", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "표면을 인식할 수 없습니다.\n화면에 주변을 좀 더 비춰주세요.", Toast.LENGTH_SHORT).show();
                 Log.w("Fail", "onFailure: detectFish", t);
             }
         });
