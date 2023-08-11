@@ -38,16 +38,10 @@ public class RecordRequestDto {
     private DayRequestDto dayRequestDto;
     MultipartFile image;
 
-    public RecordRequestDto(double length, double latitude, double longitude, double temperature, String weather, double precipitation, int windDirection, double windSpeed, boolean favorite, String species) {
+    public RecordRequestDto(double length, double latitude, double longitude, String species) {
         this.length = length;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.temperature = temperature;
-        this.weather = weather;
-        this.precipitation = precipitation;
-        this.windDirection = windDirection;
-        this.windSpeed = windSpeed;
-        this.favorite = favorite;
         this.species = species;
     }
 
