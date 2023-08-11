@@ -22,6 +22,11 @@ public class UserController {
 
     private final UserService userService;
 
+    @GetMapping("/")
+    @ResponseStatus(code = HttpStatus.OK, reason = "OK")
+    public void isOk() {
+    }
+
     @GetMapping("/user")
     public Map<String, String> getUserInfo(@RequestHeader("Authorization") String authorization) throws Exception {
         String accessToken = authorization.replace("Bearer ", "");
