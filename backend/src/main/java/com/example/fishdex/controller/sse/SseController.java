@@ -21,8 +21,8 @@ public class SseController {
 
     private static final long TIMEOUT = 3*60*1000L;
 
-    @GetMapping(value = "/sse/connect/{id}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter connect(HttpServletResponse response, @PathVariable String id) {
+    @GetMapping(value = "/sse/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public SseEmitter connect(@AuthenticationPrincipal OAuth2User principal, HttpServletResponse response) {
         response.addHeader("X-Accel-Buffering", "no");
         SseEmitter sseEmitter = new SseEmitter(TIMEOUT);
         sseEmitter = sseService.subscribe(id, sseEmitter);
