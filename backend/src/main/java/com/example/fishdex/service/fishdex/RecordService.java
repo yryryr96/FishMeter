@@ -54,6 +54,7 @@ public class RecordService {
         kakaoApiReader.setLongitude(recordRequestDto.getLongitude());
         String address = kakaoApiReader.getAddressName();
         recordRequestDto.setAddress(address);
+
         DayRequestDto dayRequestDto = new DayRequestDto();
         long currentTimeMillis = System.currentTimeMillis();
         java.util.Date currentDate = new java.util.Date(currentTimeMillis);
@@ -79,13 +80,20 @@ public class RecordService {
         recordRequestDto.setImageUrl(imageUrl);
 
         Record record = recordRequestDto.toEntity();
+        recordRepository.save(record);
 
         // sse
-//        RecentRecord recentRecord = RecentRecord.builder()
-//                        .imageUrl()
+        RecentRecord recentRecord = RecentRecord.builder()
+                .imageUrl(imageUrl)
+                .length(recordRequestDto.getLength())
+                .latitude(recordRequestDto.getLatitude())
+                .longitude(recordRequestDto.getLongitude())
+                .address(address)
+                .nickName(user.getNickname())
+                .species(fish.getSpecies())
+                .build();
 
-
-        recordRepository.save(record);
+        sseService.sendDataToAll("update",recentRecord);
     }
 
     public Fish getFish(String species) {
