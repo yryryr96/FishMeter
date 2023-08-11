@@ -21,7 +21,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors() // Enable CORS configuration
                 .and()
                 .authorizeRequests(a -> a
-                        .antMatchers("/", "/error", "/webjars/**").permitAll()
+                        .antMatchers("/**", "/error", "/webjars/**").permitAll()
                         .antMatchers("/actuator/**").permitAll() // Actuator 엔드포인트 노출 설정
                         .antMatchers("/user").permitAll()
                         .antMatchers("/profile").permitAll()
