@@ -4,6 +4,7 @@ import com.example.fishdex.service.user.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
@@ -21,11 +22,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors() // Enable CORS configuration
                 .and()
                 .authorizeRequests(a -> a
-                        .antMatchers("/**", "/error", "/webjars/**").permitAll()
-                        .antMatchers("/actuator/**").permitAll() // Actuator 엔드포인트 노출 설정
-                        .antMatchers("/user").permitAll()
-                        .antMatchers("/profile").permitAll()
-                        .anyRequest().authenticated()
+                        .antMatchers("/**").permitAll()
                 )
                 .exceptionHandling(e -> e
                         .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
@@ -41,5 +38,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 .userService(customOAuth2UserService)
                         ).defaultSuccessUrl("/")
                 );
+    }
+
+    @Override
+    public void configure(WebSecurity webSecurity)throws Exception{
+        webSecurity.ignoring().antMatchers("/**");
     }
 }

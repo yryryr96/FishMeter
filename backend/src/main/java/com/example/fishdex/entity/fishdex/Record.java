@@ -3,6 +3,7 @@ package com.example.fishdex.entity.fishdex;
 import com.example.fishdex.dto.fishdex.RecordDto;
 import com.example.fishdex.entity.user.User;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
@@ -24,6 +25,7 @@ public class Record {
     private double latitude;
     private double longitude;
     private String address;
+    @CreationTimestamp
     private Timestamp createdAt;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -39,7 +41,7 @@ public class Record {
                 .length(this.length)
                 .longitude(this.longitude)
                 .address(this.address)
-                .createdAt(this.createdAt)
+//                .createdAt(this.createdAt)
                 .nickname(this.user.getNickname())
                 .species(this.fish.getSpecies())
                 .build();

@@ -21,7 +21,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class RecordController {
     private final RecordService recordService;
-    private final UserService userService;
 
     @GetMapping("/fishes")
     public List<FishResponseDto> findAll(@RequestHeader("userId") String userId) {

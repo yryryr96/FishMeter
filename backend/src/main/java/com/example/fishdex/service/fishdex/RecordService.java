@@ -45,16 +45,11 @@ public class RecordService {
         kakaoApiReader.setLongitude(recordRequestDto.getLongitude());
         String address = kakaoApiReader.getAddressName();
 
-
-        long currentTimeMillis = System.currentTimeMillis();
-        java.util.Date currentDate = new java.util.Date(currentTimeMillis);
-        Timestamp currentTimestamp = new Timestamp(currentDate.getTime());
-        User user = getUser(recordRequestDto.getUserId());
-        Fish fish = getFish(recordRequestDto.getFishId());
+        User user = userRepository.findById(recordRequestDto.getUserId()).orElseThrow();
+        Fish fish = fishRepository.findById(recordRequestDto.getFishId()).orElseThrow();
 
         RecordDto recordDto = recordRequestDto.toRecordDto();
         recordDto.setAddress(address);
-        recordDto.setCreatedAt(currentTimestamp);
 
         MultipartFile image = recordRequestDto.getImage();
         String imageUrl = null;
