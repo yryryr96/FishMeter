@@ -4,11 +4,9 @@ import DogamScreen from "../screens/DogamScreen";
 import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
-import Gps from "../spot/Gps";
 import Profile from "../screens/Profile";
-import WebViewTest from "../WebViewTest";
-import WebView from "react-native-webview";
 import Home from "../Home";
+import Camera from "../Camera";
 
 const Tab = createBottomTabNavigator();
 
@@ -95,13 +93,13 @@ const Tabs = () => {
             }),
         }}
       />
-      {/* <Tab.Screen
-        name="WebViewTest"
-        component={WebViewTest}
+      <Tab.Screen
+        name="Camera"
+        component={Camera}
         options={{
           tabBarButton: (props) => <CustomTabBarButton {...props} />,
         }}
-      /> */}
+      />
       <Tab.Screen
         name="Profile"
         component={Profile}

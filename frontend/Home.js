@@ -18,7 +18,6 @@ import axios from "axios";
 import { useCallback, useRef, useState, useEffect } from "react";
 import Toast from "react-native-easy-toast";
 import { Entypo } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
 import NewDataModal from "./HomeScreen/NewDataModal";
 import ClickedMarkerModal from "./HomeScreen/ClickedModal";
 import * as Location from "expo-location";
@@ -39,30 +38,33 @@ const ImageUrl = [
 ];
 
 const fishes = ["광어", "상어", "고래", "참돔", "돌돔", "망둥어"];
-const socket = io("http://192.168.30.136:8082");
+const socket = io("http://192.168.123.102:8082");
 
 export default function Home() {
   const [totalMarker, setTotalMarker] = useRecoilState(testDefaultGps);
-  const [HomeMarker, setHomeMarker] = useState([]);
   const [id, setId] = useState(11);
   const [lat, setLat] = useState(35.0968275 + 0.01);
   const [lon, setLon] = useState(128.8538282 + 0.01);
-  const [title, setTitle] = useState("배스");
   const [newData, setNewData] = useState([]);
   const [newMessage, setNewMessage] = useState([]);
   // 카메라실행+카메라로부터 데이터 받은거 모달로 띄우기
   const [fishModalVisible, setfishModalVisible] = useState(false);
+  
   const handleButtonPress = () => {
     NativeModules.MyArCoreModule.launchARCoreMeasurement();
   };
+  
   const [receivedData, setReceivedData] = useState({
     category: null,
     length: null,
     imageArray: null,
   });
+  
   const closefishModalVisible = () => {
     setfishModalVisible(false);
   };
+
+  // 카메라 기능
   useEffect(() => {
     const eventEmitter = new NativeEventEmitter();
 
@@ -78,6 +80,7 @@ export default function Home() {
       subscription.remove();
     };
   }, []);
+  
   // 모달
   const [newDataModalVisible, setNewDataModalVisible] = useState(false);
   const [ClickedMarkerModalVisible, setClickedMarkerModalVisible] =
@@ -180,7 +183,7 @@ export default function Home() {
 
     // 서버로 POST 요청을 보냅니다.
     axios
-      .post("http://192.168.30.136:8082/update", newData)
+      .post("http://192.168.123.102:8082/update", newData)
       .then((response) => {
         // console.log("서버 응답:", response.data);
         // console.log('res= ',response.data)
@@ -282,7 +285,7 @@ export default function Home() {
           <View
             style={{ position: "absolute", bottom: 120, marginHorizontal: 30 }}
           >
-            <TouchableOpacity onPress={handleButtonPress}>
+            <TouchableOpacity onPress={handleUpdate}>
               <Entypo name="camera" size={50} color="black" />
             </TouchableOpacity>
           </View>

@@ -20,3 +20,9 @@ export const filteredArticle = selectorFamily({
     key : 'filteredArticle',
     get: ({param1, param2}) => ({get}) => get(testDefaultGps).filter((item) => item.latitude === param1 && item.longitude === param2)
 })
+
+export const userId = atom({
+    key: "userId",
+    default: null,
+  });
+  

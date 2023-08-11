@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CalendarPicker from "react-native-calendar-picker";
-import { StyleSheet, Text, View, Alert } from "react-native";
-import {
-  startOfMonth,
-  endOfMonth,
-  eachDayOfInterval,
-  isSameMonth,
-} from "date-fns";
+import { StyleSheet } from "react-native";
+import { startOfMonth, endOfMonth, eachDayOfInterval, format } from "date-fns";
 
 const customDateArray = [
   "2023-07-05",
@@ -17,6 +12,7 @@ const customDateArray = [
   "2023-08-10",
   "2023-08-11",
   "2023-08-15",
+  "2023-08-31",
   "2023-09-15",
   "2023-09-05",
   "2023-09-10",
@@ -28,18 +24,20 @@ const customDatesStyles = (date) => {
   const newDate = new Date(date);
   //console.log("월 변경", newDate.toISOString());
   const startOfMonthDate = startOfMonth(newDate);
+  console.log(startOfMonth);
   const endOfMonthDate = endOfMonth(newDate);
+  console.log(endOfMonthDate);
   const datesOfMonth = eachDayOfInterval({
     start: startOfMonthDate,
     end: endOfMonthDate,
   });
 
   const customDatesStyles = datesOfMonth.map((day) => {
-    const dateString = day.toISOString().slice(0, 10);
+    console.log(day);
+    const dateString = format(day, "yyyy-MM-dd");
     const isInCustomDateArray = customDateArray.includes(dateString);
     const style = isInCustomDateArray
       ? {
-          //backgroundColor: "#516DA4",
           borderWidth: 2,
           borderColor: "#6F94C2",
         }
@@ -75,10 +73,13 @@ function Calendarcheck({ navigation }) {
 
   const handleDatePress = (date) => {
     const dateString = date.toISOString().slice(0, 10);
+    //console.log(dateString);
     if (customDateArray.includes(dateString)) {
+      //console.log("정보있음!");
       setSelectedDate(dateString);
       setSelectedStartDate(dateString);
     } else {
+      //console.log("정보없음!");
       setSelectedDate(null);
       setSelectedStartDate(null);
       //Alert.alert("알림", "이날 등록된 사진이 없어요!");

@@ -99,7 +99,7 @@ export default function App() {
         <NavigationContainer>
           <RecoilRoot>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
-              {/* <Stack.Screen name="Login" component={WebView} /> */}
+              <Stack.Screen name="KaKaoLogin" component={KaKaoLogin} />
               <Stack.Screen name="Root" component={Tabs} />
               <Stack.Screen name="DogamGallery" component={DogamGallery} />
               <Stack.Screen name="DogamDetail" component={DogamDetail} />
@@ -107,7 +107,6 @@ export default function App() {
                 name="CalendarGallery"
                 component={CalendarGallery}
               />
-              <Stack.Screen name="KaKaoLogin" component={KaKaoLogin} />
               <Stack.Screen name="KaKaoLogOut" component={KaKaoLogOut} />
               <Stack.Screen name="Home" component={Home} />
             </Stack.Navigator>
