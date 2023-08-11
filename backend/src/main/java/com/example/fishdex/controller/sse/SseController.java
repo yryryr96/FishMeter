@@ -1,6 +1,7 @@
 package com.example.fishdex.controller.sse;
 
 import com.example.fishdex.service.sse.SseService;
+import com.example.fishdex.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,14 +22,21 @@ import javax.servlet.http.HttpServletResponse;
 public class SseController {
 
     private final SseService sseService;
+    private final UserService userService;
 
     private static final long TIMEOUT = 3*60*1000L;
 
     @GetMapping(value = "/sse/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter connect(@AuthenticationPrincipal OAuth2User principal, HttpServletResponse response) {
+    public SseEmitter connect(@RequestHeader("Authorization") String authorization, HttpServletResponse response) throws Exception {
+//        @RequestHeader("Authorization") String authorization
+//        @AuthenticationPrincipal OAuth2User principal
         response.addHeader("X-Accel-Buffering", "no");
         SseEmitter sseEmitter = new SseEmitter(TIMEOUT);
-        sseEmitter = sseService.subscribe(principal.getAttribute("id"), sseEmitter);
+
+        String accessToken = authorization.replace("Bearer ", "");
+        Map<String, String> map = userService.getUserInfo(accessToken);
+
+        sseEmitter = sseService.subscribe(Long.parseLong(map.get("id")), sseEmitter);
         return sseEmitter;
     }
 }
