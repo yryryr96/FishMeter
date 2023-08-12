@@ -42,7 +42,6 @@ export default function KaKaoLogin() {
                 code: authorize_code
             }
         }).then((res) => {
-            console.log(res)
             AccessToken = res.data.access_token;
             console.log('login success !', AccessToken)
             sendToken(AccessToken)

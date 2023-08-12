@@ -21,6 +21,9 @@ import { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import MapView from "react-native-maps";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import useCustomFont from "../font/useCustomFont";
+import { useRecoilState } from "recoil";
+import { userId } from "../component/recoil/selectors/testSelector";
+import { decode } from "base-64";
 
 const GoogleMap = ({ latitude, longitude, setAddress }) => {
   useEffect(() => {
@@ -107,46 +110,66 @@ export default function Fishmodal({
   data,
   fishModalVisible,
   setfishModalVisible,
+  navigation
 }) {
+  const [user, setUser] = useRecoilState(userId);
   const [selectedFish, setSelectedFish] = useState(data.category);
   const [size, setSize] = useState();
   const [address, setAddress] = useState(""); // Create a state to store address in DogamDetail
-
   const handleGoBack = () => {
     navigation.goBack();
   };
   const savefish = () => {
     setfishModalVisible(false);
-    axios({
-      //나중에 구현
-      url: "/records",
-      method: "POST",
-      data: {
-        recordRequestDto: {
-          length: data.length,
-          latitude: defaultLat,
-          longitude: defaultLon,
-          fishId: fishid[selectedFish],
-        },
+    const num = data.imageArray.length % 4
+    console.log(data.imageArray.length, num)
+    // if (num !== 0 ) { data.imageArray += ('=' * (4 - num)); }
+    const base64Image = data.imageArray
+    // console.log(base64Image.length)
+    const binaryImage = decode(base64Image);
+    const uint8Array = new Uint8Array(binaryImage.length);
+    for (let i = 0; i < binaryImage.length; i++) {
+      uint8Array[i] = binaryImage.charCodeAt(i);
+    }
 
-        image: data.imageArray,
-      },
-    }).then((res)=>{
-      console.log('savedata');
-      navigation.navigate("Home", { screen: "Home" });
-    }).catch((err)=>{
-      console.log(err)
-    })
+    const blob = new Blob([uint8Array], { type: "image/jpeg" });
+
+    try {
+      const formData = new FormData();
+      const recordRequestDto = {
+        length: data.length,
+        latitude: defaultLat,
+        longitude: defaultLon,
+        fishId: fishid[selectedFish],
+      };
+  
+      formData.append('recordRequestDto', JSON.stringify(recordRequestDto));
+      formData.append('image',blob, 'image.jpg');
+      console.log(user)
+      const response = axios.post('http://54.206.147.12/records', formData, {
+        headers: {
+          Authorization : user,
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+  
+      console.log('Data saved:', response.data);
+      // navigation.navigate('Home', { screen: 'Home' });
+    } catch (error) {
+      console.error('Error saving data:', error);
+    }
   };
+  
+
   const fishid = {
-    '쥐노래미': 0,
-    '감성돔': 1,
-    '말쥐치': 2,
-    '돌돔': 3,
-    '쏘가리': 4,
-    '참돔': 5,
-    '옥돔': 6,
-    '송어': 7,
+    쥐노래미: 0,
+    감성돔: 1,
+    말쥐치: 2,
+    돌돔: 3,
+    쏘가리: 4,
+    참돔: 5,
+    옥돔: 6,
+    송어: 7,
   };
   const closefishModalVisible = () => {
     setfishModalVisible(false);
@@ -288,7 +311,7 @@ export default function Fishmodal({
                 >어종
   </FontText>
                 </Text>
-                <View style={[styles.inputContainer, { justifyContent: "flex-start", marginTop: 10 }]}>
+                <View style={[styles.inputContainer, { justifyContent: "flex-start"}]}>
   <Picker
     style={styles.picker} // picker 스타일 수정
     selectedValue={selectedFish}
@@ -305,7 +328,7 @@ export default function Fishmodal({
 </View>
 
 
-<View style={styles.inputRow}>
+<View style={[styles.inputRow,{marginBottom:10}]}>
     <Text  style={styles.inputLabel}>              
     <FontText
                 fontFileName={require("../assets/fonts/Yeongdeok_Blueroad.ttf")}
@@ -325,7 +348,7 @@ export default function Fishmodal({
 </View>
 
 
-              <View style={[styles.inputRow,{marginBottom:5}]}>
+              <View style={[styles.inputRow,{marginBottom:10}]}>
               <Text  style={styles.inputLabel}>              
     <FontText
                 fontFileName={require("../assets/fonts/Yeongdeok_Blueroad.ttf")}
@@ -337,7 +360,7 @@ export default function Fishmodal({
                 >{solardate}</FontText></Text>
                 </View>
               </View>
-              <View style={[styles.inputRow,{marginBottom:5}]}>
+              <View style={[styles.inputRow,{marginBottom:10}]}>
               <Text  style={styles.inputLabel}>              
     <FontText
                 fontFileName={require("../assets/fonts/Yeongdeok_Blueroad.ttf")}
@@ -350,7 +373,7 @@ export default function Fishmodal({
         </View>
       </View>
 
-              <View style={[styles.inputRow,{marginBottom:5}]}>
+              <View style={[styles.inputRow,{marginBottom:10}]}>
               <Text  style={styles.inputLabel}>              
     <FontText
                 fontFileName={require("../assets/fonts/Yeongdeok_Blueroad.ttf")}
@@ -366,18 +389,18 @@ export default function Fishmodal({
     <FontText
                 fontFileName={require("../assets/fonts/Yeongdeok_Blueroad.ttf")}
                 >장소</FontText></Text>
-                <View>
-                <Text >              
-    <FontText
-                fontFileName={require("../assets/fonts/Yeongdeok_Blueroad.ttf")}
-                >{address}</FontText></Text>
-                </View>
+                <View style={{ width: "80%", flexDirection: "row" }}>
+  <FontText fontFileName={require("../assets/fonts/Yeongdeok_Blueroad.ttf")}>
+    <Text>{address}</Text>
+  </FontText>
+</View>
+
               </View>
             </View>
             <View style={{ flex: 1, marginTop: 25, marginBottom: 20 }}>
               <GoogleMap
                 latitude={defaultLat}
-                longitude={-defaultLon}
+                longitude={defaultLon}
                 setAddress={setAddress}
               ></GoogleMap>
             </View>
@@ -454,14 +477,7 @@ const styles = StyleSheet.create({
   // borderBottomWidth: 1, // 밑줄 두께 설정
   },
   picker: {
-    // width: "100%",
-    // height: 30,
-    // borderBottomWidth: 1,
-    // borderColor: "gray",
-        height: 40,
-    borderColor: "#ced4da",
-    borderWidth: 1,
-    borderRadius: 5,
+    height: 30,
     paddingLeft: 10,
     flex: 1,
   },
@@ -470,7 +486,7 @@ const styles = StyleSheet.create({
     // height: 30,
     // width: "90%",
     // paddingLeft: 10,
-    height: 40,
+    height: 30,
     borderColor: "#ced4da",
     borderWidth: 1,
     borderRadius: 5,
@@ -524,3 +540,4 @@ const styles = StyleSheet.create({
     color: "#333", // 원하는 색상으로 변경
   },
 });
+

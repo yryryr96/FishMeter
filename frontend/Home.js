@@ -5,6 +5,7 @@ import {
     Text,
     Image,
     Touchable,
+    StatusBar,
   } from "react-native";
   import { Marker } from "react-native-maps";
   import MapView from "react-native-maps";
@@ -52,13 +53,13 @@ import {
     const [newMessage, setNewMessage] = useState([]);
     const [user, setUser] = useRecoilState(userId);
     const [userCount, setUserCount] = useState(0)
-    console.log("HOMEEEEEEEEEEE", user);
-  
+    const [newId, setNewId] = useState(0)
+    
     // 모달
     const [newDataModalVisible, setNewDataModalVisible] = useState(false);
     const [ClickedMarkerModalVisible, setClickedMarkerModalVisible] = useState(false);
     //
-  
+    
     // 마커의 키
     const [MarkerKey, setMarkerKey] = useState(0);
     const getMarkerKey = (value) => {
@@ -134,6 +135,7 @@ import {
         // 서버로부터 데이터 업데이트 이벤트가 오면 해당 데이터를 받아와서 클라이언트에 반영
         // console.log('Received updated data:', data);
         // console.log('data=',data)
+        
         setTotalMarker(data);
         setNewData((prev) => [...prev, data[data.length - 1]]);
         const newM = [
@@ -141,8 +143,8 @@ import {
           data[data.length - 1]["title"],
           data[data.length - 1]["size"],
         ];
-        setNewMessage((prev) => [...prev, newM].slice(-5));
-        // console.log(newMessage)
+        setNewMessage((prev) => [...prev, newM].slice(-7));
+        
       });
   
       return () => {
@@ -199,10 +201,11 @@ import {
       { label: "스팟 조회", value: "2" },
     ];
     return (
-      <SafeAreaProvider style={styles.container}>
+      // <SafeAreaProvider style={styles.container}>
+      <View style={styles.container}>
         {state ? (
           <View>
-            <SafeAreaView>
+            <View>
               <MapView
                 ref={mapRef}
                 style={styles.map}
@@ -229,7 +232,7 @@ import {
                   />
                 ))}
               </MapView>
-            </SafeAreaView>
+            </View>
   
             <View style={styles.newModal}>
               {newData.length !== 0 ? (
@@ -237,7 +240,7 @@ import {
                   <View style={{ right: 10 }}>
                     <TouchableOpacity onPress={goAlram}>
                       <Image
-                        style={{ top: -18, width: 80, height: 80 }}
+                        style={{ left:20,top: "-50%", width: 150, height: 150 }}
                         source={require("./assets/Fishing-unscreen.gif")}
                       />
                     </TouchableOpacity>
@@ -257,16 +260,12 @@ import {
               )}
             </View>
   
-            <View style={{ top: "7%", left: "5%", position: "absolute" }}>
-              <TouchableOpacity>
+            <View style={{ top: "8%", left: "7%", position: "absolute"}}>
                 <Image
-                  source={{
-                    uri: "https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2NrNWF4eml1cG1zaWhpamR3N3p4NW9hNWFnMGVzM3M5dHVkZ3J2ZiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9cw/P7k6tr6Gmek344gqPY/giphy.gif",
-                  }}
-                  style={{ width: 70, height: 30 }}
+                  source={require('./assets/live.gif')}
+                  style={{marginLeft:"-5%", width:120, height:40}}
                 />
-                <Text style={{fontSize:20}}>{userCount}</Text>
-              </TouchableOpacity>
+                <Text style={{fontSize:18,marginTop: 10,fontWeight:'bold'}}>현재 접속자 : {userCount}</Text>
             </View>
   
             <View
@@ -278,37 +277,40 @@ import {
             </View>
   
             {/* 실시간 알림 */}
-            <View
-              style={{
-                backgroundColor: "rgba(0,0,0,0.3)",
-                position: "absolute",
-                bottom: 100,
-                width: "100%",
-              }}
-            >
-              {/* <View>
-                      <Image source={require('./assets/live.gif')} style={{width:100,height:30,margin :5}} />
-                  </View> */}
-              {newMessage.map((item, index) => (
-                <View
-                  key={index}
-                  style={{
-                    flexDirection: "row",
-                    margin: 10,
-                    justifyContent: "center",
-                  }}
-                >
-                  <Text style={{ color: "white", fontWeight: "bold" }}>
-                    {item[0]}님이{" "}
-                  </Text>
-                  <Text style={{ color: "yellow", fontWeight: "bold" }}>
-                    {item[2]}cm {item[1]}을/를{" "}
-                  </Text>
-                  <Text style={{ color: "white", fontWeight: "bold" }}>
-                    잡았습니다.
-                  </Text>
-                </View>
-              ))}
+            <View style={{alignItems : 'center'}}>
+              <View
+                style={{
+                  backgroundColor: "rgba(0,0,0,0.3)",
+                  position: "absolute",
+                  bottom: 120,
+                  width: "60%",
+                  borderRadius : 10
+                }}
+              >
+                {/* <View>
+                        <Image source={require('./assets/live.gif')} style={{width:100,height:30,margin :5}} />
+                    </View> */}
+                {newMessage.map((item, index) => (
+                  <View
+                    key={index}
+                    style={{
+                      flexDirection: "row",
+                      margin: 10,
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Text style={{ color: "white", fontWeight: "bold" }}>
+                      {item[0]}님이{" "}
+                    </Text>
+                    <Text style={{ color: "yellow", fontWeight: "bold" }}>
+                      {item[2]}cm {item[1]}을/를{" "}
+                    </Text>
+                    <Text style={{ color: "white", fontWeight: "bold" }}>
+                      잡았습니다.
+                    </Text>
+                  </View>
+                ))}
+              </View>
             </View>
   
             <NewDataModal
@@ -355,7 +357,7 @@ import {
         ) : (
           <></>
         )}
-      </SafeAreaProvider>
+      </View>
     );
   }
   

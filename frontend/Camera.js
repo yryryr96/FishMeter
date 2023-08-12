@@ -11,14 +11,10 @@ import {
 } from "react-native";
 import Fishmodal from "./HomeScreen/Fishmodal";
 import { useCallback, useRef, useState, useEffect } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 
-export default function Camera() {
-    const [fishModalVisible, setfishModalVisible] = useState(true);
-
-    const handleButtonPress = () => {
-        NativeModules.MyArCoreModule.launchARCoreMeasurement();
-    };
-
+export default function Camera({navigation}) {
+    const [fishModalVisible, setfishModalVisible] = useState(false);
     const [receivedData, setReceivedData] = useState({
         category: null,
         length: null,
@@ -29,7 +25,19 @@ export default function Camera() {
         setfishModalVisible(false);
     };
 
-    useEffect(() => {
+    const handleButtonPress = () => {
+        NativeModules.MyArCoreModule.launchARCoreMeasurement();
+    };
+   
+
+    useFocusEffect(
+        useCallback(()=> {
+        handleButtonPress()
+          return () => {}
+        },[navigation])
+      )
+
+    useEffect(() => {    
     const eventEmitter = new NativeEventEmitter();
     const subscription = eventEmitter.addListener(
         "ACTION_DATA_RECEIVED",
@@ -46,9 +54,6 @@ export default function Camera() {
 
   return (
     <View>
-        <TouchableOpacity>
-            <Text style={{fontSize:100}} onPress={handleButtonPress}>카메라</Text>
-        </TouchableOpacity>
         <Fishmodal
             data={receivedData}
             fishModalVisible={fishModalVisible}

@@ -14,6 +14,7 @@ import {
   Easing,
   Dimensions,
   ImageBackground,
+  StatusBar,
 } from "react-native";
 import Calendarcheck from "./dogam/Calendarcheck";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
