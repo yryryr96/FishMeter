@@ -1,7 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import HomeScreen from "../screens/HomeScreen";
 import DogamScreen from "../screens/DogamScreen";
-import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity} from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import Profile from "../screens/Profile";
@@ -45,6 +44,7 @@ const CustomTabBarButton = ({ onPress }) => (
 );
 
 const Tabs = () => {
+
   return (
     <Tab.Navigator
       screenOptions={{

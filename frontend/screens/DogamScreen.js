@@ -1,6 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { SafeAreaView } from "react-native-safe-area-context";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import {
   View,
   Text,
@@ -17,6 +17,7 @@ import {
 } from "react-native";
 import Calendarcheck from "./dogam/Calendarcheck";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import { useFocusEffect } from "@react-navigation/native";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -25,49 +26,49 @@ const DATA = [
     id: "1",
     state: false,
     title: "쏘가리",
-    src1: require("../assets/fishes/쏘가리.png"),
+    src1: require("../assets/fishes/one.png"),
   },
   {
     id: "2",
     title: "쥐노래미",
     state: true,
-    src1: require("../assets/fishes/쥐노래미.png"),
+    src1: require("../assets/fishes/two.png"),
   },
   {
     id: "3",
     title: "감성돔",
     state: true,
-    src1: require("../assets/fishes/감성돔.png"),
+    src1: require("../assets/fishes/three.png"),
   },
   {
     id: "4",
     title: "옥돔",
     state: false,
-    src1: require("../assets/fishes/옥돔.png"),
+    src1: require("../assets/fishes/four.png"),
   },
   {
     id: "5",
     title: "참돔",
     state: false,
-    src1: require("../assets/fishes/참돔.png"),
+    src1: require("../assets/fishes/five.png"),
   },
   {
     id: "6",
     title: "송어",
     state: true,
-    src1: require("../assets/fishes/송어.png"),
+    src1: require("../assets/fishes/six.png"),
   },
   {
     id: "7",
     title: "돌돔",
     state: false,
-    src1: require("../assets/fishes/돌돔.png"),
+    src1: require("../assets/fishes/seven.png"),
   },
   {
     id: "8",
     title: "말쥐치",
     state: false,
-    src1: require("../assets/fishes/말쥐치.png"),
+    src1: require("../assets/fishes/eight.png"),
   },
 ];
 
@@ -141,12 +142,22 @@ const FishAnimation = ({ item, navigation }) => {
 };
 
 const DogamScreen = ({ navigation }) => {
+  console.log("DogamScreen")
   const [pressedItem, setPressedItem] = useState(null);
   const [selectedImage, setSelectedImage] = useState(true); // 추가: 선택된 이미지 상태 변수
 
   const [icebox, setIcebox] = useState(true);
   const [calendar, setCalendar] = useState(false);
   const [listItem, setListItem] = useState(false);
+  const [renderCount , setRenderCount] = useState(0)
+
+  // 도감 들어올때 마다 갱신
+  useFocusEffect(
+    useCallback(()=> {
+      setRenderCount((prev) => prev+1)
+      return () => {}
+    },[navigation])
+  )
 
   const [searchKeyword, setSearchKeyword] = useState(""); // 추가: 검색어 state
   // 검색어에 해당하는 항목들만 필터링하여 반환하는 함수

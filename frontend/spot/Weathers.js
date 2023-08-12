@@ -117,5 +117,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     backgroundColor: "#fff",
     // overflow: "hidden",
+    // marginLeft : "-4%"
   },
 });

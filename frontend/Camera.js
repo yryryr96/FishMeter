@@ -13,7 +13,7 @@ import Fishmodal from "./HomeScreen/Fishmodal";
 import { useCallback, useRef, useState, useEffect } from "react";
 
 export default function Camera() {
-    const [fishModalVisible, setfishModalVisible] = useState(false);
+    const [fishModalVisible, setfishModalVisible] = useState(true);
 
     const handleButtonPress = () => {
         NativeModules.MyArCoreModule.launchARCoreMeasurement();
@@ -31,7 +31,6 @@ export default function Camera() {
 
     useEffect(() => {
     const eventEmitter = new NativeEventEmitter();
-
     const subscription = eventEmitter.addListener(
         "ACTION_DATA_RECEIVED",
         (data) => {
@@ -50,6 +49,12 @@ export default function Camera() {
         <TouchableOpacity>
             <Text style={{fontSize:100}} onPress={handleButtonPress}>카메라</Text>
         </TouchableOpacity>
+        <Fishmodal
+            data={receivedData}
+            fishModalVisible={fishModalVisible}
+            setfishModalVisible={setfishModalVisible}
+          />
+
     </View>
   )
 }

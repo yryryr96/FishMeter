@@ -2032,13 +2032,6 @@
   resolved "https://registry.npmjs.org/@react-native-picker/picker/-/picker-2.4.10.tgz"
   integrity sha512-EvAlHmPEPOwvbP6Pjg/gtDV3XJzIjIxr10fXFNlX5r9HeHw582G1Zt2o8FLyB718nOttgj8HYUTGxvhu4N65sQ==
 
-"@react-native-seoul/kakao-login@^5.3.0":
-  version "5.3.0"
-  resolved "https://registry.yarnpkg.com/@react-native-seoul/kakao-login/-/kakao-login-5.3.0.tgz#1c0cf2ecb9f8e7f7dc7adaa12167a843d957573a"
-  integrity sha512-f0srcY39rFnPxj9+OEJirDXKl+5KPfw48o8CzVPQCJh6tcf9OgWK5yj4lJ28wmxMxDc4RSxSPvTWJ/HnTJPi5w==
-  dependencies:
-    dooboolab-welcome "^1.3.2"
-
 "@react-native/assets@1.0.0":
   version "1.0.0"
   resolved "https://registry.npmjs.org/@react-native/assets/-/assets-1.0.0.tgz"
@@ -4158,11 +4151,6 @@ domutils@^3.0.1:
     dom-serializer "^2.0.0"
     domelementtype "^2.3.0"
     domhandler "^5.0.3"
-
-dooboolab-welcome@^1.3.2:
-  version "1.3.2"
-  resolved "https://registry.npmjs.org/dooboolab-welcome/-/dooboolab-welcome-1.3.2.tgz"
-  integrity sha512-2NbMaIIURElxEf/UAoVUFlXrO+7n/FRhLCiQlk4fkbGRh9cJ3/f8VEMPveR9m4Ug2l2Zey+UCXjd6EcBqHJ5bw==
 
 dot-case@^3.0.4:
   version "3.0.4"
@@ -8133,7 +8121,7 @@ react-native-easy-toast@^2.3.0:
 
 react-native-event-source@^1.1.0:
   version "1.1.0"
-  resolved "https://registry.npmjs.org/react-native-event-source/-/react-native-event-source-1.1.0.tgz"
+  resolved "https://registry.yarnpkg.com/react-native-event-source/-/react-native-event-source-1.1.0.tgz#75a085df49d17ffd6ff31ffeb269dd64e21b841a"
   integrity sha512-CAs76IW8kTrdy0okfV2KPopm7E9TL0uNAR+SRrN7iZ/ii0zBeHWuhD4Q2F8gRKvmkrEtCZ6uwnfYL2TFmK0QZg==
 
 react-native-gesture-handler@^2.12.1:
@@ -8204,6 +8192,16 @@ react-native-shadow-2@^7.0.8:
   integrity sha512-6QlmbJvHCmDGa85jwtfrVxhro1oGm/ezTlciom0A+i0UFAzxlvmRiMHyKXg1hEB2PQkKPoG6ZpANju4mpqPqGA==
   dependencies:
     colord "2.9.2"
+
+react-native-splash-screen@^3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/react-native-splash-screen/-/react-native-splash-screen-3.3.0.tgz#3af71ed17afe50fee69590a45aec399d071ead02"
+  integrity sha512-rGjt6HkoSXxMqH4SQUJ1gnPQlPJV8+J47+4yhgTIan4bVvAwJhEeJH7wWt9hXSdH4+VfwTS0GTaflj1Tw83IhA==
+
+react-native-sse@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-sse/-/react-native-sse-1.1.0.tgz#28c419f58a49d32f7f625f5862c467b3d7ac3598"
+  integrity sha512-qPhZwuVg7ry0Cw8Q2+0VH90on223obZcfB5a/2ktoD3951zWx7HXAtrqQtDfLGjv7ncSJoswd+efn2k0uoR5lw==
 
 react-native-svg@13.4.0:
   version "13.4.0"

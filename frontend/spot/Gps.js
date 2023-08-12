@@ -124,7 +124,7 @@ export default function Gps({navigation}) {
         </MapView>
         </SafeAreaView>
         
-        <View style={{position:'absolute' ,width:"90%",top:"13%", marginLeft : 20,opacity:0.8}}>
+        <View style={{position:'absolute' ,width:"90%",top:"9%", marginLeft : 20,opacity:0.8}}>
           <HourlyWeather latitude={lat} longitude={lon}/>
         </View>
 
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
   ButtonContainer : {
     flexDirection : 'row',
     position : 'absolute',
-    top : 40,
+    top : "0.5%",
     right : 20
   },
   IconBox : {

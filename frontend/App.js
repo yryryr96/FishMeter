@@ -1,5 +1,5 @@
 import { Text, View, TouchableOpacity, Image, StyleSheet } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
@@ -12,6 +12,9 @@ import { RecoilRoot } from "recoil";
 import Home from "./Home";
 import CalendarGallery from "./screens/dogam/CalendarGallery";
 import useCustomFont from "./font/useCustomFont";
+
+import SplashScreen from 'react-native-splash-screen';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createNativeStackNavigator();
 
@@ -27,6 +30,26 @@ function FontText({ fontFileName, children }) {
 
 export default function App() {
   const [state, setState] = useState(false);
+
+  useEffect(()=>{
+    SplashScreen.hide();
+
+    const getUser = async () => {
+      const userAccessToken = await AsyncStorage.getItem("userAccessToken")
+      const user = await AsyncStorage.getItem("user");
+      console.log("App.js",userAccessToken)
+      console.log("App.js",user)
+      if (userAccessToken !== null || user !== null) {
+        setState(true);
+        // console.log("App.js",userAccessToken)
+
+      }
+    }
+    
+    getUser()
+          
+  },[])
+  
   return (
     <View style={{ flex: 1 }}>
       {!state ? (

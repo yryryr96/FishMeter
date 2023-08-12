@@ -1,6 +1,4 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.fishpjt"
-    xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
   <uses-permission android:name="android.permission.CAMERA"/>
@@ -29,7 +27,7 @@
     <meta-data android:name="expo.modules.updates.EXPO_UPDATES_LAUNCH_WAIT_MS" android:value="0"/>
     <meta-data
         android:name="com.google.android.geo.API_KEY"
-        android:value="" />
+        android:value="AIzaSyB7qSyVeiS_AVxUE-RlzkptqVw3EQbVrm8" />
     <activity android:name=".MainActivity" android:label="@string/app_name" android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode" android:launchMode="singleTask" android:windowSoftInputMode="adjustResize" android:theme="@style/Theme.App.SplashScreen" android:exported="true" android:screenOrientation="portrait">
       <intent-filter>
         <action android:name="android.intent.action.MAIN"/>
@@ -42,19 +40,6 @@
         <data android:scheme="com.fishpjt"/>
       </intent-filter>
     </activity>
-    
-    <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity">
-      <intent-filter>
-          <action android:name="android.intent.action.VIEW" />
-          <category android:name="android.intent.category.DEFAULT" />
-          <category android:name="android.intent.category.BROWSABLE" />
-
-          <!-- Redirect URI: "kakao{NATIVE_APP_KEY}://oauth“ -->
-          <data android:host="oauth"
-              android:scheme="kakaoa94984823aa9131e66be0928eca3faf5" />
-      </intent-filter>
-    </activity>
-
     <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" android:exported="false"/>
     <receiver android:name=".MyBroadcastReceiver" android:enabled="true" android:exported="false">
       <intent-filter>
