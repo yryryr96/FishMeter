@@ -24,7 +24,7 @@ public class SseController {
     private final SseService sseService;
     private final UserService userService;
 
-    private static final long TIMEOUT = 3*60*1000L;
+    private static final long TIMEOUT = 60*60*1000L;
 
     @GetMapping(value = "/sse/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter connect(@RequestHeader("userId") String userId, HttpServletResponse response) throws Exception {
