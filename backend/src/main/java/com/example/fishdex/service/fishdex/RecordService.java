@@ -11,7 +11,9 @@ import com.example.fishdex.repository.user.UserRepository;
 import com.example.fishdex.service.sse.SseService;
 import com.example.fishdex.util.KakaoApiReader;
 import com.example.fishdex.util.S3Uploader;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,7 +42,9 @@ public class RecordService {
         return fishResponseDto;
     }
 
+    @Async
     public void save(RecordRequestDto recordRequestDto) throws Exception {
+
         kakaoApiReader.setLatitude(recordRequestDto.getLatitude());
         kakaoApiReader.setLongitude(recordRequestDto.getLongitude());
         String address = kakaoApiReader.getAddressName();
@@ -74,7 +78,9 @@ public class RecordService {
                 .species(fish.getSpecies())
                 .build();
 
-        sseService.sendDataToAll("update",recentRecord);
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        sseService.sendDataToAll("update",objectMapper.writeValueAsString(recentRecord));
     }
 
     public Fish getFish(long fishId) {
