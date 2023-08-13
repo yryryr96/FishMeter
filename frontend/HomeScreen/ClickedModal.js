@@ -3,11 +3,10 @@ import { MaterialIcons } from '@expo/vector-icons';
 import HourlyWeather from '../spot/Weathers';
 
 export default function ClickedMarkerModal({ClickedModalVisible, setClickedModalVisible, item}) {
-    // console.log(newData)
+    
     const closeClickedModalVisible = () => {
         setClickedModalVisible(false)
     }
-    // console.log(item)
     return (
         <Modal
             animationType="fade"
@@ -27,18 +26,18 @@ export default function ClickedMarkerModal({ClickedModalVisible, setClickedModal
                     <View style={{width:"100%", padding:18}}>
                         <View>
                             <View>
-                                <Image source={{uri : item.src1}} style={{width:"100%",height:300,borderRadius : 10}} />
+                                <Image source={{uri : item?.imageUrl}} style={{width:"100%",height:300,borderRadius : 10}} />
                             </View>
                             
                             <View>
-                                <HourlyWeather latitude={item.latitude} longitude={item.longitude}/>
+                                <HourlyWeather latitude={item?.latitude} longitude={item?.longitude}/>
                             </View>
                             
                             <View style={{justifyContent:'space-between',marginTop:20, marginLeft : 15 }}>
-                                <Text style={{fontSize : 16, marginBottom:5}}>주소 : {item.address}</Text>
-                                <Text style={{fontSize : 16, marginBottom:5}}>닉네임 : {item.id}</Text>
-                                <Text style={{fontSize : 16, marginBottom:5}}>어종 : {item.title}</Text>
-                                <Text style={{fontSize : 16, marginBottom:5}}>크기 : {item.size}cm</Text>
+                                <Text style={{fontSize : 16, marginBottom:5}}>주소 : {item?.address}</Text>
+                                <Text style={{fontSize : 16, marginBottom:5}}>닉네임 : {item?.nickName}</Text>
+                                <Text style={{fontSize : 16, marginBottom:5}}>어종 : {item?.species}</Text>
+                                <Text style={{fontSize : 16, marginBottom:5}}>크기 : {item?.length}cm</Text>
                             </View>
                         </View>
                     </View>

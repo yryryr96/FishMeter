@@ -39,14 +39,14 @@ export default function NewDataModal({newDataModalVisible, setNewDataModalVisibl
                             <View key={index}>
                                 <View style={{flexDirection:'row'}}>
                                     <View>
-                                        <Image source={{uri : item.src1}} style={{width:120,height:120,borderRadius : 10}} />
+                                        <Image source={{uri : item.imageUrl}} style={{width:120,height:120,borderRadius : 10}} />
                                     </View>
 
                                     <View style={{marginHorizontal : 7, justifyContent : 'space-between'}}>
                                         <Text style={{fontSize : 13, marginBottom:5}}>{item.address}</Text>
-                                        <Text style={{fontSize : 16, marginBottom:5}}>{item.id}</Text>
-                                        <Text style={{fontSize : 16, marginBottom:5}}>{item.title}</Text>
-                                        <Text style={{fontSize : 16, marginBottom:5}}>{item.size}cm</Text>
+                                        <Text style={{fontSize : 16, marginBottom:5}}>{item.nickName}</Text>
+                                        <Text style={{fontSize : 16, marginBottom:5}}>{item.species}</Text>
+                                        <Text style={{fontSize : 16, marginBottom:5}}>{item['length']}cm</Text>
                                     </View>
                                 </View>
                                 <View style={{borderWidth:1, borderColor:'grey', margin : 15}}></View>

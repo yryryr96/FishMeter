@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   Modal,
   ScrollView,
+  Alert,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
@@ -25,6 +26,20 @@ import { useRecoilState } from "recoil";
 import { userId } from "../component/recoil/selectors/testSelector";
 import { decode } from "base-64";
 
+const dataURLtoFile = (dataurl, fileName) => {
+  var arr = dataurl.split(','),
+      mime = arr[0].match(/:(.*?);/)[1],
+      bstr = decode(arr[1]),
+      n = bstr.length,
+      u8arr = new Uint8Array(n);
+
+  while(n--){
+      u8arr[n] = bstr.charCodeAt(n);
+  }
+
+  return new File([u8arr], fileName, {type:mime});
+}
+
 const GoogleMap = ({ latitude, longitude, setAddress }) => {
   useEffect(() => {
     // Nominatim API를 사용하여 주소 정보를 가져오는 함수를 정의합니다.
@@ -32,7 +47,7 @@ const GoogleMap = ({ latitude, longitude, setAddress }) => {
     const requestLocationPermission = async () => {
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status === "granted") {
-        // 위치 권한이 허용된 경우 주소 정보를 가져옵니다.
+        // 위치 권한이 허용된 경우 주소 정보를 가져옵니다.r
         fetchAddress();
       } else {
         // 위치 권한이 거부된 경우 처리할 로직을 추가합니다.
@@ -120,20 +135,9 @@ export default function Fishmodal({
     navigation.goBack();
   };
   const savefish = () => {
+    console.log(Object.keys(data))
     setfishModalVisible(false);
-    const num = data.imageArray.length % 4
-    console.log(data.imageArray.length, num)
-    // if (num !== 0 ) { data.imageArray += ('=' * (4 - num)); }
-    const base64Image = data.imageArray
-    // console.log(base64Image.length)
-    const binaryImage = decode(base64Image);
-    const uint8Array = new Uint8Array(binaryImage.length);
-    for (let i = 0; i < binaryImage.length; i++) {
-      uint8Array[i] = binaryImage.charCodeAt(i);
-    }
-
-    const blob = new Blob([uint8Array], { type: "image/jpeg" });
-
+    
     try {
       const formData = new FormData();
       const recordRequestDto = {
@@ -143,17 +147,38 @@ export default function Fishmodal({
         fishId: fishid[selectedFish],
       };
   
-      formData.append('recordRequestDto', JSON.stringify(recordRequestDto));
-      formData.append('image',blob, 'image.jpg');
-      console.log(user)
-      const response = axios.post('http://54.206.147.12/records', formData, {
+      const json = JSON.stringify(recordRequestDto)
+      const blob = new Blob([json], {type: "application/json"})
+      const file = new dataURLtoFile(`data:image/jpeg;base64,${data.imageArray}`,'image.jpg')
+      
+      formData.append('recordRequestDto',blob);
+      formData.append('image',file[0]);
+      axios({
+        method : 'post',
+        url : 'http://54.206.147.12/records',
+        data : formData,
         headers: {
-          Authorization : user,
-          'Content-Type': 'multipart/form-data',
+          userId : user,
+          "Content-Type" : "multipart/form-data",
+          'Access-Control-Allow-Origin': '*',
         },
-      });
-  
-      console.log('Data saved:', response.data);
+        // transformRequest:(data, headers) => {return formData;}
+      }).then((res) => {
+        // navigation.navigate("Home")
+        console.log(res)
+      }).catch((e)=> {
+        console.log(e)
+      })
+      // fetch('http://54.206.147.12/records',{
+      //   method : 'POST',
+      //   headers : {
+      //     userId : user,
+      //     "Content-Type" : "multipart/form-data"
+      //   },
+      //   body : formData
+      // }).then((res) => {
+      //   console.log(res)
+      // })
       // navigation.navigate('Home', { screen: 'Home' });
     } catch (error) {
       console.error('Error saving data:', error);

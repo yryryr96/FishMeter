@@ -1,18 +1,15 @@
 import React, { useState,useEffect, useRef } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Modal, Alert, Image, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 import { Marker } from "react-native-maps";
 import MapView from "react-native-map-clustering";
 
 import * as Location from 'expo-location';
 import CalendarModal from './CalendarModal';
 import ModalFishCategory from './ModalFishCategory';
-import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil';
-import { testGpsList } from '../component/recoil/atoms/test';
 import ModalArticle from './ModalArticle';
 import { SafeAreaProvider,SafeAreaView } from 'react-native-safe-area-context';
-import { testDefaultGps } from '../component/recoil/selectors/testSelector';
+import axios from 'axios';
 
-import { MaterialIcons } from '@expo/vector-icons';
 import HourlyWeather from './Weathers';
 
 export default function Gps({navigation}) {
@@ -20,8 +17,8 @@ export default function Gps({navigation}) {
   const [lat,setLat] = useState(37);
   const [lon, setLon] = useState(126);
   const [city, setCity] = useState(null);
-
-  const [gpsList,setGpsList] = useRecoilState(testGpsList);
+  const [totalMarker, setTotalMarker] = useState([])
+  const [gpsList,setGpsList] = useState([]);
   const mapRef = useRef(null);
 
   const [calendarModalVisible, setCalendarModalVisible] = useState(false);
@@ -48,7 +45,6 @@ export default function Gps({navigation}) {
 
   const getLocation = async() => {
     const {granted} = await Location.requestForegroundPermissionsAsync();
-    console.log(granted)
 
     const {coords:{latitude,longitude}} = await Location.getCurrentPositionAsync();
     
@@ -72,22 +68,38 @@ export default function Gps({navigation}) {
   useEffect(()=>{
     getLocation()
     // console.log(INITIAL_REGION)
+    axios({
+      method : 'get',
+      url : 'http://54.206.147.12/records'
+    }).then((res) => {
+      console.log(res.data)
+      setTotalMarker(res.data)
+      console.log(totalMarker)
+    }).catch((err)=> {
+      console.log("다시 해줘",res)
+    })
+
   },[lat,lon])
 
   const getFiltered = (gpsInformation) => {
     const temp = []
-    const globalList = useRecoilValue(testDefaultGps)
+    
+    function removeDup(arr) {
+      return [...new Set(arr.join("|").split("|"))]
+        .map((v) => v.split(","))
+        .map((v) => v.map((a) => +a));
+    }
+    
+    gpsInformation = removeDup(gpsInformation);
     const filtered = gpsInformation.forEach((item) => {
-        globalList.forEach((gps,idx) => {
+      totalMarker.forEach((gps,idx) => {
           if (gps.latitude===item[1] && gps.longitude===item[0]) {
             temp.push(gps)
           }
         })
     })
-    // console.log("temp=",temp)
     return temp
-}
-  const testCoordinates = useRecoilValue(testDefaultGps)
+  }
   
   return (
     <SafeAreaProvider style={styles.container}>
@@ -113,7 +125,7 @@ export default function Gps({navigation}) {
           }}
           // icon={require("./assets/fish.png")}
           >
-            {testCoordinates.map((coordinate, index) => (
+            {totalMarker.map((coordinate, index) => (
               <Marker
                 key={index}
                 coordinate={coordinate}
@@ -124,7 +136,7 @@ export default function Gps({navigation}) {
         </MapView>
         </SafeAreaView>
         
-        <View style={{position:'absolute' ,width:"90%",top:"9%", marginLeft : 20,opacity:0.8}}>
+        <View style={{position:'absolute' ,width:"90%",top:"13%", marginLeft : 20,opacity:0.8}}>
           <HourlyWeather latitude={lat} longitude={lon}/>
         </View>
 
@@ -155,7 +167,6 @@ export default function Gps({navigation}) {
         
         <View style={{position:'absolute', right :10, bottom:110}}>
           <TouchableOpacity 
-            // style={styles.categoryButton}
             onPress={() =>getLocation()}
             >
               <View style={styles.IconBox}>

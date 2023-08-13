@@ -7,8 +7,8 @@ export default function SpotArticle({item,ArticleModalVisible,setArticleModalVis
     const navigation = useNavigation();
     const propItem = {
         "itemName" : item.id,
-        "itemSize" : item.size,
-        "itemSrc" : item.src1,
+        "itemSize" : item.length,
+        "itemSrc" : item.imageUrl,
     }
     
     const handlePress = () => {
@@ -21,12 +21,12 @@ export default function SpotArticle({item,ArticleModalVisible,setArticleModalVis
             <View style={{marginVertical : 5}}>
                 <TouchableOpacity style={{flexDirection:'row'}} onPress={handlePress}>
                     <View style={styles.imgContainer}>
-                        <Image source={{ uri : item.src1}} style={{height:110, borderRadius:5}}/>
+                        <Image source={{ uri : item.imageUrl}} style={{height:110, borderRadius:5}}/>
                     </View>
                     
                     <View style={styles.infoContainer}>
-                        <Text style={styles.articleText}>날짜</Text>
-                        <Text style={styles.articleText}>{item.title}</Text>
+                        <Text style={styles.articleText}>{item.createdAt.substring(0,10)} {item.createdAt.substring(11,19)}</Text>
+                        <Text style={styles.articleText}>{item.species}</Text>
                         <Text style={styles.articleText}>{item.address}</Text>
                     </View>
                 </TouchableOpacity>

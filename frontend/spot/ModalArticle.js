@@ -1,13 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import {Alert, Modal, StyleSheet, Text, View,ScrollView, TouchableWithoutFeedback} from 'react-native';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { testGpsList } from '../component/recoil/atoms/test';
 import SpotArticle from './Article';
 import { MaterialIcons } from '@expo/vector-icons';
-import { filteredArticle, testDefaultGps } from '../component/recoil/selectors/testSelector';
 
 
-export default function ModalArticle({ArticleModalVisible,setArticleModalVisible,filteredList,city}) {
+export default function ModalArticle({ArticleModalVisible,setArticleModalVisible,filteredList}) {
     // console.log(filteredList)
     const closeArticleModal = () => {
         setArticleModalVisible(false)
