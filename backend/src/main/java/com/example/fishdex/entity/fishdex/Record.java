@@ -39,6 +39,7 @@ public class Record {
                 .id(this.id)
                 .imageUrl(this.imageUrl)
                 .length(this.length)
+                .latitude(this.latitude)
                 .longitude(this.longitude)
                 .address(this.address)
                 .createdAt(this.createdAt)
