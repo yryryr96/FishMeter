@@ -41,7 +41,7 @@ public class Record {
                 .length(this.length)
                 .longitude(this.longitude)
                 .address(this.address)
-//                .createdAt(this.createdAt)
+                .createdAt(this.createdAt)
                 .nickname(this.user.getNickname())
                 .species(this.fish.getSpecies())
                 .build();

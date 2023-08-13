@@ -54,6 +54,7 @@ public class RecordController {
     @PostMapping(value = "/records", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public void regist(@RequestPart RecordRequestDto recordRequestDto, @RequestPart MultipartFile image, @RequestHeader("userId") String userId) throws Exception {
         long id  = Long.parseLong(userId);
+        System.out.println(id);
         recordRequestDto.setUserId(id);
         recordRequestDto.setImage(image);
 

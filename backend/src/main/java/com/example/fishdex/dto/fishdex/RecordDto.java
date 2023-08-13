@@ -32,6 +32,8 @@ public class RecordDto {
                 .longitude(this.longitude)
                 .address(this.address)
                 .createdAt(this.createdAt)
+                .user(user)
+                .fish(fish)
                 .build();
     }
 }
