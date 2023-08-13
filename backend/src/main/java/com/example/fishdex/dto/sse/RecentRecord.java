@@ -5,6 +5,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Getter
 public class RecentRecord {
     private String imageUrl;
     private double length; // front
