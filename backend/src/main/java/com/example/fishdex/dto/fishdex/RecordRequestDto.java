@@ -21,13 +21,14 @@ public class RecordRequestDto {
     private double longitude;
     private long userId;
     private long fishId;
-    MultipartFile image;
+    private String base64;
 
-    public RecordRequestDto(double length, double latitude, double longitude, long fishId) {
+    public RecordRequestDto(double length, double latitude, double longitude, long fishId, String base64) {
         this.length = length;
         this.latitude = latitude;
         this.longitude = longitude;
         this.fishId = fishId;
+        this.base64 = base64;
     }
 
     public RecordDto toRecordDto(){
