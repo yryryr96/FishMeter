@@ -4,6 +4,7 @@ import com.example.fishdex.dto.fishdex.*;
 import com.example.fishdex.repository.user.UserRepository;
 import com.example.fishdex.service.fishdex.RecordService;
 import com.example.fishdex.service.user.UserService;
+import com.example.fishdex.util.Base64ToMultipartFileConverter;
 import lombok.RequiredArgsConstructor;
 //import org.springframework.security.core.annotation.AuthenticationPrincipal;
 //import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -11,6 +12,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -43,21 +45,18 @@ public class RecordController {
     }
 
     @GetMapping("/image/{recordId}/{recordTime}")
-    public List<RecordDto> findImages(@PathVariable("recordId") long recordId, @PathVariable("recordTime") Timestamp date, @RequestHeader("userId") String userId) throws Exception {
+    public List<RecordDto> findImages(@PathVariable("recordId") long recordId, @PathVariable("recordTime") String date, @RequestHeader("userId") String userId) throws Exception {
         long id  = Long.parseLong(userId);
         ImageRequestDto imageRequestDto = new ImageRequestDto(id, recordId, date);
         List<RecordDto> list = recordService.findImages(imageRequestDto);
         return list;
     }
 
-
-    @PostMapping(value = "/records", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public void regist(@RequestPart RecordRequestDto recordRequestDto, @RequestPart MultipartFile image, @RequestHeader("userId") String userId) throws Exception {
+    @PostMapping(value = "/records")
+    public void regist1(@RequestBody RecordRequestDto recordRequestDto, @RequestHeader("userId") String userId) throws Exception {
         long id  = Long.parseLong(userId);
         System.out.println(id);
         recordRequestDto.setUserId(id);
-        recordRequestDto.setImage(image);
-
         recordService.save(recordRequestDto);
     }
 
