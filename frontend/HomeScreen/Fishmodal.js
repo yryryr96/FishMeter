@@ -136,16 +136,9 @@ export default function Fishmodal({
     navigation.goBack();
   };
   const savefish = () => {
-    console.log(Object.keys(data))
     setfishModalVisible(false);
     // console.log(data.imageArray.replace('/',''))
     try {
-      console.log(typeof(data.length))
-      console.log(typeof(defaultLat))
-      console.log(typeof(defaultLon))
-      console.log(typeof(fishid[selectedFish]))
-      console.log(typeof(data.imageArray))
-      console.log(data.imageArray)
       const recordRequestDto = {
         'length': Number(data.length),
         'latitude': defaultLat,
@@ -153,10 +146,6 @@ export default function Fishmodal({
         'fishId': fishid[selectedFish],
         'base64' : encode(data.imageArray)
       };
-      const json = JSON.stringify(recordRequestDto)
-      // console.log(recordRequestDto)
-      // console.log(json)
-
       axios({
         method : 'post',
         url : 'http://54.206.147.12/record',
@@ -170,17 +159,7 @@ export default function Fishmodal({
       }).catch((e)=> {
         console.log(e)
       })
-      // fetch('http://54.206.147.12/records',{
-      //   method : 'POST',
-      //   headers : {
-      //     userId : user,
-      //     "Content-Type" : "multipart/form-data"
-      //   },
-      //   body : formData
-      // }).then((res) => {
-      //   console.log(res)
-      // })
-      // navigation.navigate('Home', { screen: 'Home' });
+
     } catch (error) {
       console.error('Error saving data:', error);
     }
