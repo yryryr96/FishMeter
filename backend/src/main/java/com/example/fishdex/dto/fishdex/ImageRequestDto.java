@@ -15,5 +15,5 @@ import java.sql.Timestamp;
 public class ImageRequestDto {
     long userId;
     long recordid;
-    Timestamp createdAt;
+    String createdAt;
 }

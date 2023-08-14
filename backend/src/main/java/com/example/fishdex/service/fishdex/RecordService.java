@@ -9,16 +9,21 @@ import com.example.fishdex.repository.fishdex.FishRepository;
 import com.example.fishdex.repository.fishdex.RecordRepository;
 import com.example.fishdex.repository.user.UserRepository;
 import com.example.fishdex.service.sse.SseService;
+import com.example.fishdex.util.Base64ToMultipartFileConverter;
 import com.example.fishdex.util.KakaoApiReader;
 import com.example.fishdex.util.S3Uploader;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Base64Utils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,6 +36,8 @@ public class RecordService {
     private final UserRepository userRepository;
     private final S3Uploader s3Uploader;
     private final KakaoApiReader kakaoApiReader;
+    private Base64ToMultipartFileConverter base64ToMultipartFileConverter;
+
 
     private final SseService sseService;
 
@@ -55,7 +62,10 @@ public class RecordService {
         RecordDto recordDto = recordRequestDto.toRecordDto();
         recordDto.setAddress(address);
 
-        MultipartFile image = recordRequestDto.getImage();
+        String incodeBase64 = recordRequestDto.getBase64();
+        String base64 = getBase64DecodeString(incodeBase64);
+        MultipartFile image = base64ToMultipartFileConverter.base64ToMultipartFile(base64);
+
         String imageUrl = null;
         try {
             imageUrl = s3Uploader.upload(image, "images");
@@ -132,15 +142,22 @@ public class RecordService {
         }
     }
 
-    public List<RecordDto> findImages(ImageRequestDto imageRequestDto) {
+    public List<RecordDto> findImages(ImageRequestDto imageRequestDto) throws ParseException {
         long userId = imageRequestDto.getUserId();
         long recordId = imageRequestDto.getRecordid();
-        Timestamp date = imageRequestDto.getCreatedAt();
-        List<Record> recordEntity = recordRepository.findImages(userId, recordId, date);
+        String date = imageRequestDto.getCreatedAt();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSXXX");
+        Date parsedDate = dateFormat.parse(date);
+        Timestamp timestamp = new Timestamp(parsedDate.getTime());
+        List<Record> recordEntity = recordRepository.findImages(userId, recordId, timestamp);
         List<RecordDto> recordResponseDtos = recordEntity.stream()
                 .map(record -> record.toResponseDto())
                 .collect(Collectors.toList());
         return recordResponseDtos;
+    }
+
+    public static String getBase64DecodeString(String content){
+        return new String(Base64Utils.decode(content.getBytes())); //TODO Base64 복호화된 문자열값 반환
     }
 }
 
