@@ -34,6 +34,7 @@ import {
     const [lat, setLat] = useState(35.0968275 + 0.01);
     const [lon, setLon] = useState(128.8538282 + 0.01);
     const [newData, setNewData] = useState([]);
+    const [newMarker, setNewMarker] = useState([]);
     const [newMessage, setNewMessage] = useState([]);
     const [user, setUser] = useRecoilState(userId);
     const [userCount, setUserCount] = useState(0)
@@ -98,6 +99,7 @@ import {
         const eventData = JSON.parse(event.data);
         console.log("업데이트 메시지 이벤트:", eventData);
         setNewData((prev) => [...prev, eventData]);
+        setNewMarker((prev) => [...prev, eventData]);
         const newM = [
           // data[data.length - 1]["id"],
           eventData['nickName'],
@@ -153,7 +155,7 @@ import {
                 rotateEnabled={false}
                 // zoomEnabled={false}
               >
-                {newData.map((item, index) => (
+                {newMarker.map((item, index) => (
                   <Marker
                     key={index}
                     coordinate={{
@@ -255,7 +257,7 @@ import {
               setNewData={setNewData}
             ></NewDataModal>
             <ClickedMarkerModal
-              item={newData[MarkerKey]}
+              item={newMarker[MarkerKey]}
               ClickedModalVisible={ClickedMarkerModalVisible}
               setClickedModalVisible={setClickedMarkerModalVisible}
             />

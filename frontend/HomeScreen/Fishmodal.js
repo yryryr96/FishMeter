@@ -24,7 +24,8 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import useCustomFont from "../font/useCustomFont";
 import { useRecoilState } from "recoil";
 import { userId } from "../component/recoil/selectors/testSelector";
-import { decode } from "base-64";
+import { decode, encode } from "base-64";
+import { Buffer } from "buffer";
 
 const dataURLtoFile = (dataurl, fileName) => {
   var arr = dataurl.split(','),
@@ -137,35 +138,35 @@ export default function Fishmodal({
   const savefish = () => {
     console.log(Object.keys(data))
     setfishModalVisible(false);
-    
+    // console.log(data.imageArray.replace('/',''))
     try {
-      const formData = new FormData();
+      console.log(typeof(data.length))
+      console.log(typeof(defaultLat))
+      console.log(typeof(defaultLon))
+      console.log(typeof(fishid[selectedFish]))
+      console.log(typeof(data.imageArray))
+      console.log(data.imageArray)
       const recordRequestDto = {
-        length: data.length,
-        latitude: defaultLat,
-        longitude: defaultLon,
-        fishId: fishid[selectedFish],
+        'length': Number(data.length),
+        'latitude': defaultLat,
+        'longitude': defaultLon,
+        'fishId': fishid[selectedFish],
+        'base64' : encode(data.imageArray)
       };
-  
       const json = JSON.stringify(recordRequestDto)
-      const blob = new Blob([json], {type: "application/json"})
-      const file = new dataURLtoFile(`data:image/jpeg;base64,${data.imageArray}`,'image.jpg')
-      
-      formData.append('recordRequestDto',blob);
-      formData.append('image',file[0]);
+      // console.log(recordRequestDto)
+      // console.log(json)
+
       axios({
         method : 'post',
-        url : 'http://54.206.147.12/records',
-        data : formData,
+        url : 'http://54.206.147.12/record',
+        data : recordRequestDto,
         headers: {
           userId : user,
-          "Content-Type" : "multipart/form-data",
-          'Access-Control-Allow-Origin': '*',
+          'Content-Type': 'application/json'
         },
-        // transformRequest:(data, headers) => {return formData;}
       }).then((res) => {
-        // navigation.navigate("Home")
-        console.log(res)
+        console.log(res.data)
       }).catch((e)=> {
         console.log(e)
       })

@@ -64,6 +64,25 @@ export default function Gps({navigation}) {
       });
     }
   }
+  
+  const [MarkerKey, setMarkerKey] = useState(0);
+  const getMarkerKey = (value) => {
+    setMarkerKey(value);
+  };
+  
+  const deleteMarker = (value) => {
+    console.log(value)
+    axios({
+      method : 'delete',
+      url : `http://54.206.147.12/records/${value}`,
+    }).then((res)=>{
+      console.log(res)
+      console.log("삭제 완료")
+    }).catch((e)=>{
+      console.log(e,"실패")
+
+    })
+  }
 
   useEffect(()=>{
     getLocation()
@@ -130,13 +149,14 @@ export default function Gps({navigation}) {
                 key={index}
                 coordinate={coordinate}
                 icon={require("../assets/location.png")}
+                onPress={() => deleteMarker(totalMarker[index])}
                 // onPress={() => {console.log(coordinate.latitude)}}
               />)
             )}
         </MapView>
         </SafeAreaView>
         
-        <View style={{position:'absolute' ,width:"90%",top:"13%", marginLeft : 20,opacity:0.8}}>
+        <View style={{position:'absolute' ,width:"90%",top:"9%", marginLeft : 20,opacity:0.8}}>
           <HourlyWeather latitude={lat} longitude={lon}/>
         </View>
 

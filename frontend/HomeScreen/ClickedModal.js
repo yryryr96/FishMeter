@@ -26,7 +26,7 @@ export default function ClickedMarkerModal({ClickedModalVisible, setClickedModal
                     <View style={{width:"100%", padding:18}}>
                         <View>
                             <View>
-                                <Image source={{uri : item?.imageUrl}} style={{width:"100%",height:300,borderRadius : 10}} />
+                                <Image source={{uri : item?.imageUrl}} style={{width:"100%",height:300,borderRadius : 10}} resizeMode='contain' />
                             </View>
                             
                             <View>

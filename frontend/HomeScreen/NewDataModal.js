@@ -39,7 +39,7 @@ export default function NewDataModal({newDataModalVisible, setNewDataModalVisibl
                             <View key={index}>
                                 <View style={{flexDirection:'row'}}>
                                     <View>
-                                        <Image source={{uri : item.imageUrl}} style={{width:120,height:120,borderRadius : 10}} />
+                                        <Image source={{uri : item.imageUrl}} style={{width:120,height:120,borderRadius : 10}} resizeMode='contain'/>
                                     </View>
 
                                     <View style={{marginHorizontal : 7, justifyContent : 'space-between'}}>

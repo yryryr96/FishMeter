@@ -81,7 +81,7 @@ public class MyArCoreModule extends ReactContextBaseJavaModule {
         params.putString("length", length);
 
         if (imageBytes != null) {
-            String base64Image = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+            String base64Image = Base64.encodeToString(imageBytes, Base64.NO_WRAP);
             params.putString("imageArray", base64Image);
             Log.d("ImageBytes", "Image data sent successfully.");
         } else {
