@@ -9,7 +9,6 @@ import {
   TouchableOpacity,
   Modal,
   ScrollView,
-  Alert,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import axios from "axios";
@@ -23,23 +22,9 @@ import MapView from "react-native-maps";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import useCustomFont from "../font/useCustomFont";
 import { useRecoilState } from "recoil";
-import { userId } from "../component/recoil/selectors/testSelector";
-import { decode, encode } from "base-64";
-import { Buffer } from "buffer";
-
-const dataURLtoFile = (dataurl, fileName) => {
-  var arr = dataurl.split(','),
-      mime = arr[0].match(/:(.*?);/)[1],
-      bstr = decode(arr[1]),
-      n = bstr.length,
-      u8arr = new Uint8Array(n);
-
-  while(n--){
-      u8arr[n] = bstr.charCodeAt(n);
-  }
-
-  return new File([u8arr], fileName, {type:mime});
-}
+import { myLocation, userId } from "../component/recoil/selectors/testSelector";
+import { encode } from "base-64";
+import { useNavigation } from "@react-navigation/native";
 
 const GoogleMap = ({ latitude, longitude, setAddress }) => {
   useEffect(() => {
@@ -132,6 +117,7 @@ export default function Fishmodal({
   const [selectedFish, setSelectedFish] = useState(data.category);
   const [size, setSize] = useState();
   const [address, setAddress] = useState(""); // Create a state to store address in DogamDetail
+  const navi = useNavigation()
   const handleGoBack = () => {
     navigation.goBack();
   };
@@ -148,7 +134,7 @@ export default function Fishmodal({
       };
       axios({
         method : 'post',
-        url : 'http://54.206.147.12/record',
+        url : 'http://54.206.147.12/records',
         data : recordRequestDto,
         headers: {
           userId : user,
@@ -156,6 +142,8 @@ export default function Fishmodal({
         },
       }).then((res) => {
         console.log(res.data)
+        // navi.navigate("DogamScreen") 수정해야함
+        navi.navigate("Home")
       }).catch((e)=> {
         console.log(e)
       })
@@ -231,7 +219,9 @@ export default function Fishmodal({
     //console.log(a);
     setWater(a);
   };
- const fontFileName=require("../assets/fonts/Yeongdeok_Blueroad.ttf");
+
+  const [myLocate,setMyLocate] = useRecoilState(myLocation)
+  const fontFileName=require("../assets/fonts/Yeongdeok_Blueroad.ttf");
   const [defaultLat, setDefaultLat] = useState(37.541);
   const [defaultLon, setdefaultLon] = useState(126.986);
   const getLocation = async () => {
@@ -404,8 +394,8 @@ export default function Fishmodal({
             </View>
             <View style={{ flex: 1, marginTop: 25, marginBottom: 20 }}>
               <GoogleMap
-                latitude={defaultLat}
-                longitude={defaultLon}
+                latitude={myLocate[0]}
+                longitude={myLocate[1]}
                 setAddress={setAddress}
               ></GoogleMap>
             </View>

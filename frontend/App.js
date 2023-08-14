@@ -15,7 +15,6 @@ import useCustomFont from "./font/useCustomFont";
 
 import SplashScreen from 'react-native-splash-screen';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import ImageUpload from "./ImageUpload";
 
 const Stack = createNativeStackNavigator();
 
@@ -133,7 +132,6 @@ export default function App() {
               />
               <Stack.Screen name="KaKaoLogOut" component={KaKaoLogOut} />
               <Stack.Screen name="Home" component={Home} />
-              <Stack.Screen name="ImageUpload" component={ImageUpload} />
             </Stack.Navigator>
           </RecoilRoot>
         </NavigationContainer>

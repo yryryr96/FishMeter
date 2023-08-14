@@ -10,6 +10,7 @@ import {
   import { Marker } from "react-native-maps";
   import MapView from "react-native-maps";
   import {
+    myLocation,
     testDefaultGps,
     userId,
   } from "./component/recoil/selectors/testSelector";
@@ -31,8 +32,7 @@ import {
     
   export default function Home() {
     const navigation = useNavigation();
-    const [lat, setLat] = useState(35.0968275 + 0.01);
-    const [lon, setLon] = useState(128.8538282 + 0.01);
+    const [myLocate,setMyLocate] = useRecoilState(myLocation)
     const [newData, setNewData] = useState([]);
     const [newMarker, setNewMarker] = useState([]);
     const [newMessage, setNewMessage] = useState([]);
@@ -53,8 +53,6 @@ import {
   
     //
     const mapRef = useRef(null);
-    const [defaultLat, setDefaultLat] = useState(37.541);
-    const [defaultLon, setdefaultLon] = useState(126.986);
     const getLocation = async () => {
       const { granted } = await Location.requestForegroundPermissionsAsync();
   
@@ -63,13 +61,11 @@ import {
       } = await Location.getCurrentPositionAsync();
       console.log(latitude, longitude);
   
-      if (defaultLon !== longitude && defaultLat !== latitude) {
-        setDefaultLat(longitude);
-        setdefaultLon(latitude);
+      if (myLocate[0] !== latitude && myLocate[1] !== longitude) {
+        setMyLocate([latitude,longitude])
       }
   
       if (mapRef.current) {
-        console.log("ananannanan");
         mapRef.current.animateToRegion({
           latitude: latitude,
           longitude: longitude,
@@ -147,8 +143,8 @@ import {
                 ref={mapRef}
                 style={styles.map}
                 initialRegion={{
-                  latitude: lat,
-                  longitude: lon,
+                  latitude: myLocate[0],
+                  longitude: myLocate[1],
                   latitudeDelta: 0.1,
                   longitudeDelta: 0.1,
                 }}
@@ -205,14 +201,6 @@ import {
                 <Text style={{fontSize:18,marginTop: 10,fontWeight:'bold'}}>현재 접속자 : {userCount}</Text>
             </View>
   
-            <View
-              style={{ position: "absolute", bottom: 120, marginHorizontal: 30 }}
-            >
-              <TouchableOpacity onPress={()=>navigation.navigate("ImageUpload")}>
-                <Entypo name="camera" size={50} color="black" />
-              </TouchableOpacity>
-            </View>
-  
             {/* 실시간 알림 */}
             <View style={{alignItems : 'center'}}>
               <View
@@ -220,8 +208,8 @@ import {
                   backgroundColor: "rgba(0,0,0,0.3)",
                   position: "absolute",
                   bottom: 120,
-                  width: "60%",
-                  borderRadius : 10
+                  width: "70%",
+                  borderRadius : 10,
                 }}
               >
                 {/* <View>
@@ -234,6 +222,7 @@ import {
                       flexDirection: "row",
                       margin: 10,
                       justifyContent: "center",
+                      // paddingHorizontal : 10
                     }}
                   >
                     <Text style={{ color: "white", fontWeight: "bold" }}>
