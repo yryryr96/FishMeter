@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
     private ApiInterface api;
 
     // AI 서버 baseUrl
-    private final String baseUrl = "http://192.168.140.141:8000/";
+    private final String baseUrl = "http://192.168.108.141:8000/";
 
     // API 호출 결과 0 = 쥐노래미, 1 = 감성돔, 2 = 말쥐치, 3 = 돌돔 ...
     private final String[] fish = {"쥐노래미", "감성돔", "말쥐치", "돌돔", "쏘가리", "참돔", "옥돔", "송어"};
@@ -112,10 +112,10 @@ public class MainActivity extends AppCompatActivity {
             finish();
         });
         reactButton.setOnClickListener(v -> {
-//            String fishCategory = fishTextView.getText().toString();
-//            String fLength = lengthTextView.getText().toString();
-            String fishCategory = "참돔";
-            String fLength = "체장: 45.24 cm";
+            String fishCategory = fishTextView.getText().toString();
+            String fLength = lengthTextView.getText().toString();
+            // String fishCategory = "참돔";
+            // String fLength = "체장: 45.24 cm";
             String fishLength = fLength.replace("체장: ", "").replace(" cm", "");
             Bitmap imageBitmap = null;  // 이미지 비트맵 변수 초기화
 
