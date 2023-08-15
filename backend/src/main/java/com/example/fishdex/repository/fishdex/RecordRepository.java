@@ -18,4 +18,7 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
 
     @Query("SELECT r from Record r WHERE r.user.id = :userId and DATE(r.createdAt) = Date(:date) and r.id <> :recordId")
     List<Record> findImages(@Param("userId") long userId, @Param("recordId") long recordId, @Param("date")Timestamp date);
+
+    @Query("SELECT r from Record r WHERE r.user.id = :userId")
+    List<Record> findByUserId(@Param("userId") long userId);
 }
