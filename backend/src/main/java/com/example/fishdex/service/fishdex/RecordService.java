@@ -159,5 +159,13 @@ public class RecordService {
     public static String getBase64DecodeString(String content){
         return new String(Base64Utils.decode(content.getBytes())); //TODO Base64 복호화된 문자열값 반환
     }
+
+    public List<RecordDto> findByUserId(long id) {
+        List<Record> recordEntity = recordRepository.findByUserId(id);
+        List<RecordDto> recordResponseDtos = recordEntity.stream()
+                .map(record -> record.toResponseDto())
+                .collect(Collectors.toList());
+        return recordResponseDtos;
+    }
 }
 

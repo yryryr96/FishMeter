@@ -52,6 +52,13 @@ public class RecordController {
         return list;
     }
 
+    @GetMapping("/records/all")
+    public List<RecordDto> findbyUserId(@RequestHeader("userId") String userId) {
+        long id = Long.parseLong(userId);
+        List<RecordDto> list = recordService.findByUserId(id);
+        return list;
+    }
+
     @PostMapping(value = "/records")
     public void regist1(@RequestBody RecordRequestDto recordRequestDto, @RequestHeader("userId") String userId) throws Exception {
         long id  = Long.parseLong(userId);
