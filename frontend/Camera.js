@@ -42,8 +42,9 @@ export default function Camera({navigation}) {
     const subscription = eventEmitter.addListener(
         "ACTION_DATA_RECEIVED",
         (data) => {
-        setReceivedData(data);
-        setfishModalVisible(true);
+          console.log("데이터 넘어옴",data)
+          setReceivedData(data);
+          setfishModalVisible(true);
         }
     );
 

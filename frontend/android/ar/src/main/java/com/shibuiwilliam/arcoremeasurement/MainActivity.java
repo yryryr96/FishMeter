@@ -112,10 +112,10 @@ public class MainActivity extends AppCompatActivity {
             finish();
         });
         reactButton.setOnClickListener(v -> {
-            String fishCategory = fishTextView.getText().toString();
-            String fLength = lengthTextView.getText().toString();
-            // String fishCategory = "참돔";
-            // String fLength = "체장: 45.24 cm";
+            // String fishCategory = fishTextView.getText().toString();
+            // String fLength = lengthTextView.getText().toString();
+            String fishCategory = "참돔";
+            String fLength = "체장: 45.24 cm";
             String fishLength = fLength.replace("체장: ", "").replace(" cm", "");
             Bitmap imageBitmap = null;  // 이미지 비트맵 변수 초기화
 
@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity {
             {
             Bundle bundle = new Bundle();
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, stream);
             byte[] byteArray = stream.toByteArray();
             bundle.putByteArray("image", byteArray);
             bundle.putString("category", fishCategory);

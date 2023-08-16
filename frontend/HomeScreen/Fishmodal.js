@@ -113,6 +113,7 @@ export default function Fishmodal({
   setfishModalVisible,
   navigation
 }) {
+  console.log(data.imageArray)
   const [user, setUser] = useRecoilState(userId);
   const [selectedFish, setSelectedFish] = useState(data.category);
   const [size, setSize] = useState();
