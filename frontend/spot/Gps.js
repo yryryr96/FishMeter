@@ -1,4 +1,4 @@
-import React, { useState,useEffect, useRef } from 'react';
+import React, { useState,useEffect, useRef, useCallback } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Image } from 'react-native';
 import { Marker } from "react-native-maps";
 import MapView from "react-native-map-clustering";
@@ -11,19 +11,24 @@ import { SafeAreaProvider,SafeAreaView } from 'react-native-safe-area-context';
 import axios from 'axios';
 
 import HourlyWeather from './Weathers';
+import { useFocusEffect } from '@react-navigation/native';
+import ClickedMarkerModal from '../HomeScreen/ClickedModal';
+import { useRecoilState } from 'recoil';
+import { totalDatas, userDatas } from '../component/recoil/selectors/testSelector';
 
 export default function Gps({navigation}) {
-
   const [lat,setLat] = useState(37);
   const [lon, setLon] = useState(126);
   const [city, setCity] = useState(null);
   const [totalMarker, setTotalMarker] = useState([])
+  const [totalData, setTotalData] = useRecoilState(totalDatas)
   const [gpsList,setGpsList] = useState([]);
   const mapRef = useRef(null);
 
   const [calendarModalVisible, setCalendarModalVisible] = useState(false);
   const [CategoryModalVisible, setCategoryModalVisible] = useState(false);
   const [ArticleModalVisible, setArticleModalVisible] = useState(false);
+  const [ClickedMarkerModalVisible, setClickedMarkerModalVisible] = useState(false);
 
   const openCalendarModal = () => {
     setCalendarModalVisible(true)
@@ -65,9 +70,19 @@ export default function Gps({navigation}) {
     }
   }
   
+  const [renderCount, setRenderCount] = useState(0);
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     setRenderCount((prev) => prev + 1);
+  //     setTotalMarker(totalData)
+  //     return () => {};
+  //   }, [navigation])
+  // );
+  
   const [MarkerKey, setMarkerKey] = useState(0);
   const getMarkerKey = (value) => {
     setMarkerKey(value);
+    setClickedMarkerModalVisible(true);
   };
   
   const deleteMarker = (value) => {
@@ -76,7 +91,7 @@ export default function Gps({navigation}) {
       method : 'delete',
       url : `http://54.206.147.12/records/${value}`,
     }).then((res)=>{
-      console.log(res)
+      // console.log(res)
       console.log("삭제 완료")
     }).catch((e)=>{
       console.log(e,"실패")
@@ -92,8 +107,8 @@ export default function Gps({navigation}) {
       url : 'http://54.206.147.12/records'
     }).then((res) => {
       console.log(res.data)
+      setTotalData(res.data)
       setTotalMarker(res.data)
-      console.log(totalMarker)
     }).catch((err)=> {
       console.log("다시 해줘",res)
     })
@@ -149,7 +164,7 @@ export default function Gps({navigation}) {
                 key={index}
                 coordinate={coordinate}
                 icon={require("../assets/location.png")}
-                onPress={() => deleteMarker(totalMarker[index])}
+                onPress={() => getMarkerKey(index)}
                 // onPress={() => {console.log(coordinate.latitude)}}
               />)
             )}
@@ -197,8 +212,13 @@ export default function Gps({navigation}) {
         </View>
 
         <CalendarModal calendarModalVisible={calendarModalVisible} setCalendarModalVisible={setCalendarModalVisible}></CalendarModal>
-        <ModalFishCategory CategoryModalVisible={CategoryModalVisible} setCategoryModalVisible={setCategoryModalVisible}></ModalFishCategory>
+        <ModalFishCategory setTotalMarker={setTotalMarker} CategoryModalVisible={CategoryModalVisible} setCategoryModalVisible={setCategoryModalVisible}></ModalFishCategory>
         <ModalArticle ArticleModalVisible={ArticleModalVisible} setArticleModalVisible={setArticleModalVisible} filteredList={getFiltered(gpsList)} city={city} />
+        <ClickedMarkerModal
+              item={totalMarker[MarkerKey]}
+              ClickedModalVisible={ClickedMarkerModalVisible}
+              setClickedModalVisible={setClickedMarkerModalVisible}
+            />
     </SafeAreaProvider>
   );
 }
@@ -240,6 +260,7 @@ const styles = StyleSheet.create({
   categoryButton : {
     flexDirection : 'row',
     justifyContent : 'center',
-    alignItems : 'center'
+    alignItems : 'center',
+    padding : 2
   }
 });

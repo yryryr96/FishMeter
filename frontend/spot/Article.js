@@ -6,9 +6,14 @@ import HourlyWeather from './Weathers';
 export default function SpotArticle({item,ArticleModalVisible,setArticleModalVisible}) {
     const navigation = useNavigation();
     const propItem = {
-        "itemName" : item.id,
+        "itemName" : item.species,
         "itemSize" : item.length,
         "itemSrc" : item.imageUrl,
+        "itemId" : item.id,
+        "itemAddress" : item.address,
+        "itemDate" : item.createdAt,
+        "itemLat" : item.latitude,
+        "itemLon" : item.longitude
     }
     
     const handlePress = () => {
@@ -25,7 +30,7 @@ export default function SpotArticle({item,ArticleModalVisible,setArticleModalVis
                     </View>
                     
                     <View style={styles.infoContainer}>
-                        <Text style={styles.articleText}>{item.createdAt.substring(0,10)} {item.createdAt.substring(11,19)}</Text>
+                        <Text style={styles.articleText}>{item.createdAt.substring(0,10)}</Text>
                         <Text style={styles.articleText}>{item.species}</Text>
                         <Text style={styles.articleText}>{item.address}</Text>
                     </View>
@@ -53,7 +58,7 @@ const styles = StyleSheet.create({
     infoContainer : {
         width:"50%",
         backgroundColor:'transparent',
-        paddingTop : 5
+        paddingTop : 10
     },
     articleText : {
         marginVertical : 5,

@@ -3,7 +3,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import HourlyWeather from '../spot/Weathers';
 
 export default function ClickedMarkerModal({ClickedModalVisible, setClickedModalVisible, item}) {
-    
+    // console.log(item)
     const closeClickedModalVisible = () => {
         setClickedModalVisible(false)
     }
@@ -35,7 +35,7 @@ export default function ClickedMarkerModal({ClickedModalVisible, setClickedModal
                             
                             <View style={{justifyContent:'space-between',marginTop:20, marginLeft : 15 }}>
                                 <Text style={{fontSize : 16, marginBottom:5}}>주소 : {item?.address}</Text>
-                                <Text style={{fontSize : 16, marginBottom:5}}>닉네임 : {item?.nickName}</Text>
+                                <Text style={{fontSize : 16, marginBottom:5}}>닉네임 : {item?.nickname}</Text>
                                 <Text style={{fontSize : 16, marginBottom:5}}>어종 : {item?.species}</Text>
                                 <Text style={{fontSize : 16, marginBottom:5}}>크기 : {item?.length}cm</Text>
                             </View>

@@ -19,63 +19,75 @@ import {
 import Calendarcheck from "./dogam/Calendarcheck";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useFocusEffect } from "@react-navigation/native";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { Dates, userDatas, userId } from "../component/recoil/selectors/testSelector";
+import axios from "axios";
 
 const screenWidth = Dimensions.get("window").width;
 
 const DATA = [
   {
-    id: "1",
-    state: false,
-    title: "쏘가리",
-    src1: require("../assets/fishes/one.png"),
-  },
-  {
-    id: "2",
+    id: 0,
     title: "쥐노래미",
     state: true,
-    src1: require("../assets/fishes/two.png"),
+    src1: require("../assets/fishes/movefishes/test1.gif"),
+    src2: require("../assets/fishes/two.png"),
   },
   {
-    id: "3",
+    id: 1,
     title: "감성돔",
     state: true,
-    src1: require("../assets/fishes/three.png"),
+    src1: require("../assets/fishes/movefishes/test3.gif"),
+    src2: require("../assets/fishes/three.png"),
   },
   {
-    id: "4",
-    title: "옥돔",
-    state: false,
-    src1: require("../assets/fishes/four.png"),
-  },
-  {
-    id: "5",
-    title: "참돔",
-    state: false,
-    src1: require("../assets/fishes/five.png"),
-  },
-  {
-    id: "6",
-    title: "송어",
-    state: true,
-    src1: require("../assets/fishes/six.png"),
-  },
-  {
-    id: "7",
-    title: "돌돔",
-    state: false,
-    src1: require("../assets/fishes/seven.png"),
-  },
-  {
-    id: "8",
+    id: 2,
     title: "말쥐치",
     state: false,
-    src1: require("../assets/fishes/eight.png"),
+    src1: require("../assets/fishes/movefishes/test8.gif"),
+    src2: require("../assets/fishes/eight.png"),
+  },
+  {
+    id: 3,
+    title: "돌돔",
+    state: false,
+    src1: require("../assets/fishes/movefishes/test7.gif"),
+    src2: require("../assets/fishes/seven.png"),
+  },
+  {
+    id: 4,
+    state: false,
+    title: "쏘가리",
+    src1: require("../assets/fishes/movefishes/test1.gif"),
+    src2: require("../assets/fishes/one.png"),
+  },
+  {
+    id: 5,
+    title: "참돔",
+    state: false,
+    src1: require("../assets/fishes/movefishes/test5.gif"),
+    src2: require("../assets/fishes/five.png"),
+  },
+  {
+    id: 6,
+    title: "옥돔",
+    state: false,
+    src1: require("../assets/fishes/movefishes/test4.gif"),
+    src2: require("../assets/fishes/four.png"),
+  },
+
+  {
+    id: 7,
+    title: "송어",
+    state: true,
+    src1: require("../assets/fishes/movefishes/test6.gif"),
+    src2: require("../assets/fishes/six.png"),
   },
 ];
 
 const Stack = createStackNavigator();
 
-const FishAnimation = ({ item, navigation }) => {
+const FishAnimation = ({ fishlist, item, navigation }) => {
   const positionX = useRef(new Animated.Value(0)).current;
   const positionY = useRef(new Animated.Value(0)).current;
 
@@ -143,23 +155,76 @@ const FishAnimation = ({ item, navigation }) => {
 };
 
 const DogamScreen = ({ navigation }) => {
-  console.log("DogamScreen")
   const [pressedItem, setPressedItem] = useState(null);
   const [selectedImage, setSelectedImage] = useState(true); // 추가: 선택된 이미지 상태 변수
 
   const [icebox, setIcebox] = useState(true);
   const [calendar, setCalendar] = useState(false);
   const [listItem, setListItem] = useState(false);
-  const [renderCount , setRenderCount] = useState(0)
+  const [renderCount, setRenderCount] = useState(0);
+
+  const [user, setUser] = useRecoilState(userId);
+  const [totalDatas, setTotalDatas] = useRecoilState(userDatas);
+  const customDateArray = useRecoilValue(Dates)
+
+  const [fishlist, setFishList] = useState([]);
+  // fishlist에 포함된 id만 추출하여 새로운 배열 생성
+  const fishlistIds = Array.from(new Set(fishlist.map((fish) => fish.id)));
+  // DATA에서 fishlist에 포함된 id만 필터링하여 새로운 배열 생성
+  const filteredData = DATA.filter((fish) => fishlistIds.includes(fish.id));
+  // console.log("중복제거한 데이터 : ", filteredData);
+  console.log("유저 : ", user);
+
+  // 유저가 가지고 있는 어종 데이터
+  const findFish = () => {
+    axios({
+      method: "get",
+      url: "http://54.206.147.12/fishes",
+      headers: {
+        userId: user,
+      },
+    })
+      .then((res) => {
+        setFishList(res.data);
+      })
+      .catch((err) => {
+        console.log("삐빅", err);
+      });
+  };
+
+  const getUserData = () => {
+    axios({
+      method: "get",
+      url: "http://54.206.147.12/records/all",
+      headers: {
+        userId: user,
+      },
+    })
+      .then((res) => {
+        setTotalDatas(res.data);
+      })
+      .catch((err) => {
+        console.log("삐빅", err);
+      });
+  }
+
+  useEffect(() => {
+    findFish();
+    getUserData();
+    
+  }, []);
 
   // 도감 들어올때 마다 갱신
   useFocusEffect(
-    useCallback(()=> {
-      setRenderCount((prev) => prev+1)
-      return () => {}
-    },[navigation])
-  )
-
+    useCallback(() => {
+      setRenderCount((prev) => prev + 1);
+      findFish();
+      getUserData();
+      
+      return () => {};
+    }, [navigation])
+  );
+  
   const [searchKeyword, setSearchKeyword] = useState(""); // 추가: 검색어 state
   // 검색어에 해당하는 항목들만 필터링하여 반환하는 함수
   const searchFilter = (item) => {
@@ -178,7 +243,15 @@ const DogamScreen = ({ navigation }) => {
   };
 
   const renderItem = ({ item }) => {
+    console.log("렌더아이탬: ", fishlist);
+
+    if (!fishlist.some((fish) => fish.id === item.id)) {
+      // fishlist에 일치하는 id를 가진 아이템이 없다면 렌더링하지 않음
+      return null;
+    }
+
     const isPressed = pressedItem === item.id;
+
     return (
       <View
         style={{
@@ -202,7 +275,7 @@ const DogamScreen = ({ navigation }) => {
           >
             <View style={{ width: 90, height: 90 }}>
               <Image
-                source={item.src1}
+                source={item.src2}
                 style={[
                   styles.dogamItem,
                   isPressed ? styles.itemPressed : null,
@@ -220,16 +293,6 @@ const DogamScreen = ({ navigation }) => {
       </View>
     );
   };
-
-  // // listItem 값에 따라 동적으로 marginTop 값 계산
-  // const getDynamicMarginTop = () => {
-  //   if (listItem === false) {
-  //     return ; // marginTop 값
-  //   } else if (listItem === true) {
-  //     return 26;
-  //   }
-  //   return 160;
-  // };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -290,7 +353,7 @@ const DogamScreen = ({ navigation }) => {
                 어종
               </Text>
               <Text style={{ fontSize: 20, fontFamily: "Yeongdeok Blueroad" }}>
-                잡은 수 : 7
+                잡은 수 : {totalDatas.length}
               </Text>
             </View>
             <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -335,9 +398,10 @@ const DogamScreen = ({ navigation }) => {
                 style={styles.fishAnimationContainer}
                 source={require("../assets/Gallery/underthesea.gif")}
               >
-                {DATA.filter(searchFilter).map((item) => (
+                {filteredData.filter(searchFilter).map((item) => (
                   <FishAnimation
                     key={item.id}
+                    fishlist={fishlist}
                     item={item}
                     navigation={navigation}
                   />
@@ -347,7 +411,7 @@ const DogamScreen = ({ navigation }) => {
             {listItem === true && (
               <View style={styles.flatList}>
                 <FlatList
-                  data={DATA.filter(searchFilter)}
+                  data={filteredData.filter(searchFilter)}
                   renderItem={renderItem}
                   keyExtractor={(item) => item.id}
                   numColumns={3}
@@ -365,7 +429,7 @@ const DogamScreen = ({ navigation }) => {
               </Text>
             </View>
             <View style={{ width: 400, marginTop: 20 }}>
-              <Calendarcheck navigation={navigation} />
+              <Calendarcheck navigation={navigation} customDateArray={customDateArray} />
             </View>
           </View>
         )}

@@ -1,4 +1,4 @@
-import { Text, View, TouchableOpacity, Image, StyleSheet } from "react-native";
+import { Text, View, TouchableOpacity, Image, StyleSheet, StatusBar } from "react-native";
 import { useEffect, useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -33,7 +33,7 @@ export default function App() {
 
   useEffect(()=>{
     SplashScreen.hide();
-
+    StatusBar.setBarStyle("dark-content")
     const getUser = async () => {
       const userAccessToken = await AsyncStorage.getItem("userAccessToken")
       const user = await AsyncStorage.getItem("user");

@@ -113,44 +113,47 @@ export default function Fishmodal({
   setfishModalVisible,
   navigation
 }) {
-  console.log(data.imageArray)
   const [user, setUser] = useRecoilState(userId);
   const [selectedFish, setSelectedFish] = useState(data.category);
   const [size, setSize] = useState();
   const [address, setAddress] = useState(""); // Create a state to store address in DogamDetail
   const navi = useNavigation()
-  const handleGoBack = () => {
-    navigation.goBack();
-  };
+  
   const savefish = () => {
-    setfishModalVisible(false);
-    // console.log(data.imageArray.replace('/',''))
-    try {
-      const recordRequestDto = {
-        'length': Number(data.length),
-        'latitude': defaultLat,
-        'longitude': defaultLon,
-        'fishId': fishid[selectedFish],
-        'base64' : encode(data.imageArray)
-      };
-      axios({
-        method : 'post',
-        url : 'http://54.206.147.12/records',
-        data : recordRequestDto,
-        headers: {
-          userId : user,
-          'Content-Type': 'application/json'
-        },
-      }).then((res) => {
-        console.log(res.data)
-        // navi.navigate("DogamScreen") 수정해야함
-        navi.navigate("Home")
-      }).catch((e)=> {
-        console.log(e)
-      })
+    if (data.length == "0" || selectedFish == "어종") {
+      console.log(data.length);
+      console.log(data.category);
+      alert("어종과 길이를 확인해주세요!");
+    } else {
+      setfishModalVisible(false);
+      navi.navigate("Home")
+      
+      try {
+        const recordRequestDto = {
+          'length': Number(data.length),
+          'latitude': myLocate[0],
+          'longitude': myLocate[1],
+          'fishId': fishid[selectedFish],
+          'base64' : encode(data.imageArray)
+        };
+        axios({
+          method : 'post',
+          url : 'http://54.206.147.12/records',
+          data : recordRequestDto,
+          headers: {
+            userId : user,
+            'Content-Type': 'application/json'
+          },
+        }).then((res) => {
+          console.log(res.data)
+          // navi.navigate("DogamScreen") 수정해야함
+        }).catch((e)=> {
+          console.log(e)
+        })
 
-    } catch (error) {
-      console.error('Error saving data:', error);
+      } catch (error) {
+        console.error('Error saving data:', error);
+      }
     }
   };
   
@@ -167,6 +170,7 @@ export default function Fishmodal({
   };
   const closefishModalVisible = () => {
     setfishModalVisible(false);
+    navi.navigate("Home")
   };
   const fishlist = [
     "쏘가리",
@@ -223,21 +227,13 @@ export default function Fishmodal({
 
   const [myLocate,setMyLocate] = useRecoilState(myLocation)
   const fontFileName=require("../assets/fonts/Yeongdeok_Blueroad.ttf");
-  const [defaultLat, setDefaultLat] = useState(37.541);
-  const [defaultLon, setdefaultLon] = useState(126.986);
+  
   const getLocation = async () => {
     const { granted } = await Location.requestForegroundPermissionsAsync();
     const {
       coords: { latitude, longitude },
     } = await Location.getCurrentPositionAsync();
-    console.log(longitude,1);
-      console.log(latitude,2);
-    if (defaultLon !== longitude && defaultLat !== latitude) {
-      setDefaultLat(latitude);
-      setdefaultLon(longitude);
-      console.log(defaultLon,3);
-      console.log(defaultLat,4);
-    }
+    
   };
   useEffect(() => {
     getLocation();
@@ -252,29 +248,12 @@ export default function Fishmodal({
       visible={fishModalVisible}
       onRequestClose={() => {
         setfishModalVisible(false);
+        navigation.navigate("Home")
       }}
     >
       <SafeAreaView style={styles.container}>
       <ScrollView>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <TouchableOpacity onPress={handleGoBack} style={{ marginBottom: 5 }}>
-            <Icon name="arrow-left" size={35} color="#000" />
-          </TouchableOpacity>
-        </View>
-
           <View style={{ backgroundColor: "#FCFCFC" }}>
-            <View style={{ alignItems: "center" }}>
-              <View
-                style={{
-                  width: "90%",
-                  marginTop: 20,
-                  borderColor: "gray",
-                  borderBottomWidth: 1,
-                  marginBottom: 25,
-                }}
-              ></View>
-            </View>
-
             <View style={{ width: "100%", height: 300 }}>
               <Image
                 source={{
@@ -285,21 +264,7 @@ export default function Fishmodal({
               />
             </View>
 
-            <View style={{ alignItems: "center" }}>
-              <View
-                style={{
-                  width: "90%",
-                  marginTop: 20,
-                  marginBottom: 20,
-                  borderColor: "gray",
-                  borderBottomWidth: 1,
-                }}
-              ></View>
-            </View>
             <View style={styles.detail}>
-              <View style={{ marginBottom: 10 }}>
-                  <Text style={{ fontSize: 25 }}>세부기록</Text>
-              </View>
               <View style={styles.inputRow}>
                 <Text style={styles.inputLabel}>
               <FontText

@@ -1,6 +1,7 @@
 package com.fishpjt.ar;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.Image;
 import android.os.Bundle;
 import android.os.Environment;
@@ -60,7 +61,8 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView fishTextView;
     private TextView lengthTextView;
-    private Button button;
+    private TextView warningTextView;
+    // private Button button;
 
     private Button reactButton;
 
@@ -72,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
     // API 호출 결과 0 = 쥐노래미, 1 = 감성돔, 2 = 말쥐치, 3 = 돌돔 ...
     private final String[] fish = {"쥐노래미", "감성돔", "말쥐치", "돌돔", "쏘가리", "참돔", "옥돔", "송어"};
 
-    private Button finishButton;
+    // private Button finishButton;
 
     /*
      "버튼": 버튼 클릭 API 호출
@@ -93,8 +95,9 @@ public class MainActivity extends AppCompatActivity {
         scene = arSceneView.getScene();
         fishTextView = findViewById(R.id.fish_textView);
         lengthTextView = findViewById(R.id.length_textView);
-        button = findViewById(R.id.button);
-        finishButton = findViewById(R.id.finish_button);
+        warningTextView = findViewById(R.id.warning_textView);
+        // button = findViewById(R.id.button);
+        // finishButton = findViewById(R.id.finish_button);
         reactButton = findViewById(R.id.finish_button2);
         boundingBoxView = findViewById(R.id.bounding_box_view);
 
@@ -108,14 +111,15 @@ public class MainActivity extends AppCompatActivity {
 
         callApiBy(by);
 
-        finishButton.setOnClickListener(v -> {
-            finish();
-        });
+        // finishButton.setOnClickListener(v -> {
+        //     finish();
+        // });
         reactButton.setOnClickListener(v -> {
-            // String fishCategory = fishTextView.getText().toString();
-            // String fLength = lengthTextView.getText().toString();
-            String fishCategory = "참돔";
-            String fLength = "체장: 45.24 cm";
+            tmp();
+            String fishCategory = fishTextView.getText().toString();
+            String fLength = lengthTextView.getText().toString();
+            // String fishCategory = "참돔";
+            // String fLength = "체장: 45.24 cm";
             String fishLength = fLength.replace("체장: ", "").replace(" cm", "");
             Bitmap imageBitmap = null;  // 이미지 비트맵 변수 초기화
 
@@ -142,21 +146,21 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
 
-            if ("어종".equals(fishCategory) || "???".equals(fishLength)) {
-                // 이미지, 어종, 체장 데이터 중 하나라도 없는 경우 예외 처리
-                Toast.makeText(getApplicationContext(), "이미지, 어종, 체장 데이터가 모두 있어야 합니다.", Toast.LENGTH_SHORT).show();
-                return;
-            }
+            // if ("어종".equals(fishCategory) || "???".equals(fishLength)) {
+            //     // 이미지, 어종, 체장 데이터 중 하나라도 없는 경우 예외 처리
+            //     Toast.makeText(getApplicationContext(), "이미지, 어종, 체장 데이터가 모두 있어야 합니다.", Toast.LENGTH_SHORT).show();
+            //     return;
+            // }
 
             // 어종과 길이 출력
             Log.d("FishCategory", "어종: " + fishCategory);
             Log.d("FishLength", "길이: " + fishLength);
             // 데이터 전송 로직
-            if(fishCategory=="어종" || fishLength=="체장: ??? cm"){
-                Log.d("length", fishLength);
-                Log.d("category", fishCategory);
-                return;
-            }else
+            // if(fishCategory=="어종" || fishLength=="체장: ??? cm"){
+            //     Log.d("length", fishLength);
+            //     Log.d("category", fishCategory);
+            //     return;
+            // }else
             {
             Bundle bundle = new Bundle();
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -185,9 +189,9 @@ public class MainActivity extends AppCompatActivity {
     private void callApiBy(String by) {
         switch (by) {
             case "버튼":
-                button.setOnClickListener(v -> {
-                    tmp();
-                });
+                // button.setOnClickListener(v -> {
+                //     tmp();
+                // });
                 break;
             case "자동":
                 TimerTask timerTask = new TimerTask() {
@@ -219,10 +223,14 @@ public class MainActivity extends AppCompatActivity {
         File imageFile;
         try {
             imageFile = getImageFileFromFrame(arFrame);
+            warningTextView.setText("물고기를 비춰주세요.");
+            warningTextView.setTextColor(Color.parseColor("#00FF00"));
         } catch (NotYetAvailableException e) {
             runOnUiThread(new Runnable() { // runOnUiThread 내부에 Runnable을 전달
                 @Override
                 public void run() {
+                    warningTextView.setText("잠시 기다려주세요.");
+                warningTextView.setTextColor(Color.parseColor("#FFEC0D0D"));
 //                    Toast.makeText(getApplicationContext(), "NotYetAvailableException", Toast.LENGTH_SHORT).show();
                 }
             });
@@ -289,7 +297,9 @@ public class MainActivity extends AppCompatActivity {
              */
             @Override
             public void onFailure(Call<List<List<Float>>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "표면을 인식할 수 없습니다.\n화면에 주변을 좀 더 비춰주세요.", Toast.LENGTH_SHORT).show();
+                warningTextView.setText("천천히 물고기 주변으로 한번 돌려주세요.");
+                warningTextView.setTextColor(Color.parseColor("#FFEC0D0D"));
+                // Toast.makeText(MainActivity.this, "표면을 인식할 수 없습니다.\n화면에 주변을 좀 더 비춰주세요.", Toast.LENGTH_SHORT).show();
                 Log.w("Fail", "onFailure: detectFish", t);
             }
         });

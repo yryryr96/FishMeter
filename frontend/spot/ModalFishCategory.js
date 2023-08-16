@@ -4,22 +4,84 @@ import { MaterialIcons } from '@expo/vector-icons';
 // import { ScrollView } from 'react-native';
 import { FlatList } from 'react-native';
 import { Shadow } from 'react-native-shadow-2';
+import { useRecoilValue } from 'recoil';
+import { filteredDatas } from '../component/recoil/selectors/testSelector';
+const DATA = [
+    {
+        id: 0,
+        title: "쥐노래미",
+        state: true,
+        src1: require("../assets/fishes/movefishes/test1.gif"),
+        src2: require("../assets/fishes/two.png"),
+    },
+    {
+        id: 1,
+        title: "감성돔",
+        state: true,
+        src1: require("../assets/fishes/movefishes/test3.gif"),
+        src2: require("../assets/fishes/three.png"),
+    },
+    {
+        id: 2,
+        title: "말쥐치",
+        state: false,
+        src1: require("../assets/fishes/movefishes/test8.gif"),
+        src2: require("../assets/fishes/eight.png"),
+    },
+    {
+        id: 3,
+        title: "돌돔",
+        state: false,
+        src1: require("../assets/fishes/movefishes/test7.gif"),
+        src2: require("../assets/fishes/seven.png"),
+    },
+    {
+        id: 4,
+        state: false,
+        title: "쏘가리",
+        src1: require("../assets/fishes/movefishes/test1.gif"),
+        src2: require("../assets/fishes/one.png"),
+    },
+    {
+        id: 5,
+        title: "참돔",
+        state: false,
+        src1: require("../assets/fishes/movefishes/test5.gif"),
+        src2: require("../assets/fishes/five.png"),
+    },
+    {
+        id: 6,
+        title: "옥돔",
+        state: false,
+        src1: require("../assets/fishes/movefishes/test4.gif"),
+        src2: require("../assets/fishes/four.png"),
+    },
 
-export default function ModalFishCategory({CategoryModalVisible,setCategoryModalVisible}) {
+    {
+        id: 7,
+        title: "송어",
+        state: true,
+        src1: require("../assets/fishes/movefishes/test6.gif"),
+        src2: require("../assets/fishes/six.png"),
+    },
+];
+
+export default function ModalFishCategory({setTotalMarker,CategoryModalVisible,setCategoryModalVisible}) {
 
     const [selectedFishes,setSelectedFishes] = useState([])
+    const filteredData = useRecoilValue(filteredDatas(selectedFishes))
     const addFish = (item) => {
         if (selectedFishes.includes(item)) {
             // 이미 선택된 어종인 경우 선택 해제
-            setSelectedFishes((prev) => prev.filter((id) => id !== item));
-            } else {
+            setSelectedFishes((prev) => prev.filter((name) => name !== item));
+        } else {
             // 선택되지 않은 어종인 경우 추가
             setSelectedFishes((prev) => [...prev, item]);
-            }
+        }
     }
 
     const ClickSetting = () => {
-        // console.log(selectedFishes)
+        setTotalMarker(filteredData)
         setSelectedFishes([])
         setCategoryModalVisible(false)
     }
@@ -29,33 +91,15 @@ export default function ModalFishCategory({CategoryModalVisible,setCategoryModal
         setCategoryModalVisible(false)
     }
 
-    const Fishes = [
-        {id : 1, name : '감성돔'},
-        {id : 2, name : '고등어'},
-        {id : 3, name : '돌돔'},
-        {id : 4, name : '참치'},
-        {id : 5, name : '광어'},
-        {id : 6, name : '상어'},
-        {id : 7, name : '돌고래'},
-        {id : 8, name : '갈치'},
-        {id : 9, name : '날치'},
-        {id : 10, name : '연어'},
-        {id : 11, name : '우럭'},
-        {id : 12, name : '망둥어'},
-        {id : 13, name : '한치'},
-        {id : 14, name : '참돔'},
-    ]
-
-
     const renderButtonRow = ({ item }) => {
-        const isSelected = selectedFishes && selectedFishes.includes(item.id);
+        const isSelected = selectedFishes && selectedFishes.includes(item.title);
 
         return (
             <View style={{width:"33%",justifyContent:'space-around', flexDirection:'row'}}>
                 <View style={{width : "90%", marginVertical:10}}>
                     <Shadow style={{width : "100%"}} offset={[3,4]} distance={3}>
-                    <TouchableOpacity style={[styles.modalButton1, isSelected && styles.selectedButton]} onPress={() => addFish(item.id)}>
-                        <Text style={[styles.buttonText,isSelected&&styles.selectedText]}>{item.name} </Text>
+                    <TouchableOpacity style={[styles.modalButton1, isSelected && styles.selectedButton]} onPress={() => addFish(item.title)}>
+                        <Text style={[styles.buttonText,isSelected&&styles.selectedText]}>{item.title} </Text>
                     </TouchableOpacity>
                     </Shadow>
                 </View>
@@ -76,7 +120,7 @@ export default function ModalFishCategory({CategoryModalVisible,setCategoryModal
             <TouchableWithoutFeedback onPress={closeCategoryModal}>
             <View style={styles.categoryContainer} onPress={closeCategoryModal}>
                 <TouchableWithoutFeedback onPress={()=>{}}>
-                <View>
+                <View style={styles.categoryInnerContainer}>
                     <View style={styles.headerContainer}>
                         <Text style={{fontSize : 30, fontWeight : "600"}}>어종</Text>
                         <MaterialIcons name="close" size={40} color="black" onPress={closeCategoryModal} />
@@ -86,7 +130,7 @@ export default function ModalFishCategory({CategoryModalVisible,setCategoryModal
 
                     <View style={{paddingHorizontal : "5%",justifyContent:'center', alignItems:'center'}}>
                         <FlatList
-                            data={Fishes}
+                            data={DATA}
                             renderItem={renderButtonRow}
                             keyExtractor={(item) => item.id.toString()}
                             numColumns={3}
@@ -122,7 +166,7 @@ const styles = StyleSheet.create({
         width : "90%", 
         paddingTop:20, 
         borderRadius : 30, 
-        borderWidth:3
+        borderWidth:1   
     },
     modalButton1 : {
         backgroundColor : 'white',
@@ -140,7 +184,6 @@ const styles = StyleSheet.create({
         borderRadius : 10,
         padding : 5,
         paddingHorizontal:10,
-        borderWidth : 1,
         justifyContent : 'center',
         alignItems : 'center',
 
@@ -149,7 +192,8 @@ const styles = StyleSheet.create({
         width:"100%",
         alignItems:'center',
         marginVertical : "5%",
-        paddingHorizontal : "7%"
+        paddingHorizontal : "7%",
+
     },
     headerContainer : {
         flexDirection : 'row',
@@ -171,7 +215,7 @@ const styles = StyleSheet.create({
         color : 'white'
       },
       buttonText : {
-        fontSize : 22
+        fontSize : 20
       }
   });
   

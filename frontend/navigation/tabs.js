@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import DogamScreen from "../screens/DogamScreen";
-import { StyleSheet, Text, View, Image, TouchableOpacity} from "react-native";
+import { StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import Profile from "../screens/Profile";
@@ -17,43 +17,13 @@ const IonIcon = ({ name, size, color }) => {
   return <Ionicons name={name} size={size} color={color} />;
 };
 
-const CustomTabBarButton = ({ onPress }) => (
-  <TouchableOpacity
-    style={{
-      top: -30,
-      justifyContent: "center",
-      alignItems: "center",
-      ...styles.shadow,
-    }}
-    onPress={onPress}
-  >
-    <View
-      style={{
-        margin: 10,
-        width: 80,
-        height: 80,
-        borderRadius: 50,
-        backgroundColor: "#89DAFF",
-        justifyContent: "center",
-        alignItems: "center", // 중요! 원 안에 내용물을 가운데로 정렬함
-      }}
-    >
-      <IonIcon name="camera-outline" size={50} color="#fff" />
-    </View>
-  </TouchableOpacity>
-);
-
 const Tabs = () => {
-
   return (
     <Tab.Navigator
       screenOptions={{
         tabBarShowLabel: false,
         tabBarStyle: {
           position: "absolute",
-          //bottom: 25,
-          //left: 20,
-          //right: 20,
           backgroundColor: "#ffffff",
           borderTopRightRadius: 25,
           borderTopLeftRadius: 25,
@@ -69,10 +39,10 @@ const Tabs = () => {
         component={Home}
         options={{
           tabBarIcon: (props) =>
-            IonIcon({
+            TabIcon({
               ...props,
-              name: props.focused ? "home" : "home-outline",
-              size: 26,
+              name: props.focused ? "map-marker" : "map-marker-outline",
+              size: 35,
               color: "gray",
             }),
         }}
@@ -85,19 +55,27 @@ const Tabs = () => {
           tabBarIcon: (props) =>
             TabIcon({
               ...props,
-              name: props.focused
-                ? "book-open-page-variant"
-                : "book-open-page-variant-outline",
-              size: 30,
+              name: props.focused ? "fishbowl" : "fishbowl-outline",
+              size: 35,
               color: "gray",
             }),
         }}
       />
+
       <Tab.Screen
         name="Camera"
         component={Camera}
         options={{
-          tabBarButton: (props) => <CustomTabBarButton {...props} />,
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={require("../assets/camera.png")} // 이미지 파일 경로
+              style={{
+                width: 40,
+                height: 40,
+                tintColor: focused ? "black" : "gray", // 선택 여부에 따라 색 변경
+              }}
+            />
+          ),
         }}
       />
       <Tab.Screen

@@ -7,9 +7,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from "@react-navigation/native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { useRecoilState } from "recoil";
-
-const REST_API_KEY = 'f55712663179d181a09716e3fbe37ac0'
-const REDIRECT_URI = 'http://54.206.147.12'
+import {KAKAO_API_KEY, KAKAO_REDIRECT_URI} from '@env'
+const REST_API_KEY = KAKAO_API_KEY
+const REDIRECT_URI = KAKAO_REDIRECT_URI
 const INJECTED_JAVASCRIPT = `window.ReactNativeWebView.postMessage('message from webView')`;
 
 // 인가 코드 요청
