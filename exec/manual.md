@@ -225,7 +225,7 @@ echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \ https://pkg.jenki
 - 빌드 유발 설정
 
 - Build Steps   
-    Gradle 버전 설정   
+    Gradle 버전 설정(7.2)   
     Task -> bootjar   
 
 **MatterMost 연동**   
@@ -234,3 +234,8 @@ echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \ https://pkg.jenki
 **Send build artifacts over SSH**   
 - 빌드파일이 생성되는 경로 설정   
 - 프로젝트 이름/build/libs/*.jar   
+
+
+java : 11.0.19   
+gradle : 7.2   
+intellij : 2023.2
