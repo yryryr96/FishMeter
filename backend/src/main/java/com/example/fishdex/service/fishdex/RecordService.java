@@ -12,6 +12,7 @@ import com.example.fishdex.service.sse.SseService;
 import com.example.fishdex.util.Base64ToMultipartFileConverter;
 import com.example.fishdex.util.KakaoApiReader;
 import com.example.fishdex.util.S3Uploader;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Async;
@@ -166,6 +167,40 @@ public class RecordService {
                 .map(record -> record.toResponseDto())
                 .collect(Collectors.toList());
         return recordResponseDtos;
+    }
+
+
+    private TestingList testingList = new TestingList();
+    private TestingRecordDto[] testingRecordDto = testingList.testingRecordDto;
+    @Async
+    public void saveTesting(int idx) throws JsonProcessingException {
+        String address = testingRecordDto[idx].getAddress();
+        String imageUrl = testingRecordDto[idx].getImageUrl();
+
+        User user = userRepository.findById(testingRecordDto[idx].getUserId()).orElseThrow();
+        Fish fish = fishRepository.findById(testingRecordDto[idx].getFishId()).orElseThrow();
+
+        RecordDto recordDto = testingRecordDto[idx].toRecordDto();
+        recordDto.setAddress(address);
+        recordDto.setImageUrl(imageUrl);
+
+        Record record = recordDto.toEntity(user, fish);
+        recordRepository.save(record);
+
+        // sse
+        RecentRecord recentRecord = RecentRecord.builder()
+                .imageUrl(imageUrl)
+                .length(testingRecordDto[idx].getLength())
+                .latitude(testingRecordDto[idx].getLatitude())
+                .longitude(testingRecordDto[idx].getLongitude())
+                .address(address)
+                .nickName(user.getNickname())
+                .species(fish.getSpecies())
+                .build();
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        sseService.sendDataToAll("update",objectMapper.writeValueAsString(recentRecord));
     }
 }
 

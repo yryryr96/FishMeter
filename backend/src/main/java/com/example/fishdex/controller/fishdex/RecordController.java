@@ -5,6 +5,7 @@ import com.example.fishdex.repository.user.UserRepository;
 import com.example.fishdex.service.fishdex.RecordService;
 import com.example.fishdex.service.user.UserService;
 import com.example.fishdex.util.Base64ToMultipartFileConverter;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 //import org.springframework.security.core.annotation.AuthenticationPrincipal;
 //import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -75,5 +76,14 @@ public class RecordController {
     @DeleteMapping("/records/{recordId}")
     public void deleteRecord(@PathVariable("recordId") long recordId) {
         recordService.delete(recordId);
+    }
+
+    private int idx=0;
+    @PostMapping("/testing")
+    public void testing() throws JsonProcessingException {
+        if(idx>=59) {
+            idx=0;
+        }
+        recordService.saveTesting(idx++);
     }
 }
