@@ -86,4 +86,9 @@ public class RecordController {
         }
         recordService.saveTesting(idx++);
     }
+
+    @GetMapping("/testing/reset")
+    public void testingReset(){
+        idx=0;
+    }
 }
