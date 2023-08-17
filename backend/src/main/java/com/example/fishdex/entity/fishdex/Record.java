@@ -45,6 +45,7 @@ public class Record {
                 .createdAt(this.createdAt)
                 .nickname(this.user.getNickname())
                 .species(this.fish.getSpecies())
+                .userId(this.user.getId())
                 .build();
     }
 }

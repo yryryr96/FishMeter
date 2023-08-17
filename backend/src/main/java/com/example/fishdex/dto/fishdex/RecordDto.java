@@ -22,6 +22,7 @@ public class RecordDto {
     private Timestamp createdAt;
     private String nickname;
     private String species;
+    private long userId;
 
     public Record toEntity(User user, Fish fish){
         return Record.builder()
