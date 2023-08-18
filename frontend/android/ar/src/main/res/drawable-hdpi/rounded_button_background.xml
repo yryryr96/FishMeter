@@ -1,0 +1,7 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <solid android:color="@android:color/white" /> <!-- 버튼 색상 -->
+    <corners android:radius="10dp" /> <!-- 둥글게 만들어질 정도 (반지름) -->
+
+</shape>
