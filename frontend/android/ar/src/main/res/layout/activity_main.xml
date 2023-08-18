@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0F000000"
+    android:orientation="vertical"
+    tools:context=".Measurement">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="9"
+        android:orientation="horizontal">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="9">
+
+            <fragment
+                android:id="@+id/ar_fragment"
+                android:name="com.google.ar.sceneform.ux.ArFragment"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <com.fishpjt.ar.BoundingBoxView
+                android:id="@+id/bounding_box_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:gravity="end"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/fish_textView"
+                    android:layout_width="200dp"
+                    android:layout_height="38dp"
+                    android:layout_weight="1"
+                    android:background="#3C000000"
+                    android:gravity="center"
+                    android:text="어종"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textColor="@android:color/white"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/length_textView"
+                    android:layout_width="200dp"
+                    android:layout_height="38dp"
+                    android:layout_weight="1"
+                    android:background="#3C000000"
+                    android:gravity="center"
+                    android:text="체장: ??? cm"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textColor="#FFFFFF"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/warning_textView"
+                    android:layout_width="200dp"
+                    android:layout_height="55dp"
+                    android:layout_marginBottom="38dp"
+                    android:background="#3C000000"
+                    android:gravity="center"
+                    android:text=""
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <!--            <Button-->
+            <!--                android:id="@+id/finish_button"-->
+            <!--                android:layout_width="80dp"-->
+            <!--                android:layout_height="48dp"-->
+            <!--                android:layout_gravity="right"-->
+            <!--                android:background="@drawable/rounded_button_background_with_back"-->
+            <!--                android:textColor="@android:color/black"-->
+            <!--                android:layout_marginRight="20dp"-->
+            <!--                android:layout_marginTop="20dp"/>-->
+
+            <Button
+                android:id="@+id/finish_button2"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="20dp"
+                android:background="@drawable/rounded_button_background_with_measure"
+                android:textColor="@android:color/black" />
+        </FrameLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>
