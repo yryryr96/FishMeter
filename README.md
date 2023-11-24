@@ -8,7 +8,7 @@
 
 ## 🛠 기술 스택
 
-<img src = "https://lab.ssafy.com/s09-webmobile2-sub2/S09P12E205/-/raw/main/readme/%EA%B8%B0%EC%88%A0%EC%8A%A4%ED%83%9D.PNG">
+<img src = "https://github.com/yryryr96/FishMeter/assets/122415720/735ee06c-1ad7-4879-b8f0-fe12d2a75c71.PNG">
 
 
 ## 💡 주요 기능
